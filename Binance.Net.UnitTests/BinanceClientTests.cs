@@ -2,7 +2,6 @@
 using CryptoExchange.Net.Authentication;
 using CryptoExchange.Net.Requests;
 using Moq;
-using Newtonsoft.Json;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,8 @@ using Binance.Net.Clients;
 using Binance.Net.Objects.Options;
 using NUnit.Framework.Legacy;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.Converters.JsonNet;
+using CryptoExchange.Net.Converters.SystemTextJson;
+using System.Text.Json;
 
 namespace Binance.Net.UnitTests
 {
@@ -30,7 +30,7 @@ namespace Binance.Net.UnitTests
             // arrange
             DateTime expected = new DateTime(1970, 1, 1).AddMilliseconds(milisecondsTime);
             var time = new BinanceCheckTime() { ServerTime = expected };
-            var client = TestHelpers.CreateResponseClient(JsonConvert.SerializeObject(time));
+            var client = TestHelpers.CreateResponseClient(JsonSerializer.Serialize(time));
 
             // act
             var result = await client.SpotApi.ExchangeData.GetServerTimeAsync();
@@ -143,7 +143,7 @@ namespace Binance.Net.UnitTests
             var authProvider = new BinanceAuthenticationProvider(new ApiCredentials("TestKey", "TestSecret"));
 
             // assert
-            Assert.That(authProvider.GetApiKey() == "TestKey");
+            Assert.That(authProvider.ApiKey == "TestKey");
         }
 
         [Test]
@@ -156,13 +156,15 @@ namespace Binance.Net.UnitTests
 
             // act
             var headers = new Dictionary<string, string>();
+            IDictionary<string, object> uriParams = null;
+            IDictionary<string, object> bodyParams = null;
             authProvider.AuthenticateRequest(
                 new BinanceRestApiClient(new TraceLogger(), new BinanceRestOptions(), new BinanceRestOptions().SpotOptions),
                 request.Uri,
                 HttpMethod.Get,
-                new SortedDictionary<string, object>(),
-                new SortedDictionary<string, object>(),
-                headers,
+                ref uriParams,
+                ref bodyParams,
+                ref headers,
                 true, ArrayParametersSerialization.MultipleValues,
                 HttpMethodParameterPosition.InUri,
                 RequestBodyFormat.Json);
@@ -197,7 +199,7 @@ namespace Binance.Net.UnitTests
                     { "price", "0.1" },
                     { "recvWindow", "5000" },
                 },
-                DateTimeConverter.ParseFromLong(1499827319559),
+                DateTimeConverter.ParseFromString("1499827319559"),
                 true,
                 false);
         }
@@ -228,7 +230,7 @@ namespace Binance.Net.UnitTests
                     { "price", "0.1" },
                     { "recvWindow", "5000" },
                 },
-                DateTimeConverter.ParseFromLong(1499827319559),
+                DateTimeConverter.ParseFromString("1499827319559"),
                 true,
                 false);
         }
