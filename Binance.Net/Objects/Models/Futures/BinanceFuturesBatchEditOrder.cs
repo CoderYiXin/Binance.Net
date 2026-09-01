@@ -5,6 +5,7 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Parameters for editing an order
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesBatchEditOrder
     {
         /// <summary>
@@ -30,6 +31,10 @@ namespace Binance.Net.Objects.Models.Futures
         /// <summary>
         /// Price
         /// </summary>
-        public decimal Price { get; set; }
+        public decimal? Price { get; set; }
+        /// <summary>
+        /// PriceMatch
+        /// </summary>
+        public PriceMatch? PriceMatch { get; set; }
     }
 }

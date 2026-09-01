@@ -1,7 +1,6 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 using Binance.Net.Objects;
 using Binance.Net.Objects.Models.Spot;
-using Binance.Net.Objects.Models.Spot.Blvt;
 using Binance.Net.Objects.Models.Spot.Socket;
 using CryptoExchange.Net.Objects.Sockets;
 
@@ -13,385 +12,476 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
     public interface IBinanceSocketClientSpotApiExchangeData
     {
         /// <summary>
-        /// Ping to test connection
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#test-connectivity" /></para>
+        /// Pings the API to test connectivity
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/general#test-connectivity" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<object>>> PingAsync(CancellationToken ct = default);
+        /// <returns>Ping response</returns>
+        Task<QueryResult<BinanceResponse<object>>> PingAsync(CancellationToken ct = default);
 
         /// <summary>
-        /// Get the server time
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#check-server-time" /></para>
+        /// Gets the server time
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/general#check-server-time" /></para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<DateTime>>> GetServerTimeAsync(CancellationToken ct = default);
+        /// <returns>Server time response</returns>
+        Task<QueryResult<BinanceResponse<DateTime>>> GetServerTimeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about the exchange including rate limits and symbol list
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#exchange-information" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/general#exchange-information" /></para>
         /// </summary>
-        /// <param name="symbols">Filter by symbols</param>
+        /// <param name="symbols">Filter by symbols, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<BinanceExchangeInfo>>> GetExchangeInfoAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
+        /// <returns>Exchange information response</returns>
+        Task<QueryResult<BinanceResponse<BinanceExchangeInfo>>> GetExchangeInfoAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets compressed, aggregate trades. Trades that fill at the same time, from the same order, with the same price will have the quantity aggregated.
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#aggregate-trades" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#aggregate-trades" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="fromId">Filter by from trade id</param>
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="limit">Max results</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceStreamAggregatedTrade>>>> GetAggregatedTradeHistoryAsync(string symbol, long? fromId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
+        /// <returns>Aggregated trade history response</returns>
+        Task<QueryResult<BinanceResponse<BinanceStreamAggregatedTrade[]>>> GetAggregatedTradeHistoryAsync(string symbol, long? fromId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
+        
         /// <summary>
         /// Gets the best price/quantity on the order book for a symbol.
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-order-book-ticker" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#symbol-order-book-ticker" /></para>
         /// </summary>
-        /// <param name="symbols">Filter by symbols</param>
+        /// <param name="symbols">Filter by symbols, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceBookPrice>>>> GetBookTickersAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
+        /// <returns>Book ticker response</returns>
+        Task<QueryResult<BinanceResponse<BinanceBookPrice[]>>> GetBookTickersAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
         /// <summary>
-        /// Gets current average price for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#current-average-price" /></para>
+        /// Gets the current average price for a symbol
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#current-average-price" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<BinanceAveragePrice>>> GetCurrentAvgPriceAsync(string symbol, CancellationToken ct = default);
+        /// <returns>Average price response</returns>
+        Task<QueryResult<BinanceResponse<BinanceAveragePrice>>> GetCurrentAvgPriceAsync(string symbol, CancellationToken ct = default);
         /// <summary>
-        /// Get candlestick data for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#klines" /></para>
+        /// Gets candlestick data for the provided symbol
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#klines" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="interval">Kline interval</param>
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="limit">Max results</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceSpotKline>>>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
+        /// <returns>Kline data response</returns>
+        Task<QueryResult<BinanceResponse<BinanceSpotKline[]>>> GetKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
         /// <summary>
         /// Gets the order book for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#order-book" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#order-book" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="limit">Number of entries</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<BinanceOrderBook>>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
+        /// <returns>Order book response</returns>
+        Task<QueryResult<BinanceResponse<BinanceOrderBook>>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
         /// <summary>
         /// Gets the recent trades for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#recent-trades" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#recent-trades" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="limit">Max results</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceRecentTradeQuote>>>> GetRecentTradesAsync(string symbol, int? limit = null, CancellationToken ct = default);
+        /// <returns>Recent trades response</returns>
+        Task<QueryResult<BinanceResponse<BinanceRecentTradeQuote[]>>> GetRecentTradesAsync(string symbol, int? limit = null, CancellationToken ct = default);
         /// <summary>
-        /// Get data based on the last x time, specified as windowSize
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#rolling-window-price-change-statistics" /></para>
+        /// Gets ticker statistics over a rolling window
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#rolling-window-price-change-statistics" /></para>
         /// </summary>
-        /// <param name="symbols">Filter by symbols</param>
+        /// <param name="symbols">Filter by symbols, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceRollingWindowTick>>>> GetRollingWindowTickersAsync(IEnumerable<string> symbols, CancellationToken ct = default);
+        /// <returns>Rolling-window ticker response</returns>
+        Task<QueryResult<BinanceResponse<BinanceRollingWindowTick[]>>> GetRollingWindowTickersAsync(IEnumerable<string> symbols, CancellationToken ct = default);
         /// <summary>
-        /// Get data regarding the last 24 hours
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#symbol-price-ticker" /></para>
+        /// Gets 24-hour ticker statistics
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#24hr-ticker-price-change-statistics" /></para>
         /// </summary>
-        /// <param name="symbols">Filter by symbols</param>
+        /// <param name="symbols">Filter by symbols, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<Binance24HPrice>>>> GetTickersAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
+        /// <returns>24-hour ticker response</returns>
+        Task<QueryResult<BinanceResponse<Binance24HPrice[]>>> GetTickersAsync(IEnumerable<string>? symbols = null, CancellationToken ct = default);
         /// <summary>
         /// Gets the historical trades for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#historical-trades" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#historical-trades" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="fromId">Filter by from trade id</param>
         /// <param name="limit">Max results</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceRecentTradeQuote>>>> GetTradeHistoryAsync(string symbol, long? fromId = null, int? limit = null, CancellationToken ct = default);
+        /// <returns>Historical trades response</returns>
+        Task<QueryResult<BinanceResponse<BinanceRecentTradeQuote[]>>> GetTradeHistoryAsync(string symbol, long? fromId = null, int? limit = null, CancellationToken ct = default);
         /// <summary>
-        /// Get candlestick data for the provided symbol. Returns modified kline data, optimized for the presentation of candlestick charts
-        /// <para><a href="https://binance-docs.github.io/apidocs/websocket_api/en/#ui-klines" /></para>
+        /// Gets candlestick data for the provided symbol. Returns modified kline data optimized for candlestick chart presentation
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#ui-klines" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="interval">Kline interval</param>
         /// <param name="startTime">Filter by start time</param>
         /// <param name="endTime">Filter by end time</param>
         /// <param name="limit">Max results</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<CallResult<BinanceResponse<IEnumerable<BinanceSpotKline>>>> GetUIKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
+        /// <returns>UI kline data response</returns>
+        Task<QueryResult<BinanceResponse<BinanceSpotKline[]>>> GetUIKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Subscribes to the aggregated trades update stream for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#aggregate-trade-streams" /></para>
+        /// Get execution rules
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/general#query-execution-rules" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
+        /// <param name="status">Filter by symbol status</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Execution rules</returns>
+        Task<QueryResult<BinanceResponse<BinanceExecutionRules[]>>> GetExecutionRulesAsync(string? symbol = null, SymbolStatus? status = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get reference price for a symbol
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#query-reference-price" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Reference price</returns>
+        Task<QueryResult<BinanceResponse<BinanceReferencePrice>>> GetReferencePriceAsync(string? symbol = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get reference price calculation info for a symbol
+        /// <para>
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-api/market#query-reference-price-calculation" />
+        /// </para>
+        /// </summary>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol, for example `ETHUSDT`</param>
+        /// <param name="symbolStatus">["<c>status</c>"] Filter by symbol status</param>
+        /// <param name="ct">Cancellation token</param>
+        Task<QueryResult<BinanceResponse<BinanceReferencePriceCalculation>>> GetReferencePriceCalculationAsync(string symbol, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to the aggregated trade update stream for the provided symbols
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#aggregate-trade-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAggregatedTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamAggregatedTrade>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAggregatedTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamAggregatedTrade>> onMessage, CancellationToken ct = default);
 
         /// <summary>
-        /// Subscribes to the aggregated trades update stream for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#aggregate-trade-streams" /></para>
+        /// Subscribes to the aggregated trade update stream for the provided symbol
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#aggregate-trade-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAggregatedTradeUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamAggregatedTrade>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAggregatedTradeUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamAggregatedTrade>> onMessage, CancellationToken ct = default);
+        /// <summary>
+        /// Subscribes to the aggregated trade update stream in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#aggregate-trade-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToAggregatedTradeUpdatesPerfAsync(IEnumerable<string> symbols, Action<BinanceStreamMinimalTrade> onMessage, CancellationToken ct);
         /// <summary>
         /// Subscribes to mini ticker updates stream for all symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#all-market-mini-tickers-stream" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#all-market-mini-tickers-stream" /></para>
         /// </summary>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAllMiniTickerUpdatesAsync(Action<DataEvent<IEnumerable<IBinanceMiniTick>>> onMessage, CancellationToken ct = default);
-        
-        /// <summary>
-        /// Subscribe to rolling window ticker updates stream for all symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#all-market-rolling-window-statistics-streams" /></para>
-        /// </summary>
-        /// <param name="windowSize">Window size, either 1 hour or 4 hours</param>
-        /// <param name="onMessage">The event handler for the received data</param>
-        /// <param name="ct">Cancellation token for closing this subscription</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAllRollingWindowTickerUpdatesAsync(TimeSpan windowSize, Action<DataEvent<IEnumerable<BinanceStreamRollingWindowTick>>> onMessage, CancellationToken ct = default);
-        
-        /// <summary>
-        /// Subscribes to ticker updates stream for all symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#all-market-tickers-stream" /></para>
-        /// </summary>
-        /// <param name="onMessage">The event handler for the received data</param>
-        /// <param name="ct">Cancellation token for closing this subscription</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToAllTickerUpdatesAsync(Action<DataEvent<IEnumerable<IBinanceTick>>> onMessage, CancellationToken ct = default);
-        /// <summary>
-        /// Subscribes to leveraged token info updates
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#blvt-info-streams" /></para>
-        /// </summary>
-        /// <param name="tokens">The tokens to subscribe to</param>
-        /// <param name="onMessage">The event handler for the received data</param>
-        /// <param name="ct">Cancellation token for closing this subscription</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBlvtInfoUpdatesAsync(IEnumerable<string> tokens, Action<DataEvent<BinanceBlvtInfoUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAllMiniTickerUpdatesAsync(Action<DataEvent<IBinanceMiniTick[]>> onMessage, CancellationToken ct = default);
 
         /// <summary>
-        /// Subscribes to leveraged token info updates
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#blvt-info-streams" /></para>
+        /// Subscribes to rolling-window ticker updates stream for all symbols
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#all-market-rolling-window-statistics-streams" /></para>
         /// </summary>
-        /// <param name="token">The token to subscribe to</param>
+        /// <param name="windowSize">Window size, either 1 hour, 4 hours or 1 day</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBlvtInfoUpdatesAsync(string token, Action<DataEvent<BinanceBlvtInfoUpdate>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAllRollingWindowTickerUpdatesAsync(TimeSpan windowSize, Action<DataEvent<BinanceStreamRollingWindowTick[]>> onMessage, CancellationToken ct = default);
 
-        /// <summary>
-        /// Subscribes to leveraged token kline updates
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#blvt-nav-kline-candlestick-streams" /></para>
-        /// </summary>
-        /// <param name="tokens">The tokens to subscribe to</param>
-        /// <param name="interval">The kline interval</param>
-        /// <param name="onMessage">The event handler for the received data</param>
-        /// <param name="ct">Cancellation token for closing this subscription</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBlvtKlineUpdatesAsync(IEnumerable<string> tokens, KlineInterval interval, Action<DataEvent<BinanceStreamKlineData>> onMessage, CancellationToken ct = default);
-
-        /// <summary>
-        /// Subscribes to leveraged token kline updates
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#blvt-nav-kline-candlestick-streams" /></para>
-        /// </summary>
-        /// <param name="token">The token to subscribe to</param>
-        /// <param name="interval">The kline interval</param>
-        /// <param name="onMessage">The event handler for the received data</param>
-        /// <param name="ct">Cancellation token for closing this subscription</param>
-        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBlvtKlineUpdatesAsync(string token, KlineInterval interval, Action<DataEvent<BinanceStreamKlineData>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to the book ticker update stream for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-book-ticker-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-book-ticker-streams" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamBookPrice>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamBookPrice>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to the book ticker update stream for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-book-ticker-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-book-ticker-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamBookPrice>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToBookTickerUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamBookPrice>> onMessage, CancellationToken ct = default);
+        /// <summary>
+        /// Subscribes to the book ticker update stream in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-book-ticker-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToBookTickerUpdatesPerfAsync(IEnumerable<string> symbols, Action<BinanceStreamBookPrice> onMessage, CancellationToken ct);
 
         /// <summary>
         /// Subscribes to the candlestick update stream for the provided symbols and intervals
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#klinecandlestick-streams-for-utc" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
         /// <param name="intervals">The intervals of the candlesticks</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, IEnumerable<KlineInterval> intervals, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, IEnumerable<KlineInterval> intervals, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to the candlestick update stream for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#klinecandlestick-streams-for-utc" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
         /// <param name="interval">The interval of the candlesticks</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(IEnumerable<string> symbols, KlineInterval interval, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to the candlestick update stream for the provided symbol and intervals
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#klinecandlestick-streams-for-utc" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="intervals">The intervals of the candlesticks</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, IEnumerable<KlineInterval> intervals, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, IEnumerable<KlineInterval> intervals, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to the candlestick update stream for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#klinecandlestick-streams-for-utc" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="interval">The interval of the candlesticks</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToKlineUpdatesAsync(string symbol, KlineInterval interval, Action<DataEvent<IBinanceStreamKlineData>> onMessage, CancellationToken ct = default);
         /// <summary>
-        /// Subscribes to mini ticker updates stream for a list of symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-mini-ticker-stream" /></para>
+        /// Subscribes to mini ticker updates stream for a list of symbols
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-mini-ticker-stream" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols to subscribe to</param>
+        /// <param name="symbols">The symbols to subscribe to, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToMiniTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<IBinanceMiniTick>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToMiniTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<IBinanceMiniTick>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to mini ticker updates stream for a specific symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-mini-ticker-stream" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-mini-ticker-stream" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
+        /// <param name="symbol">The symbol to subscribe to, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToMiniTickerUpdatesAsync(string symbol, Action<DataEvent<IBinanceMiniTick>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToMiniTickerUpdatesAsync(string symbol, Action<DataEvent<IBinanceMiniTick>> onMessage, CancellationToken ct = default);
+        /// <summary>
+        /// Subscribes to mini ticker updates stream in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-book-ticker-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToMiniTickerUpdatesPerfAsync(IEnumerable<string> symbols, Action<BinanceStreamMinimalTick> onMessage, CancellationToken ct);
+
         /// <summary>
         /// Subscribes to the depth update stream for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#diff-depth-stream" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#diff-depth-stream" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="updateInterval">Update interval in milliseconds</param>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
+        /// <param name="updateInterval">Update interval in milliseconds, either 100 or 1000</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int? updateInterval, Action<DataEvent<IBinanceEventOrderBook>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(IEnumerable<string> symbols, int? updateInterval, Action<DataEvent<IBinanceEventOrderBook>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to the order book updates for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#diff-depth-stream" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#diff-depth-stream" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="updateInterval">Update interval in milliseconds</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
+        /// <param name="updateInterval">Update interval in milliseconds, either 100 or 1000</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int? updateInterval, Action<DataEvent<IBinanceEventOrderBook>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToOrderBookUpdatesAsync(string symbol, int? updateInterval, Action<DataEvent<IBinanceEventOrderBook>> onMessage, CancellationToken ct = default);
+        /// <summary>
+        /// Subscribes to the order book update stream in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#diff-depth-stream" /></para>
+        /// </summary>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="updateInterval">Update interval in milliseconds, either 100 or 1000</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToOrderBookUpdatesPerfAsync(IEnumerable<string> symbols, int? updateInterval, Action<BinanceEventOrderBook> onMessage, CancellationToken ct);
 
         /// <summary>
         /// Subscribes to the depth updates for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#partial-book-depth-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#partial-book-depth-streams" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols to subscribe on</param>
+        /// <param name="symbols">The symbols to subscribe on, for example `ETHUSDT`</param>
         /// <param name="levels">The amount of entries to be returned in the update of each symbol, 5, 10 or 20</param>
         /// <param name="updateInterval">Update interval in milliseconds, 1000ms or 100ms</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToPartialOrderBookUpdatesAsync(IEnumerable<string> symbols, int levels, int? updateInterval, Action<DataEvent<IBinanceOrderBook>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToPartialOrderBookUpdatesAsync(IEnumerable<string> symbols, int levels, int? updateInterval, Action<DataEvent<IBinanceOrderBook>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to the depth updates for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#partial-book-depth-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#partial-book-depth-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to subscribe on</param>
+        /// <param name="symbol">The symbol to subscribe on, for example `ETHUSDT`</param>
         /// <param name="levels">The amount of entries to be returned in the update, 5, 10 or 20</param>
         /// <param name="updateInterval">Update interval in milliseconds, 1000ms or 100ms</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToPartialOrderBookUpdatesAsync(string symbol, int levels, int? updateInterval, Action<DataEvent<IBinanceOrderBook>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToPartialOrderBookUpdatesAsync(string symbol, int levels, int? updateInterval, Action<DataEvent<IBinanceOrderBook>> onMessage, CancellationToken ct = default);
         /// <summary>
-        /// Subscribe to rolling window ticker updates stream for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-rolling-window-statistics-streams" /></para>
+        /// Subscribes to partial order book updates for the provided symbols in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#partial-book-depth-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to subscribe</param>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="levels">The amount of entries to be returned in the update, 5, 10 or 20</param>
+        /// <param name="updateInterval">Update interval in milliseconds, 1000ms or 100ms</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToPartialOrderBookUpdatesPerfAsync(IEnumerable<string> symbols, int levels, int? updateInterval, Action<BinanceOrderBook> onMessage, CancellationToken ct);
+
+        /// <summary>
+        /// Subscribes to rolling-window ticker updates stream for a symbol
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-rolling-window-statistics-streams" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol to subscribe, for example `ETHUSDT`</param>
         /// <param name="windowSize">Window size, either 1 hour or 4 hours</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToRollingWindowTickerUpdatesAsync(string symbol, TimeSpan windowSize, Action<DataEvent<BinanceStreamRollingWindowTick>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToRollingWindowTickerUpdatesAsync(string symbol, TimeSpan windowSize, Action<DataEvent<BinanceStreamRollingWindowTick>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to ticker updates stream for a specific symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-ticker-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-ticker-streams" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols to subscribe to</param>
+        /// <param name="symbols">The symbols to subscribe to, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<IBinanceTick>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<IBinanceTick>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to ticker updates stream for a specific symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#individual-symbol-ticker-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#individual-symbol-ticker-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol to subscribe to</param>
+        /// <param name="symbol">The symbol to subscribe to, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<IBinanceTick>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTickerUpdatesAsync(string symbol, Action<DataEvent<IBinanceTick>> onMessage, CancellationToken ct = default);
 
         /// <summary>
         /// Subscribes to the trades update stream for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#trade-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#trade-streams" /></para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamTrade>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(IEnumerable<string> symbols, Action<DataEvent<BinanceStreamTrade>> onMessage, CancellationToken ct = default);
         /// <summary>
         /// Subscribes to the trades update stream for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#trade-streams" /></para>
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#trade-streams" /></para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
         /// <param name="onMessage">The event handler for the received data</param>
         /// <param name="ct">Cancellation token for closing this subscription</param>
         /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
-        Task<CallResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamTrade>> onMessage, CancellationToken ct = default);
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToTradeUpdatesAsync(string symbol, Action<DataEvent<BinanceStreamTrade>> onMessage, CancellationToken ct = default);
+        /// <summary>
+        /// Subscribes to the trades update stream in high-performance mode<br />
+        /// More info about high-performance mode can be found here: <a href="https://cryptoexchange.jkorf.dev/client-libs/features/performance" />
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#trade-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">Symbols to subscribe</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected</returns>
+        Task<WebSocketResult<HighPerfUpdateSubscription>> SubscribeToTradeUpdatesPerfAsync(IEnumerable<string> symbols, Action<BinanceStreamMinimalTrade> onMessage, CancellationToken ct);
+
+        /// <summary>
+        /// Subscribes to average price updates
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#average-price" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAveragePriceUpdatesAsync(string symbol,
+            Action<DataEvent<BinanceStreamAveragePrice>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to reference price updates
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#reference-price-streams" /></para>
+        /// </summary>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToAveragePriceUpdatesAsync(IEnumerable<string> symbols,
+            Action<DataEvent<BinanceStreamAveragePrice>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to reference price updates
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#reference-price-streams" /></para>
+        /// </summary>
+        /// <param name="symbol">The symbol, for example `ETHUSDT`</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToReferencePriceUpdatesAsync(string symbol,
+            Action<DataEvent<BinanceReferencePriceUpdate>> onMessage, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to Reference price updates
+        /// <para><a href="https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~#Reference-price" /></para>
+        /// </summary>
+        /// <param name="symbols">The symbols, for example `ETHUSDT`</param>
+        /// <param name="onMessage">The event handler for the received data</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToReferencePriceUpdatesAsync(IEnumerable<string> symbols,
+            Action<DataEvent<BinanceReferencePriceUpdate>> onMessage, CancellationToken ct = default);
     }
 }

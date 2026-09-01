@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,69 +5,80 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// C2C user trade
     /// </summary>
+    [SerializationModel]
     public record BinanceC2CUserTrade
     {
         /// <summary>
-        /// Order number
+        /// ["<c>orderNumber</c>"] The order number.
         /// </summary>
+        [JsonPropertyName("orderNumber")]
         public string OrderNumber { get; set; } = string.Empty;
         /// <summary>
-        /// Advert number
+        /// ["<c>advNo</c>"] The advertisement number.
         /// </summary>
-        [JsonProperty("advNo")]
+        [JsonPropertyName("advNo")]
         public string AdvertNumber { get; set; } = string.Empty;
         /// <summary>
-        /// Trade type
+        /// ["<c>tradeType</c>"] Trade type
         /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("tradeType")]
         public OrderSide TradeType { get; set; }
         /// <summary>
-        /// Crypto asset traded
+        /// ["<c>asset</c>"] Crypto asset traded
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Fiat type
+        /// ["<c>fiat</c>"] Fiat type
         /// </summary>
+        [JsonPropertyName("fiat")]
         public string Fiat { get; set; } = string.Empty;
         /// <summary>
-        /// Fiat symbol
+        /// ["<c>fiatSymbol</c>"] Fiat symbol
         /// </summary>
+        [JsonPropertyName("fiatSymbol")]
         public string FiatSymbol { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity traded
+        /// ["<c>amount</c>"] Quantity traded
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Total price of the trade
+        /// ["<c>totalPrice</c>"] Total price of the trade
         /// </summary>
+        [JsonPropertyName("totalPrice")]
         public decimal TotalPrice { get; set; }
         /// <summary>
-        /// Price per unit
+        /// ["<c>unitPrice</c>"] Price per unit
         /// </summary>
+        [JsonPropertyName("unitPrice")]
         public decimal UnitPrice { get; set; }
         /// <summary>
-        /// Order status
+        /// ["<c>orderStatus</c>"] Order status
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("orderStatus")]
         public C2COrderStatus OrderStatus { get; set; }
         /// <summary>
-        /// Creation time
+        /// ["<c>createTime</c>"] Creation time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime")]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Transaction fee in crypto
+        /// ["<c>commission</c>"] Transaction fee in crypto
         /// </summary>
-        [JsonProperty("commission")]
+        [JsonPropertyName("commission")]
         public decimal Fee { get; set; }
         /// <summary>
-        /// Counter part nickname
+        /// ["<c>counterPartNickName</c>"] Counter part nickname
         /// </summary>
+        [JsonPropertyName("counterPartNickName")]
         public string CounterPartNickName { get; set; } = string.Empty;
         /// <summary>
-        /// Advertisement role
+        /// ["<c>advertisementRole</c>"] Advertisement role
         /// </summary>
+        [JsonPropertyName("advertisementRole")]
         public string AdvertisementRole { get; set; } = string.Empty;
     }
 }
+

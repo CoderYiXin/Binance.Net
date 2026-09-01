@@ -5,6 +5,7 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Parameters for a new futures batch order
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesBatchOrder
     {
         /// <summary>
@@ -63,5 +64,13 @@ namespace Binance.Net.Objects.Models.Futures
         /// Used with Stop/StopMarket or TakeProfit/TakeProfitMarket orders.
         /// </summary>
         public bool? PriceProtect { get; set; }
+        /// <summary>
+        /// Price match
+        /// </summary>
+        public PriceMatch? PriceMatch { get; set; }
+        /// <summary>
+        /// Self trade prevention mode
+        /// </summary>
+        public SelfTradePreventionMode? SelfTradePreventionMode { get; set; }
     }
 }

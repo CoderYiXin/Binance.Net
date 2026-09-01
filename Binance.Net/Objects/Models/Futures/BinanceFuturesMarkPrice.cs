@@ -5,55 +5,65 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Mark Price and Funding Rate
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesMarkPrice : IBinanceFuturesMarkPrice
     {
         /// <summary>
-        /// The symbol the information is about
+        /// ["<c>symbol</c>"] The symbol the information is about
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The current market price
+        /// ["<c>markPrice</c>"] The current market price
         /// </summary>
+        [JsonPropertyName("markPrice")]
         public decimal MarkPrice { get; set; }
         /// <summary>
-        /// The current index price
+        /// ["<c>indexPrice</c>"] The current index price
         /// </summary>
+        [JsonPropertyName("indexPrice")]
         public decimal IndexPrice { get; set; }
         /// <summary>
-        /// The last funding rate
+        /// ["<c>lastFundingRate</c>"] The last funding rate
         /// </summary>
-        [JsonProperty("lastFundingRate")]
+        [JsonPropertyName("lastFundingRate")]
         public decimal? FundingRate { get; set; }
         /// <summary>
-        /// The time the funding rate is applied
+        /// ["<c>nextFundingTime</c>"] The time the funding rate is applied
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("nextFundingTime")]
         public DateTime NextFundingTime { get; set; }
         /// <summary>
-        /// Estimated settle price
+        /// ["<c>estimatedSettlePrice</c>"] Estimated settle price
         /// </summary>
+        [JsonPropertyName("estimatedSettlePrice")]
         public decimal? EstimatedSettlePrice { get; set; }
 
         /// <summary>
-        /// Interest rate
+        /// ["<c>interestRate</c>"] Interest rate
         /// </summary>
+        [JsonPropertyName("interestRate")]
         public decimal? InterestRate { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] The data timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
     }
 
     /// <summary>
     /// Mark price for Coin-M future
     /// </summary>
-    public record BinanceFuturesCoinMarkPrice: BinanceFuturesMarkPrice
+    [SerializationModel]
+    public record BinanceFuturesCoinMarkPrice : BinanceFuturesMarkPrice
     {
         /// <summary>
-        /// The pair
+        /// ["<c>pair</c>"] The pair
         /// </summary>
+        [JsonPropertyName("pair")]
         public string Pair { get; set; } = string.Empty;
     }
 }
+

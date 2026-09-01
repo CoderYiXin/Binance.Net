@@ -1,0 +1,39 @@
+GET
+/fapi/v1/allAlgoOrders
+true
+[
+   {
+        "algoId": 1000001270850379,
+        "clientAlgoId": "x-yHjDKm8h7cd1bf4f-9ce3-4d55-b9f",
+        "algoType": "CONDITIONAL",
+        "orderType": "STOP_MARKET",
+        "symbol": "BTCUSDT",
+        "side": "BUY",
+        "positionSide": "BOTH",
+        "timeInForce": "GTC",
+        "quantity": "0.002",
+        "algoStatus": "FINISHED",
+        "actualOrderId": "974828356187",
+        "actualPrice": "69067.60000",
+        "actualQty": "0.002",
+        "actualType": "MARKET",
+        "triggerPrice": "69080.20",
+        "price": "0.00",
+        "icebergQuantity": null,
+        "tpTriggerPrice": "0.000",
+        "tpPrice": "0.000",
+        "slTriggerPrice": "0.000",
+        "slPrice": "0.000",
+        "tpOrderType": "",
+        "selfTradePreventionMode": "EXPIRE_MAKER",
+        "workingType": "CONTRACT_PRICE",
+        "priceMatch": "NONE",
+        "closePosition": false,
+        "priceProtect": false,
+        "reduceOnly": true,
+        "createTime": 1775461924247,
+        "updateTime": 1775461936135,
+        "triggerTime": 1775461936114,
+        "goodTillDate": 0
+   }
+]

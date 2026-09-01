@@ -1,8 +1,9 @@
 ﻿namespace Binance.Net.Objects.Sockets
 {
+    [SerializationModel]
     internal class BinanceSocketQueryResponse
     {
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public int Id { get; set; }
     }
 }

@@ -1,17 +1,53 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Underlying Type
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<UnderlyingType>))]
     public enum UnderlyingType
     {
         /// <summary>
-        /// Coin
+        /// ["<c>COIN</c>"] Coin
         /// </summary>
+        [Map("COIN")]
         Coin,
         /// <summary>
-        /// Index
+        /// ["<c>INDEX</c>"] Index
         /// </summary>
-        Index
+        [Map("INDEX")]
+        Index,
+        /// <summary>
+        /// ["<c>PREMARKET</c>"] Pre-market
+        /// </summary>
+        [Map("PREMARKET")]
+        PreMarket,
+        /// <summary>
+        /// ["<c>COMMODITY</c>"] Commodity
+        /// </summary>
+        [Map("COMMODITY")]
+        Commodity,
+        /// <summary>
+        /// ["<c>EQUITY</c>"] Equity
+        /// </summary>
+        [Map("EQUITY")]
+        Equity,
+        /// <summary>
+        /// ["<c>KR_EQUITY</c>"] Korean Equity
+        /// </summary>
+        [Map("KR_EQUITY")]
+        KrEquity,
+        /// <summary>
+        /// ["<c>HK_EQUITY</c>"] Hong Kong Equity
+        /// </summary>
+        [Map("HK_EQUITY")]
+        HkEquity,
+        /// <summary>
+        /// ["<c>CN_EQUITY</c>"] Chinese Equity
+        /// </summary>
+        [Map("CN_EQUITY")]
+        CnEquity,
     }
 }
+

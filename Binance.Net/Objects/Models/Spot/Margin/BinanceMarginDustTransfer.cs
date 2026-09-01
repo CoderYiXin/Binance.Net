@@ -1,62 +1,64 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Margin dust transfer info
     /// </summary>
+    [SerializationModel]
     public record BinanceMarginDustTransfer
     {
         /// <summary>
-        /// Total service charge
+        /// ["<c>totalServiceCharge</c>"] Total service charge
         /// </summary>
-        [JsonProperty("totalServiceCharge")]
+        [JsonPropertyName("totalServiceCharge")]
         public decimal TotalServiceCharge { get; set; }
         /// <summary>
-        /// Total transfered
+        /// ["<c>totalTransfered</c>"] Total transferred
         /// </summary>
-        [JsonProperty("totalTransfered")]
-        public decimal TotalTransfered { get; set; }
+        [JsonPropertyName("totalTransfered")]
+        public decimal TotalTransferred { get; set; }
         /// <summary>
-        /// Transfer results
+        /// ["<c>transferResult</c>"] Transfer results
         /// </summary>
-        [JsonProperty("transferResult")]
-        public IEnumerable<BinanceMargingDustTransferResult> TransferResults { get; set; } = Array.Empty<BinanceMargingDustTransferResult>();
+        [JsonPropertyName("transferResult")]
+        public BinanceMarginDustTransferResult[] TransferResults { get; set; } = Array.Empty<BinanceMarginDustTransferResult>();
     }
 
     /// <summary>
     /// Transfer results
     /// </summary>
-    public record BinanceMargingDustTransferResult
+    public record BinanceMarginDustTransferResult
     {
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Source asset
+        /// ["<c>fromAsset</c>"] Source asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>operateTime</c>"] Timestamp
         /// </summary>
-        [JsonProperty("operateTime")]
+        [JsonPropertyName("operateTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime OperateTime { get; set; }
         /// <summary>
-        /// Service charge quantity
+        /// ["<c>serviceChargeAmount</c>"] Service charge quantity
         /// </summary>
-        [JsonProperty("serviceChargeAmount")]
+        [JsonPropertyName("serviceChargeAmount")]
         public decimal ServiceChargeQuantity { get; set; }
         /// <summary>
-        /// Transaction id
+        /// ["<c>tranId</c>"] Transaction id
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
         /// <summary>
-        /// Transfered quantity
+        /// ["<c>transferedAmount</c>"] Transferred quantity
         /// </summary>
-        [JsonProperty("transferedAmount")]
-        public decimal TransferedQuantity { get; set; }
+        [JsonPropertyName("transferedAmount")]
+        public decimal TransferredQuantity { get; set; }
     }
 }
+

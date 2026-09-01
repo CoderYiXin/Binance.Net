@@ -3,25 +3,35 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Funding rate information for Futures trading
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesFundingRateHistory
     {
         /// <summary>
-        /// The symbol the information is about
+        /// ["<c>symbol</c>"] The symbol the information is about
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The finding rate for the given symbol and time
+        /// ["<c>fundingRate</c>"] The funding rate for the given symbol and time.
         /// </summary>
+        [JsonPropertyName("fundingRate")]
         public decimal FundingRate { get; set; }
         /// <summary>
-        /// The time the funding rate is applied
+        /// ["<c>fundingTime</c>"] The time the funding rate is applied
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("fundingTime")]
         public DateTime FundingTime { get; set; }
         /// <summary>
-        /// The mark price
+        /// ["<c>markPrice</c>"] The mark price
         /// </summary>
-        [JsonProperty("markPrice")]
+        [JsonPropertyName("markPrice")]
         public decimal? MarkPrice { get; set; }
+        /// <summary>
+        /// ["<c>rateType</c>"] The type of the rate
+        /// </summary>
+        [JsonPropertyName("rateType")]
+        public string? RateType { get; set; }
     }
 }
+

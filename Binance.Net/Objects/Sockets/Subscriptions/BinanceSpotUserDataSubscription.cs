@@ -1,100 +1,205 @@
-﻿using Binance.Net.Objects.Internal;
+﻿using Binance.Net.Clients.SpotApi;
+using Binance.Net.Objects.Internal;
 using Binance.Net.Objects.Models;
 using Binance.Net.Objects.Models.Spot.Socket;
-using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Objects.Sockets;
 using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
+using CryptoExchange.Net.Sockets.Default.Routing;
 
 namespace Binance.Net.Objects.Sockets.Subscriptions
 {
     /// <inheritdoc />
-    internal class BinanceSpotUserDataSubscription : Subscription<BinanceSocketQueryResponse, BinanceSocketQueryResponse>
+    internal class BinanceSpotUserDataSubscription : Subscription
     {
-        private static readonly MessagePath _ePath = MessagePath.Get().Property("data").Property("e");
-
-        /// <inheritdoc />
-        public override HashSet<string> ListenerIdentifiers { get; set; }
+        private readonly BinanceSocketClientSpotApi _client;
+        internal string? _subscriptionId;
 
         private readonly Action<DataEvent<BinanceStreamOrderUpdate>>? _orderHandler;
         private readonly Action<DataEvent<BinanceStreamOrderList>>? _orderListHandler;
         private readonly Action<DataEvent<BinanceStreamPositionsUpdate>>? _positionHandler;
         private readonly Action<DataEvent<BinanceStreamBalanceUpdate>>? _balanceHandler;
-        private readonly Action<DataEvent<BinanceStreamEvent>>? _listenKeyExpiredHandler;
-
-        /// <inheritdoc />
-        public override Type? GetMessageType(IMessageAccessor message)
-        {
-            var identifier = message.GetValue<string>(_ePath);
-            if (string.Equals(identifier, "outboundAccountPosition", StringComparison.Ordinal))
-                return typeof(BinanceCombinedStream<BinanceStreamPositionsUpdate>);
-            if (string.Equals(identifier, "balanceUpdate", StringComparison.Ordinal))
-                return typeof(BinanceCombinedStream<BinanceStreamBalanceUpdate>);
-            if (string.Equals(identifier, "executionReport", StringComparison.Ordinal))
-                return typeof(BinanceCombinedStream<BinanceStreamOrderUpdate>);
-            if (string.Equals(identifier, "listStatus", StringComparison.Ordinal))
-                return typeof(BinanceCombinedStream<BinanceStreamOrderList>);
-            if (string.Equals(identifier, "listenKeyExpired", StringComparison.Ordinal))
-                return typeof(BinanceCombinedStream<BinanceStreamEvent>);
-
-            return null;
-        }
+        private readonly Action<DataEvent<BinanceStreamEvent>>? _streamTerminatedHandler;
+        private readonly Action<DataEvent<BinanceStreamBalanceLockUpdate>>? _balanceLockHandler;
 
         /// <inheritdoc />
         public BinanceSpotUserDataSubscription(
             ILogger logger,
-            List<string> topics,
+            BinanceSocketClientSpotApi client,
             Action<DataEvent<BinanceStreamOrderUpdate>>? orderHandler,
             Action<DataEvent<BinanceStreamOrderList>>? orderListHandler,
             Action<DataEvent<BinanceStreamPositionsUpdate>>? positionHandler,
             Action<DataEvent<BinanceStreamBalanceUpdate>>? balanceHandler,
-            Action<DataEvent<BinanceStreamEvent>>? listenKeyExpiredHandler,
+            Action<DataEvent<BinanceStreamEvent>>? streamTerminatedHandler,
+            Action<DataEvent<BinanceStreamBalanceLockUpdate>>? lockHandler,
             bool auth) : base(logger, auth)
         {
+            _client = client;
             _orderHandler = orderHandler;
             _orderListHandler = orderListHandler;
             _positionHandler = positionHandler;
             _balanceHandler = balanceHandler;
-            _listenKeyExpiredHandler = listenKeyExpiredHandler;
-            ListenerIdentifiers = new HashSet<string>(topics);
+            _streamTerminatedHandler = streamTerminatedHandler;
+            _balanceLockHandler = lockHandler;
+
+            MessageRouter = MessageRouter.Create([]);
         }
 
         /// <inheritdoc />
-        public override Query? GetSubQuery(SocketConnection connection)
+        protected override Query? GetSubQuery(SocketConnection connection)
         {
-            return new BinanceSystemQuery<BinanceSocketQueryResponse>(new BinanceSocketRequest
+            var signParameters = _client.AuthenticationProvider!.ProcessRequest(_client, new Parameters(BinanceExchange._parameterSerializationSettings));
+            return new BinanceSpotQuery<BinanceResponse<BinanceWebsocketApiWrapper>>(_client, new BinanceSocketQuery
             {
-                Method = "SUBSCRIBE",
-                Params = ListenerIdentifiers.ToArray(),
+                Method = "userDataStream.subscribe.signature",
+                Params = signParameters,
                 Id = ExchangeHelpers.NextId()
-            }, false);
+            }, false);            
         }
 
-        /// <inheritdoc />
-        public override Query? GetUnsubQuery()
+        public override void HandleSubQueryResponse(SocketConnection connection, object? message)
         {
-            return new BinanceSystemQuery<BinanceSocketQueryResponse>(new BinanceSocketRequest
+            if (message == null)
+                return;
+
+            string? id = null;
+            var response = (BinanceResponse<BinanceWebsocketApiWrapper>)message;
+            if (response.Result == null && response.Error?.Code == -2035)
             {
-                Method = "UNSUBSCRIBE",
-                Params = ListenerIdentifiers.ToArray(),
-                Id = ExchangeHelpers.NextId()
-            }, false);
+                // Duplicate subscription, treat as success as it handled correctly internally
+                var otherUserConnection = connection.Subscriptions.First(x => x is BinanceSpotUserDataSubscription userSub);
+                if (otherUserConnection != null)
+                    id = ((BinanceSpotUserDataSubscription)otherUserConnection)._subscriptionId;
+            }
+            else if (response.Result?.SubscriptionId != null)
+            {
+                id = response.Result.SubscriptionId.ToString();
+            }
+            else
+            {
+                return;
+            }
+
+            _subscriptionId = id;
+
+            MessageRouter = MessageRouter.Create([
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamPositionsUpdate>>("outboundAccountPosition", id, DoHandleMessage),
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamBalanceUpdate>>("balanceUpdate", id, DoHandleMessage),
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamOrderUpdate>>("executionReport", id, DoHandleMessage),
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamOrderList>>("listStatus", id, DoHandleMessage),
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamEvent>>("eventStreamTerminated", id, DoHandleMessage),
+                MessageRoute.CreateForEvent<BinanceWebsocketApiWrapper<BinanceStreamBalanceLockUpdate>>("externalLockUpdate", id, DoHandleMessage),
+                ]);
         }
 
         /// <inheritdoc />
-        public override CallResult DoHandleMessage(SocketConnection connection, DataEvent<object> message)
+        protected override Query? GetUnsubQuery(SocketConnection connection)
         {
-            if (message.Data is BinanceCombinedStream<BinanceStreamPositionsUpdate> positionUpdate)
-                _positionHandler?.Invoke(message.As(positionUpdate.Data, positionUpdate.Stream, null, SocketUpdateType.Update));
-            else if (message.Data is BinanceCombinedStream<BinanceStreamBalanceUpdate> balanceUpdate)
-                _balanceHandler?.Invoke(message.As(balanceUpdate.Data, balanceUpdate.Stream, null, SocketUpdateType.Update));
-            else if (message.Data is BinanceCombinedStream<BinanceStreamOrderUpdate> orderUpdate)
-                _orderHandler?.Invoke(message.As(orderUpdate.Data, orderUpdate.Stream, orderUpdate.Data.Symbol, SocketUpdateType.Update));
-            else if (message.Data is BinanceCombinedStream<BinanceStreamOrderList> orderListUpdate)
-                _orderListHandler?.Invoke(message.As(orderListUpdate.Data, orderListUpdate.Stream, null, SocketUpdateType.Update));
-            else if (message.Data is BinanceCombinedStream<BinanceStreamEvent> listenKeyExpired)
-                _listenKeyExpiredHandler?.Invoke(message.As(listenKeyExpired.Data, listenKeyExpired.Stream, null, SocketUpdateType.Update));
+            return new BinanceSpotQuery<BinanceResponse>(_client, new BinanceSocketQuery
+            {
+                Method = "userDataStream.unsubscribe",
+                Params = _subscriptionId != null ? new Parameters(BinanceExchange._parameterSerializationSettings) { { "subscriptionId", _subscriptionId } } : new Parameters(BinanceExchange._parameterSerializationSettings),
+                Id = ExchangeHelpers.NextId()
+            }, false);            
+        }
 
-            return new CallResult(null);
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamPositionsUpdate> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+
+            message.Event.ApiKey = _client.AuthenticationProvider!.Key;
+            _positionHandler?.Invoke(
+                new DataEvent<BinanceStreamPositionsUpdate>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())                 
+                );
+            
+            return CallResult.Ok();
+        }
+
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamBalanceUpdate> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+
+            message.Event.ApiKey = _client.AuthenticationProvider!.Key;
+            _balanceHandler?.Invoke(
+                new DataEvent<BinanceStreamBalanceUpdate>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())
+                );
+            
+            return CallResult.Ok();
+        }
+
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamOrderUpdate> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+
+            message.Event.ApiKey = _client.AuthenticationProvider!.Key;
+            _orderHandler?.Invoke(
+                new DataEvent<BinanceStreamOrderUpdate>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithSymbol(message.Event.Symbol)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())
+                );
+            
+            return CallResult.Ok();
+        }
+
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamOrderList> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+
+            message.Event.ApiKey = _client.AuthenticationProvider!.Key;
+            _orderListHandler?.Invoke(
+                new DataEvent<BinanceStreamOrderList>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithSymbol(message.Event.Symbol)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())
+                );
+            
+            return CallResult.Ok();
+        }
+
+
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamEvent> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+                        
+            _streamTerminatedHandler?.Invoke(
+                new DataEvent<BinanceStreamEvent>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())
+                );            
+            
+            return CallResult.Ok();
+        }
+
+
+        /// <inheritdoc />
+        public CallResult DoHandleMessage(SocketConnection connection, DateTime receiveTime, string? originalData, BinanceWebsocketApiWrapper<BinanceStreamBalanceLockUpdate> message)
+        {
+            _client.UpdateTimeOffset(message.Event.EventTime);
+
+            message.Event.ApiKey = _client.AuthenticationProvider!.Key;
+            _balanceLockHandler?.Invoke(
+                new DataEvent<BinanceStreamBalanceLockUpdate>(BinanceExchange.ExchangeName, message.Event, receiveTime, originalData)
+                    .WithUpdateType(SocketUpdateType.Update)
+                    .WithStreamId(_client.AuthenticationProvider!.Key)
+                    .WithDataTimestamp(message.Event.EventTime, _client.GetTimeOffset())
+                );
+
+            return CallResult.Ok();
         }
     }
 }

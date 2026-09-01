@@ -54,7 +54,9 @@ namespace Binance.Net.SymbolOrderBooks
             Initialize(options);
 
             _strictLevels = false;
-            _sequencesAreConsecutive = options?.Limit == null;
+            _sequencesAreConsecutive = true;
+            _skipSequenceCheckFirstUpdateAfterSnapshotSet = true;
+
             _updateInterval = options?.UpdateInterval;
             _limit = options?.Limit;
 
@@ -68,52 +70,54 @@ namespace Binance.Net.SymbolOrderBooks
         /// <inheritdoc />
         protected override async Task<CallResult<UpdateSubscription>> DoStartAsync(CancellationToken ct)
         {
-            CallResult<UpdateSubscription> subResult;
+            WebSocketResult<UpdateSubscription> subResult;
             if (_limit == null)
-                subResult = await _socketClient.UsdFuturesApi.SubscribeToOrderBookUpdatesAsync(Symbol, _updateInterval, HandleUpdate).ConfigureAwait(false);
+                subResult = await _socketClient.UsdFuturesApi.ExchangeData.SubscribeToOrderBookUpdatesAsync(Symbol, _updateInterval, HandleUpdate).ConfigureAwait(false);
             else
-                subResult = await _socketClient.UsdFuturesApi.SubscribeToPartialOrderBookUpdatesAsync(Symbol, _limit.Value, _updateInterval, HandleUpdate).ConfigureAwait(false);
+                subResult = await _socketClient.UsdFuturesApi.ExchangeData.SubscribeToPartialOrderBookUpdatesAsync(Symbol, _limit.Value, _updateInterval, HandleUpdate).ConfigureAwait(false);
 
-            if (!subResult)
-                return new CallResult<UpdateSubscription>(subResult.Error!);
+            if (!subResult.Success)
+                return CallResult<UpdateSubscription>.Fail(subResult.Error!);
 
             if (ct.IsCancellationRequested)
             {
                 await subResult.Data.CloseAsync().ConfigureAwait(false);
-                return subResult.AsError<UpdateSubscription>(new CancellationRequestedError());
+                return CallResult<UpdateSubscription>.Fail(new CancellationRequestedError());
             }
 
             Status = OrderBookStatus.Syncing;
             if (_limit == null)
             {
+                // Wait up to 250ms until the first update has been received
+                await WaitUntilFirstUpdateBufferedAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(250), ct).ConfigureAwait(false);
+
                 var bookResult = await _restClient.UsdFuturesApi.ExchangeData.GetOrderBookAsync(Symbol, _limit ?? 1000).ConfigureAwait(false);
-                if (!bookResult)
+                if (!bookResult.Success)
                 {
                     await _socketClient.UnsubscribeAsync(subResult.Data).ConfigureAwait(false);
-                    return new CallResult<UpdateSubscription>(bookResult.Error!);
+                    return CallResult<UpdateSubscription>.Fail(bookResult.Error!);
                 }
 
-                SetInitialOrderBook(bookResult.Data.LastUpdateId, bookResult.Data.Bids, bookResult.Data.Asks);
+                SetSnapshot(bookResult.Data.LastUpdateId, bookResult.Data.Bids, bookResult.Data.Asks);
             }
             else
             {
                 var setResult = await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
-                return setResult ? subResult : new CallResult<UpdateSubscription>(setResult.Error!);
+                if (!setResult.Success)
+                    await subResult.Data.CloseAsync().ConfigureAwait(false);
+
+                return setResult.Success ? CallResult<UpdateSubscription>.Ok(subResult.Data) : CallResult<UpdateSubscription>.Fail(setResult.Error!);
             }
 
-            return new CallResult<UpdateSubscription>(subResult.Data);
+            return CallResult<UpdateSubscription>.Ok(subResult.Data);
         }
 
         private void HandleUpdate(DataEvent<IBinanceFuturesEventOrderBook> data)
         {
             if (_limit == null)
-            {
-                UpdateOrderBook(data.Data.FirstUpdateId ?? 0, data.Data.LastUpdateId, data.Data.Bids, data.Data.Asks);
-            }
+                UpdateOrderBook(data.Data.LastUpdateIdStream + 1, data.Data.LastUpdateId, data.Data.Bids, data.Data.Asks, data.DataTime, data.DataTimeLocal);
             else
-            {
-                SetInitialOrderBook(data.Data.LastUpdateId, data.Data.Bids, data.Data.Asks);
-            }
+                SetSnapshot(data.Data.LastUpdateId, data.Data.Bids, data.Data.Asks, data.DataTime, data.DataTimeLocal);
         }
 
         /// <inheritdoc />
@@ -122,17 +126,20 @@ namespace Binance.Net.SymbolOrderBooks
         }
 
         /// <inheritdoc />
-        protected override async Task<CallResult<bool>> DoResyncAsync(CancellationToken ct)
+        protected override async Task<CallResult> DoResyncAsync(CancellationToken ct)
         {
             if (_limit != null)
                 return await WaitForSetOrderBookAsync(_initialDataTimeout, ct).ConfigureAwait(false);
 
-            var bookResult = await _restClient.UsdFuturesApi.ExchangeData.GetOrderBookAsync(Symbol, _limit ?? 1000).ConfigureAwait(false);
-            if (!bookResult)
-                return new CallResult<bool>(bookResult.Error!);
+            // Wait up to 250ms until the first update has been received
+            await WaitUntilFirstUpdateBufferedAsync(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(250), ct).ConfigureAwait(false);
 
-            SetInitialOrderBook(bookResult.Data.LastUpdateId, bookResult.Data.Bids, bookResult.Data.Asks);
-            return new CallResult<bool>(true);
+            var bookResult = await _restClient.UsdFuturesApi.ExchangeData.GetOrderBookAsync(Symbol, _limit ?? 1000).ConfigureAwait(false);
+            if (!bookResult.Success)
+                return CallResult.Fail(bookResult.Error!);
+
+            SetSnapshot(bookResult.Data.LastUpdateId, bookResult.Data.Bids, bookResult.Data.Asks);
+            return CallResult.Ok();
         }
 
         /// <inheritdoc />

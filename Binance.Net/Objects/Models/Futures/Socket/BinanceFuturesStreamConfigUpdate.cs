@@ -1,26 +1,27 @@
-﻿namespace Binance.Net.Objects.Models.Futures.Socket
+namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Information about leverage of symbol changed
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamConfigUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Leverage Update data
+        /// ["<c>ac</c>"] Leverage update data.
         /// </summary>
-        [JsonProperty("ac")]
+        [JsonPropertyName("ac")]
         public BinanceFuturesStreamLeverageUpdateData? LeverageUpdateData { get; set; }
 
         /// <summary>
-        /// Position mode Update data
+        /// ["<c>ai</c>"] Position mode update data.
         /// </summary>
-        [JsonProperty("ai")]
+        [JsonPropertyName("ai")]
         public BinanceFuturesStreamConfigUpdateData? ConfigUpdateData { get; set; }
 
         /// <summary>
-        /// Transaction time
+        /// ["<c>T</c>"] Transaction time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
         /// <summary>
         /// The listen key the update was for
@@ -34,15 +35,15 @@
     public record BinanceFuturesStreamLeverageUpdateData
     {
         /// <summary>
-        /// The symbol this balance is for
+        /// ["<c>s</c>"] The symbol this balance is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string? Symbol { get; set; }
 
         /// <summary>
-        /// The symbol this leverage is for
+        /// ["<c>l</c>"] The symbol this leverage is for
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public int Leverage { get; set; }
     }
 
@@ -52,9 +53,10 @@
     public record BinanceFuturesStreamConfigUpdateData
     {
         /// <summary>
-        /// Multi-Assets Mode
+        /// ["<c>j</c>"] Multi-Assets Mode
         /// </summary>
-        [JsonProperty("j")]
+        [JsonPropertyName("j")]
         public bool MultiAssetMode { get; set; }
     }
 }
+

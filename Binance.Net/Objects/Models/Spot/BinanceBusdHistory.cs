@@ -1,58 +1,59 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Busd convert history
     /// </summary>
+    [SerializationModel]
     public record BinanceBusdHistory
     {
         /// <summary>
-        /// Transaction id
+        /// ["<c>tranId</c>"] The transaction identifier.
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
         /// <summary>
-        /// Type
+        /// ["<c>type</c>"] The conversion type.
         /// </summary>
-        [JsonProperty("type")]
-        [JsonConverter(typeof(EnumConverter))]
-        public BinanceBusdConvertType Type { get; set; }
+        [JsonPropertyName("type")]
+        public BusdConvertType Type { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] The conversion timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Deducted asset
+        /// ["<c>deductedAsset</c>"] Deducted asset
         /// </summary>
-        [JsonProperty("deductedAsset")]
+        [JsonPropertyName("deductedAsset")]
         public string DeductedAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Deducted quantity
+        /// ["<c>deductedAmount</c>"] Deducted quantity
         /// </summary>
-        [JsonProperty("deductedAmount")]
+        [JsonPropertyName("deductedAmount")]
         public decimal DeductedQuantity { get; set; }
         /// <summary>
-        /// Target asset
+        /// ["<c>targetAsset</c>"] Target asset
         /// </summary>
-        [JsonProperty("targetAsset")]
+        [JsonPropertyName("targetAsset")]
         public string TargetAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Target quantity
+        /// ["<c>targetAmount</c>"] Target quantity
         /// </summary>
-        [JsonProperty("targetAmount")]
+        [JsonPropertyName("targetAmount")]
         public decimal TargetQuantity { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
-        /// Account type
+        /// ["<c>accountType</c>"] Account type
         /// </summary>
-        [JsonProperty("accountType")]
+        [JsonPropertyName("accountType")]
         public string AccountType { get; set; } = string.Empty;
     }
 }
+

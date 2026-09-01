@@ -1,18 +1,23 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Transfer direction for isolated margin transfer
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<IsolatedMarginTransferDirection>))]
     public enum IsolatedMarginTransferDirection
     {
         /// <summary>
-        /// Spot
+        /// ["<c>SPOT</c>"] Spot
         /// </summary>
+        [Map("SPOT")]
         Spot,
-
         /// <summary>
-        /// Isolated margin
+        /// ["<c>ISOLATED_MARGIN</c>"] Isolated margin
         /// </summary>
+        [Map("ISOLATED_MARGIN")]
         IsolatedMargin
     }
 }
+

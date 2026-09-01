@@ -1,14 +1,16 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// The result of transferring
     /// </summary>
+    [SerializationModel]
     public record BinanceTransaction
     {
         /// <summary>
-        /// The Transaction id as assigned by Binance
+        /// ["<c>tranId</c>"] The Transaction id as assigned by Binance
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
     }
 }
+

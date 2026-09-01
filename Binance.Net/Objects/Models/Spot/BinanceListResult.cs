@@ -1,33 +1,39 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// List result
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    //[SerializationModel]
     public record BinanceListResult<T>
     {
         /// <summary>
-        /// Data start time
+        /// ["<c>startTime</c>"] Data start time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("startTime")]
         public DateTime StartTime { get; set; }
         /// <summary>
-        /// Emd to,e
+        /// ["<c>endTime</c>"] Data end time.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("endTime")]
         public DateTime EndTime { get; set; }
         /// <summary>
-        /// Limit
+        /// ["<c>limit</c>"] Limit
         /// </summary>
+        [JsonPropertyName("limit")]
         public int Limit { get; set; }
         /// <summary>
-        /// More data available
+        /// ["<c>moreData</c>"] More data available
         /// </summary>
+        [JsonPropertyName("moreData")]
         public bool MoreData { get; set; }
         /// <summary>
-        /// The data
+        /// ["<c>list</c>"] The data
         /// </summary>
-        [JsonProperty("list")]
-        public IEnumerable<T> Data { get; set; } = Array.Empty<T>();
+        [JsonPropertyName("list")]
+        public T[] Data { get; set; } = Array.Empty<T>();
     }
 }
+

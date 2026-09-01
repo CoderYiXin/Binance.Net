@@ -1,16 +1,15 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
+    [SerializationModel]
     internal record BinanceSubAccountUniversalTransfersList
     {
         /// <summary>
-        /// Transactions
+        /// ["<c>result</c>"] The returned transfer transactions.
         /// </summary>
-        [JsonProperty("result")]
-        public IEnumerable<BinanceSubAccountUniversalTransferTransaction> Transactions { get; set; } =
-            new List<BinanceSubAccountUniversalTransferTransaction>();
+        [JsonPropertyName("result")]
+        public BinanceSubAccountUniversalTransferTransaction[] Transactions { get; set; } = [];
 
     }
 
@@ -20,54 +19,59 @@ namespace Binance.Net.Objects.Models.Spot.SubAccountData
     public record BinanceSubAccountUniversalTransferTransaction
     {
         /// <summary>
-        /// Transaction id
+        /// ["<c>tranId</c>"] The transaction identifier.
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
 
         /// <summary>
-        /// From email
+        /// ["<c>fromEmail</c>"] The source account email address.
         /// </summary>
-        public string FromEmail { get; set; } = "";
+        [JsonPropertyName("fromEmail")]
+        public string FromEmail { get; set; } = string.Empty;
 
         /// <summary>
-        /// To email
+        /// ["<c>toEmail</c>"] The destination account email address.
         /// </summary>
-        public string ToEmail { get; set; } = "";
+        [JsonPropertyName("toEmail")]
+        public string ToEmail { get; set; } = string.Empty;
 
         /// <summary>
-        /// From account type
+        /// ["<c>fromAccountType</c>"] From account type
         /// </summary>
-        [JsonConverter(typeof(TransferAccountTypeConverter))]
+        [JsonPropertyName("fromAccountType")]
         public TransferAccountType FromAccountType { get; set; }
 
         /// <summary>
-        /// To account type
+        /// ["<c>toAccountType</c>"] To account type
         /// </summary>
-        [JsonConverter(typeof(TransferAccountTypeConverter))]
+        [JsonPropertyName("toAccountType")]
         public TransferAccountType ToAccountType { get; set; }
 
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] The transfer status.
         /// </summary>
-        public string Status { get; set; } = "";
+        [JsonPropertyName("status")]
+        public string Status { get; set; } = string.Empty;
 
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] The transferred asset.
         /// </summary>
-        public string Asset { get; set; } = "";
+        [JsonPropertyName("asset")]
+        public string Asset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
 
         /// <summary>
-        /// The time the universal transaction was created
+        /// ["<c>createTimeStamp</c>"] The time the universal transaction was created
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("createTimeStamp")]
+        [JsonPropertyName("createTimeStamp")]
         public DateTime CreateTime { get; set; }
     }
 }
+

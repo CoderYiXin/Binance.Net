@@ -3,14 +3,18 @@ using System.IO;
 using System.Net.WebSockets;
 using System.Security.Authentication;
 using System.Text;
+using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
-using CryptoExchange.Net.Interfaces;
+using Binance.Net.Converters;
+using CryptoExchange.Net.Converters.SystemTextJson;
 using CryptoExchange.Net.Objects;
-using Newtonsoft.Json;
+using CryptoExchange.Net.Sockets.Default.Interfaces;
+using CryptoExchange.Net.Sockets.Interfaces;
 
 namespace Binance.Net.UnitTests.TestImplementations
 {
-    public class TestSocket: IWebsocket
+    public class TestSocket : IWebsocket
     {
         public bool CanConnect { get; set; } = true;
         public bool Connected { get; set; }
@@ -20,6 +24,7 @@ namespace Binance.Net.UnitTests.TestImplementations
         public event Func<Task> OnReconnected;
         public event Func<Task> OnReconnecting;
         public event Func<int, Task> OnRequestRateLimited;
+        public event Func<Task> OnConnectRateLimited;
         public event Func<Exception, Task> OnError;
 #pragma warning restore 0067
         public event Func<int, Task> OnRequestSent;
@@ -30,6 +35,7 @@ namespace Binance.Net.UnitTests.TestImplementations
         public bool ShouldReconnect { get; set; }
         public Func<string, string> DataInterpreterString { get; set; }
         public Func<byte[], string> DataInterpreterBytes { get; set; }
+        public DateTime? LastReceiveTime { get; set; }
         public DateTime? DisconnectTime { get; set; }
         public string Url { get; }
         public bool IsClosed => !Connected;
@@ -49,10 +55,10 @@ namespace Binance.Net.UnitTests.TestImplementations
         public TimeSpan KeepAliveInterval { get; set; }
         public Func<Task<Uri>> GetReconnectionUrl { get; set; }
 
-        public Task<CallResult> ConnectAsync()
+        public Task<CallResult> ConnectAsync(CancellationToken ct)
         {
             Connected = CanConnect;
-            return Task.FromResult(CanConnect ? new CallResult(null) : new CallResult(new CantConnectError()));
+            return Task.FromResult(CanConnect ? CallResult.Ok() : CallResult.Fail(new CantConnectError()));
         }
 
         public bool Send(int requestId, string data, int weight)
@@ -101,7 +107,7 @@ namespace Binance.Net.UnitTests.TestImplementations
 
         public void InvokeMessage<T>(T data)
         {
-            OnStreamMessage?.Invoke(WebSocketMessageType.Text, new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(data)))).Wait();
+            OnStreamMessage?.Invoke(WebSocketMessageType.Text, new ReadOnlyMemory<byte>(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(data, SerializerOptions.WithConverters(new BinanceSourceGenerationContext()))))).Wait();
         }
 
         public void SetProxy(ApiProxy proxy)
@@ -119,5 +125,8 @@ namespace Binance.Net.UnitTests.TestImplementations
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateProxy(ApiProxy proxy) => throw new NotImplementedException();
+        public bool Send(int id, byte[] data, int weight) => throw new NotImplementedException();
     }
 }

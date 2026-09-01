@@ -1,22 +1,23 @@
-﻿namespace Binance.Net.Objects.Models.Futures.Socket
+namespace Binance.Net.Objects.Models.Futures.Socket
 {
 
     /// <summary>
-    /// 
+    /// Condition order reject update
     /// </summary>
+    [SerializationModel]
     public record BinanceConditionOrderTriggerRejectUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Timestamp
+        /// ["<c>T</c>"] The event timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("T")]
+        [JsonPropertyName("T")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Reject info
+        /// ["<c>or</c>"] Reject info
         /// </summary>
-        [JsonProperty("or")]
+        [JsonPropertyName("or")]
         public BinanceConditionOrderTriggerReject RejectInfo { get; set; } = null!;
     }
 
@@ -26,19 +27,20 @@
     public record BinanceConditionOrderTriggerReject
     {
         /// <summary>
-        /// The symbol
+        /// ["<c>s</c>"] The symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Order id
+        /// ["<c>i</c>"] Order id
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public long OrderId { get; set; }
         /// <summary>
-        /// Reject reason
+        /// ["<c>r</c>"] Reject reason
         /// </summary>
-        [JsonProperty("r")]
+        [JsonPropertyName("r")]
         public string Reason { get; set; } = string.Empty;
     }
 }
+

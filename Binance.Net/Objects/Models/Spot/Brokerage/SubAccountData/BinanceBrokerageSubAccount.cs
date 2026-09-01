@@ -1,24 +1,27 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
 {
     /// <summary>
     /// Sub Account
     /// </summary>
+    [SerializationModel]
     public record BinanceBrokerageSubAccount : BinanceBrokerageSubAccountCommission
     {
         /// <summary>
-        /// Email
+        /// ["<c>email</c>"] Email
         /// </summary>
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
-        /// Tag
+        /// ["<c>tag</c>"] Tag
         /// </summary>
+        [JsonPropertyName("tag")]
         public string Tag { get; set; } = string.Empty;
 
         /// <summary>
-        /// Create Date
+        /// ["<c>createTime</c>"] Create Date
         /// </summary>
-        [JsonProperty("createTime"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateDate { get; set; }
     }
 }

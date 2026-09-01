@@ -1,26 +1,31 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Asset info for dust conversion
     /// </summary>
+    [SerializationModel]
     public record BinanceMarginDustAsset
     {
         /// <summary>
-        /// Total btc
+        /// ["<c>totalTransferBtc</c>"] Total btc
         /// </summary>
+        [JsonPropertyName("totalTransferBtc")]
         public decimal TotalTransferBtc { get; set; }
         /// <summary>
-        /// Total bnb
+        /// ["<c>totalTransferBNB</c>"] Total bnb
         /// </summary>
+        [JsonPropertyName("totalTransferBNB")]
         public decimal TotalTransferBnb { get; set; }
         /// <summary>
-        /// Dribblet percentage
+        /// ["<c>dribbletPercentage</c>"] Dribblet percentage
         /// </summary>
+        [JsonPropertyName("dribbletPercentage")]
         public decimal DribbletPercentage { get; set; }
         /// <summary>
-        /// Details
+        /// ["<c>details</c>"] Details
         /// </summary>
-        public IEnumerable<BinanceMarginDustAssetDetails> Details { get; set; } = Array.Empty<BinanceMarginDustAssetDetails>();
+        [JsonPropertyName("details")]
+        public BinanceMarginDustAssetDetails[] Details { get; set; } = Array.Empty<BinanceMarginDustAssetDetails>();
     }
 
     /// <summary>
@@ -29,39 +34,40 @@
     public record BinanceMarginDustAssetDetails
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Asset full name
+        /// ["<c>assetFullName</c>"] Asset full name
         /// </summary>
-        [JsonProperty("assetFullName")]
+        [JsonPropertyName("assetFullName")]
         public string AssetFullName { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity fee
+        /// ["<c>amountFree</c>"] Quantity fee
         /// </summary>
-        [JsonProperty("amountFree")]
+        [JsonPropertyName("amountFree")]
         public decimal QuantityFree { get; set; }
         /// <summary>
-        /// To btc
+        /// ["<c>toBTC</c>"] To btc
         /// </summary>
-        [JsonProperty("toBTC")]
+        [JsonPropertyName("toBTC")]
         public decimal ToBtc { get; set; }
         /// <summary>
-        /// To bnb
+        /// ["<c>toBNB</c>"] To bnb
         /// </summary>
-        [JsonProperty("toBNB")]
+        [JsonPropertyName("toBNB")]
         public decimal ToBnb { get; set; }
         /// <summary>
-        /// To bnb off exchange
+        /// ["<c>toBNBOffExchange</c>"] To bnb off exchange
         /// </summary>
-        [JsonProperty("toBNBOffExchange")]
+        [JsonPropertyName("toBNBOffExchange")]
         public decimal ToBnbOffExchange { get; set; }
         /// <summary>
-        /// Exchange
+        /// ["<c>exchange</c>"] Exchange
         /// </summary>
-        [JsonProperty("exchange")]
+        [JsonPropertyName("exchange")]
         public decimal Exchange { get; set; }
     }
 }
+

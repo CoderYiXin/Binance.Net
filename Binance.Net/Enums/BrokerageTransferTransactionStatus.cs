@@ -1,17 +1,32 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Brokerage transfer transaction status
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<BrokerageTransferTransactionStatus>))]
     public enum BrokerageTransferTransactionStatus
     {
-        /// <summary> Init </summary>
+        /// <summary>
+        /// ["<c>INIT</c>"] Init
+        /// </summary>
+        [Map("INIT")]
         Init,
-        /// <summary> Process </summary>
+        /// <summary>
+        /// ["<c>PROCESS</c>"] Process
+        /// </summary>
+        [Map("PROCESS")]
         Process,
-        /// <summary> Success </summary>
+        /// <summary> 
+        /// ["<c>SUCCESS</c>"] Success 
+        /// </summary>
+        [Map("SUCCESS")]
         Success,
-        /// <summary> Failure </summary>
+        /// <summary> 
+        /// ["<c>FAILURE</c>"] Failure 
+        /// </summary>
+        [Map("FAILURE")]
         Failure,
     }
 }

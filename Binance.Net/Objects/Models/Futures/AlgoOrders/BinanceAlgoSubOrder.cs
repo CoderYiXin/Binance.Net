@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.AlgoOrders
@@ -6,26 +5,29 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
     /// <summary>
     /// Sub order list
     /// </summary>
+    [SerializationModel]
     public record BinanceAlgoSubOrderList
     {
         /// <summary>
-        /// Amount of sub orders
+        /// ["<c>total</c>"] Amount of sub orders
         /// </summary>
+        [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
-        /// Executed quantity
+        /// ["<c>executedQty</c>"] Executed quantity
         /// </summary>
-        [JsonProperty("executedQty")]
+        [JsonPropertyName("executedQty")]
         public decimal ExecutedQuantity { get; set; }
         /// <summary>
-        /// Executed amount
+        /// ["<c>executedAmt</c>"] Executed amount
         /// </summary>
-        [JsonProperty("executedAmt")]
+        [JsonPropertyName("executedAmt")]
         public decimal ExecutedAmount { get; set; }
         /// <summary>
-        /// Sub orders
+        /// ["<c>subOrders</c>"] Sub orders
         /// </summary>
-        public IEnumerable<BinanceAlgoSubOrder> SubOrders { get; set; } = Array.Empty<BinanceAlgoSubOrder>();
+        [JsonPropertyName("subOrders")]
+        public BinanceAlgoSubOrder[] SubOrders { get; set; } = Array.Empty<BinanceAlgoSubOrder>();
     }
 
     /// <summary>
@@ -34,69 +36,76 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
     public record BinanceAlgoSubOrder
     {
         /// <summary>
-        /// Algo id
+        /// ["<c>algoId</c>"] Algo id
         /// </summary>
+        [JsonPropertyName("algoId")]
         public long AlgoId { get; set; }
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
+        [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
         /// <summary>
-        /// Order status
+        /// ["<c>orderStatus</c>"] Order status
         /// </summary>
-        [JsonProperty("orderStatus")]
-        [JsonConverter(typeof(OrderStatusConverter))]
+        [JsonPropertyName("orderStatus")]
         public OrderStatus Status { get; set; }
         /// <summary>
-        /// Executed quantity
+        /// ["<c>executedQty</c>"] Executed quantity
         /// </summary>
-        [JsonProperty("executedQty")]
+        [JsonPropertyName("executedQty")]
         public decimal ExecutedQuantity { get; set; }
         /// <summary>
-        /// Exceuted amount
+        /// ["<c>executedAmt</c>"] Executed amount
         /// </summary>
-        [JsonProperty("executedAmt")]
+        [JsonPropertyName("executedAmt")]
         public decimal ExecutedAmount { get; set; }
         /// <summary>
-        /// Fee amount
+        /// ["<c>feeAmt</c>"] Fee amount
         /// </summary>
-        [JsonProperty("feeAmt")]
+        [JsonPropertyName("feeAmt")]
         public decimal FeeAmount { get; set; }
         /// <summary>
-        /// Fee asset
+        /// ["<c>feeAsset</c>"] Fee asset
         /// </summary>
+        [JsonPropertyName("feeAsset")]
         public string FeeAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Book time
+        /// ["<c>bookTime</c>"] Book time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("bookTime")]
         public DateTime BookTime { get; set; }
         /// <summary>
-        /// Average price
+        /// ["<c>avgPrice</c>"] Average price
         /// </summary>
-        [JsonProperty("avgPrice")]
+        [JsonPropertyName("avgPrice")]
         public decimal AveragePrice { get; set; }
         /// <summary>
-        /// Side
+        /// ["<c>side</c>"] Side
         /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("side")]
         public OrderSide Side { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>symbol</c>"] Symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Sub id
+        /// ["<c>subId</c>"] Sub id
         /// </summary>
+        [JsonPropertyName("subId")]
         public long SubId { get; set; }
         /// <summary>
-        /// Time in force
+        /// ["<c>timeInForce</c>"] Time in force
         /// </summary>
+        [JsonPropertyName("timeInForce")]
         public string TimeInForce { get; set; } = string.Empty;
         /// <summary>
-        /// Original quantity
+        /// ["<c>origQty</c>"] Original quantity
         /// </summary>
-        [JsonProperty("origQty")]
+        [JsonPropertyName("origQty")]
         public decimal OriginalQuantity { get; set; }
     }
 }
+

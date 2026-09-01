@@ -1,52 +1,59 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Repay record
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanRepayRecord
     {
         /// <summary>
-        /// The loaning asset
+        /// ["<c>loanCoin</c>"] The loaning asset
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The collateral asset
+        /// ["<c>collateralCoin</c>"] The collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Borrow order id
+        /// ["<c>orderId</c>"] Borrow order id
         /// </summary>
+        [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
         /// <summary>
-        /// Repay timestamp
+        /// ["<c>repayTime</c>"] Repay timestamp
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("repayTime")]
         public DateTime RepayTime { get; set; }
         /// <summary>
-        /// Status of the repay
+        /// ["<c>repayStatus</c>"] The repayment status.
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("repayStatus")]
         public BorrowStatus RepayStatus { get; set; }
         /// <summary>
-        /// Collateral return
+        /// ["<c>collateralReturn</c>"] Collateral return
         /// </summary>
+        [JsonPropertyName("collateralReturn")]
         public decimal CollateralReturn { get; set; }
         /// <summary>
-        /// Collateral used
+        /// ["<c>collateralUsed</c>"] Collateral used
         /// </summary>
+        [JsonPropertyName("collateralUsed")]
         public decimal CollateralUsed { get; set; }
         /// <summary>
-        /// Repay quantity
+        /// ["<c>repayAmount</c>"] Repay quantity
         /// </summary>
-        [JsonProperty("repayAmount")]
+        [JsonPropertyName("repayAmount")]
         public decimal RepayQuantity { get; set; }
         /// <summary>
-        /// 1 for "repay with borrowed asset", 2 for "repay with collateral"
+        /// ["<c>repayType</c>"] 1 for "repay with borrowed asset", 2 for "repay with collateral"
         /// </summary>
+        [JsonPropertyName("repayType")]
         public int RepayType { get; set; }
     }
 }
+

@@ -1,18 +1,33 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Cross margin collateral info
     /// </summary>
+    [SerializationModel]
     public record BinanceCrossMarginCollateralRatio
     {
         /// <summary>
-        /// Collaterals
+        /// ["<c>collaterals</c>"] Collaterals
         /// </summary>
-        public IEnumerable<BinanceCrossMarginCollateral> Collaterals { get; set; } = Array.Empty<BinanceCrossMarginCollateral>();
+        [JsonPropertyName("collaterals")]
+        public BinanceCrossMarginCollateral[] Collaterals { get; set; } = Array.Empty<BinanceCrossMarginCollateral>();
+
         /// <summary>
-        /// Asset names
+        /// ["<c>withdrawCollaterals</c>"] Withdraw collaterals
         /// </summary>
-        public IEnumerable<string> AssetNames { get; set; } = Array.Empty<string>();
+        [JsonPropertyName("withdrawCollaterals")]
+        public BinanceCrossMarginCollateral[] WithdrawCollaterals { get; set; } = Array.Empty<BinanceCrossMarginCollateral>();
+
+        /// <summary>
+        /// ["<c>borrowCollaterals</c>"] Borrow collaterals
+        /// </summary>
+        [JsonPropertyName("borrowCollaterals")]
+        public BinanceCrossMarginCollateral[] BorrowCollaterals { get; set; } = Array.Empty<BinanceCrossMarginCollateral>();
+        /// <summary>
+        /// ["<c>assetNames</c>"] Asset names
+        /// </summary>
+        [JsonPropertyName("assetNames")]
+        public string[] AssetNames { get; set; } = Array.Empty<string>();
     }
 
     /// <summary>
@@ -21,16 +36,20 @@
     public record BinanceCrossMarginCollateral
     {
         /// <summary>
-        /// Min usd value
+        /// ["<c>minUsdValue</c>"] Min usd value
         /// </summary>
+        [JsonPropertyName("minUsdValue")]
         public decimal MinUsdValue { get; set; }
         /// <summary>
-        /// Max usd value
+        /// ["<c>maxUsdValue</c>"] Max usd value
         /// </summary>
+        [JsonPropertyName("maxUsdValue")]
         public decimal? MaxUsdValue { get; set; }
         /// <summary>
-        /// Discount rate
+        /// ["<c>discountRate</c>"] Discount rate
         /// </summary>
+        [JsonPropertyName("discountRate")]
         public decimal DiscountRate { get; set; }
     }
 }
+

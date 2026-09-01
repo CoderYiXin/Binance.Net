@@ -5,7 +5,8 @@ namespace Binance.Net.Objects.Models.Spot.Blvt
     /// <summary>
     /// Blvt kline
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<BinanceBlvtKline>))]
+    [SerializationModel]
     public record BinanceBlvtKline
     {
         /// <summary>
@@ -40,7 +41,7 @@ namespace Binance.Net.Objects.Models.Spot.Blvt
         [ArrayProperty(5)]
         public decimal RealLeverage { get; set; }
         /// <summary>
-        /// The time this candlestick closed
+        /// The time this candlestick closed.
         /// </summary>
         [ArrayProperty(6), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CloseTime { get; set; }

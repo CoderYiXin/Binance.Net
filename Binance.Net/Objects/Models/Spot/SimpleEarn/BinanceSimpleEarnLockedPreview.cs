@@ -1,59 +1,71 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Simple Earn locked product preview
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnLockedPreview
     {
         /// <summary>
-        /// Reward asset
+        /// ["<c>rewardAsset</c>"] Reward asset
         /// </summary>
-        [JsonProperty("rewardAsset")]
+        [JsonPropertyName("rewardAsset")]
         public string RewardAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Extra reward asset
+        /// ["<c>extraRewardAsset</c>"] Extra reward asset
         /// </summary>
-        [JsonProperty("extraRewardAsset")]
+        [JsonPropertyName("extraRewardAsset")]
         public string ExtraRewardAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Total reward quantity
+        /// ["<c>totalRewardAmt</c>"] Total reward quantity
         /// </summary>
-        [JsonProperty("totalRewardAmt")]
+        [JsonPropertyName("totalRewardAmt")]
         public decimal TotalRewardQuantity { get; set; }
         /// <summary>
-        /// Estimated total extra reward quantity
+        /// ["<c>estTotalExtraRewardAmt</c>"] Estimated total extra reward quantity
         /// </summary>
-        [JsonProperty("estTotalExtraRewardAmt")]
+        [JsonPropertyName("estTotalExtraRewardAmt")]
         public decimal EstimatedTotalExtraRewardQuantity { get; set; }
         /// <summary>
-        /// Next pay
+        /// ["<c>nextPay</c>"] Next pay amount.
         /// </summary>
-        [JsonProperty("nextPay")]
+        [JsonPropertyName("nextPay")]
         public decimal NextPay { get; set; }
         /// <summary>
-        /// Next pay date
+        /// ["<c>nextPayDate</c>"] Next pay date
         /// </summary>
-        [JsonProperty("nextPayDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("nextPayDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime NextPayDate { get; set; }
         /// <summary>
-        /// Value date
+        /// ["<c>valueDate</c>"] Value date
         /// </summary>
-        [JsonProperty("valueDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("valueDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime ValueDate { get; set; }
         /// <summary>
-        /// Rewards end date
+        /// ["<c>rewardsEndDate</c>"] Rewards end date
         /// </summary>
-        [JsonProperty("rewardsEndDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("rewardsEndDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime RewardsEndDate { get; set; }
         /// <summary>
-        /// Deliver date
+        /// ["<c>deliverDate</c>"] Deliver date
         /// </summary>
-        [JsonProperty("deliverDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("deliverDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime DeliverDate { get; set; }
         /// <summary>
-        /// Next subscription date
+        /// ["<c>nextSubscriptionDate</c>"] Next subscription date
         /// </summary>
-        [JsonProperty("nextSubscriptionDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("nextSubscriptionDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime NextSubscriptionDate { get; set; }
+        /// <summary>
+        /// ["<c>boostRewardAsset</c>"] Asset the boost reward is in
+        /// </summary>
+        [JsonPropertyName("boostRewardAsset")]
+        public string? BoostRewardAsset { get; set; }
+        /// <summary>
+        /// ["<c>estDailyRewardAmt</c>"] Estimated daily reward
+        /// </summary>
+        [JsonPropertyName("estDailyRewardAmt")]
+        public decimal? EstimatedDailyRewardQuantity { get; set; }
     }
 }
+

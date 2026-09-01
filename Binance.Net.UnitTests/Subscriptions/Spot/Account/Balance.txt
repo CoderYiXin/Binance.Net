@@ -1,14 +1,14 @@
-> { "method": "SUBSCRIBE", "params": [ "123" ], "id": "|1|" }
-< { "result": null, "id": |1| }
+> {"params":{"apiKey":"123","timestamp":1770146786002,"signature":"123"},"method":"userDataStream.subscribe.signature","id":"|1|"}
+< {"id":|1|,"status":200,"result":{"subscriptionId":0},"rateLimits":[{"rateLimitType":"REQUEST_WEIGHT","interval":"MINUTE","intervalNum":1,"limit":6000,"count":4}]}
 = 
-{ 
-	"stream": "123",
-	"data": 
+{
+    "subscriptionId":0,
+    "event":
     {
-	  "e": "balanceUpdate",         //Event Type
-	  "E": 1573200697110,           //Event Time
-	  "a": "BTC",                   //Asset
-	  "d": "100.00000000",          //Balance Delta
-	  "T": 1573200697068            //Clear Time
+	  "e": "balanceUpdate",      
+	  "E": 1573200697110,          
+	  "a": "BTC",               
+	  "d": "100.00000000",          
+	  "T": 1573200697068           
 	}
 }

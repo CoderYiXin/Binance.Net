@@ -1,26 +1,27 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Snapshot data of a spot account
     /// </summary>
+    [SerializationModel]
     public record BinanceSpotAccountSnapshot
     {
         /// <summary>
-        /// Timestamp of the data
+        /// ["<c>updateTime</c>"] Timestamp of the data
         /// </summary>
-        [JsonConverter(typeof(DateTimeConverter)), JsonProperty("updateTime")]
+        [JsonConverter(typeof(DateTimeConverter)), JsonPropertyName("updateTime")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Account type the data is for
+        /// ["<c>type</c>"] Account type the data is for
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("type")]
         public AccountType Type { get; set; }
         /// <summary>
-        /// Snapshot data
+        /// ["<c>data</c>"] Snapshot data
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public BinanceSpotAccountSnapshotData Data { get; set; } = default!;
     }
 
@@ -30,13 +31,16 @@ namespace Binance.Net.Objects.Models.Spot
     public record BinanceSpotAccountSnapshotData
     {
         /// <summary>
-        /// The total value of assets in btc
+        /// ["<c>totalAssetOfBtc</c>"] The total value of assets in BTC.
         /// </summary>
+        [JsonPropertyName("totalAssetOfBtc")]
         public decimal TotalAssetOfBtc { get; set; }
         /// <summary>
-        /// List of balances
+        /// ["<c>balances</c>"] List of balances
         /// </summary>
-        public IEnumerable<BinanceBalance> Balances { get; set; } = Array.Empty<BinanceBalance>();
+        [JsonPropertyName("balances")]
+        public BinanceBalance[] Balances { get; set; } = Array.Empty<BinanceBalance>();
 
     }
 }
+

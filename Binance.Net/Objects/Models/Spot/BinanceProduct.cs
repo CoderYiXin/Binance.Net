@@ -1,176 +1,178 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Info on a product
     /// </summary>
+    [SerializationModel]
     public record BinanceProduct
     {
         /// <summary>
-        /// Name of the symbol
+        /// ["<c>s</c>"] Name of the symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Status of the symbol
+        /// ["<c>st</c>"] Status of the symbol
         /// </summary>
-        [JsonProperty("st")]
+        [JsonPropertyName("st")]
         public string Status { get; set; } = string.Empty;
 
         /// <summary>
-        /// Name of the base asset
+        /// ["<c>b</c>"] Name of the base asset
         /// </summary>
-        [JsonProperty("b")]
+        [JsonPropertyName("b")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Name of the quote asset
+        /// ["<c>q</c>"] Name of the quote asset
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public string QuoteAsset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Char of the base asset
+        /// ["<c>ba</c>"] Char of the base asset
         /// </summary>
-        [JsonProperty("ba")]
+        [JsonPropertyName("ba")]
         public string? BaseAssetChar { get; set; }
         /// <summary>
-        /// Char of the quote asset
+        /// ["<c>qa</c>"] Char of the quote asset
         /// </summary>
-        [JsonProperty("qa")]
+        [JsonPropertyName("qa")]
         public string? QuoteAssetChar { get; set; }
 
         /// <summary>
-        /// Base asset name
+        /// ["<c>an</c>"] Base asset name
         /// </summary>
-        [JsonProperty("an")]
+        [JsonPropertyName("an")]
         public string BaseAssetName { get; set; } = string.Empty;
         /// <summary>
-        /// Quote asset name
+        /// ["<c>qn</c>"] Quote asset name
         /// </summary>
-        [JsonProperty("qn")]
+        [JsonPropertyName("qn")]
         public string QuoteAssetName { get; set; } = string.Empty;
 
         /// <summary>
-        /// Open price
+        /// ["<c>o</c>"] Open price
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public decimal? OpenPrice { get; set; }
         /// <summary>
-        /// High price
+        /// ["<c>h</c>"] High price
         /// </summary>
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public decimal? HighPrice { get; set; }
         /// <summary>
-        /// Low price
+        /// ["<c>l</c>"] Low price
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal? LowPrice { get; set; }
         /// <summary>
-        /// Close price
+        /// ["<c>c</c>"] Close price
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public decimal? ClosePrice { get; set; }
         /// <summary>
-        /// Base volume
+        /// ["<c>v</c>"] Base volume
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public decimal Volume { get; set; }
         /// <summary>
-        /// Quote volume
+        /// ["<c>qv</c>"] Quote volume
         /// </summary>
-        [JsonProperty("qv")]
+        [JsonPropertyName("qv")]
         public decimal QuoteVolume { get; set; }
 
         /// <summary>
-        /// Amount of coins in circulation
+        /// ["<c>cs</c>"] Amount of coins in circulation
         /// </summary>
-        [JsonProperty("cs")]
+        [JsonPropertyName("cs")]
         public decimal? CirculatingSupply { get; set; }
         /// <summary>
-        /// Tags
+        /// ["<c>tags</c>"] Tags
         /// </summary>
-        [JsonProperty("tags")]
-        public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
+        [JsonPropertyName("tags")]
+        public string[] Tags { get; set; } = Array.Empty<string>();
         /// <summary>
-        /// Is Etf enabled
+        /// ["<c>etf</c>"] Is Etf enabled
         /// </summary>
-        [JsonProperty("etf")]
+        [JsonPropertyName("etf")]
         public bool? LeveragedTokenTrading { get; set; }
 
         /// <summary>
-        /// 
+        /// ["<c>i</c>"]
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public decimal? I { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>ts</c>"]
         /// </summary>
-        [JsonProperty("ts")]
+        [JsonPropertyName("ts")]
         public decimal? Ts { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>y</c>"]
         /// </summary>
-        [JsonProperty("y")]
+        [JsonPropertyName("y")]
         public decimal? Y { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>as</c>"]
         /// </summary>
-        [JsonProperty("as")]
+        [JsonPropertyName("as")]
         public decimal? As { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>pn</c>"]
         /// </summary>
-        [JsonProperty("pn")]
+        [JsonPropertyName("pn")]
         public string? Pn { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>pm</c>"]
         /// </summary>
-        [JsonProperty("pm")]
+        [JsonPropertyName("pm")]
         public string? Pm { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>pom</c>"]
         /// </summary>
-        [JsonProperty("pom")]
+        [JsonPropertyName("pom")]
         public bool? Pom { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>pomt</c>"]
         /// </summary>
-        [JsonProperty("pomt")]
-        public bool? Pomt { get; set; }
+        [JsonPropertyName("pomt")]
+        public DateTime? Pomt { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>lc</c>"]
         /// </summary>
-        [JsonProperty("lc")]
+        [JsonPropertyName("lc")]
         public bool? Lc { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>g</c>"]
         /// </summary>
-        [JsonProperty("g")]
+        [JsonPropertyName("g")]
         public bool? G { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>sd</c>"]
         /// </summary>
-        [JsonProperty("sd")]
+        [JsonPropertyName("sd")]
         public bool? Sd { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>r</c>"]
         /// </summary>
-        [JsonProperty("r")]
+        [JsonPropertyName("r")]
         public bool? R { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>hd</c>"]
         /// </summary>
-        [JsonProperty("hd")]
+        [JsonPropertyName("hd")]
         public bool? Hd { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>rb</c>"]
         /// </summary>
-        [JsonProperty("rb")]
+        [JsonPropertyName("rb")]
         public bool? Rb { get; set; }
         /// <summary>
-        /// 
+        /// ["<c>ks</c>"]
         /// </summary>
-        [JsonProperty("ks")]
+        [JsonPropertyName("ks")]
         public bool? Ks { get; set; }
     }
 }
+

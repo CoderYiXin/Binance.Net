@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.Socket
@@ -6,18 +5,19 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Wrapper for kline information for a symbol
     /// </summary>
+    [SerializationModel]
     public record BinanceStreamIndexKlineData : BinanceStreamEvent
     {
         /// <summary>
-        /// The symbol the data is for
+        /// ["<c>s</c>"] The symbol the data is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// The data
+        /// ["<c>k</c>"] The data
         /// </summary>
-        [JsonProperty("k")]
+        [JsonPropertyName("k")]
         public BinanceFuturesStreamIndexKline Data { get; set; } = default!;
     }
 
@@ -27,99 +27,99 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     public record BinanceFuturesStreamIndexKline
     {
         /// <summary>
-        /// Open time
+        /// ["<c>t</c>"] Open time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public DateTime OpenTime { get; set; }
         /// <summary>
-        /// Close time
+        /// ["<c>T</c>"] Close time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("T")]
+        [JsonPropertyName("T")]
         public DateTime CloseTime { get; set; }
 
         /// <summary>
-        /// Ignore
+        /// ["<c>s</c>"] Ignore
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Ignore1 { get; set; } = string.Empty;
         /// <summary>
-        /// Kline interval
+        /// ["<c>i</c>"] Kline interval
         /// </summary>
-        [JsonProperty("i")]
-        [JsonConverter(typeof(KlineIntervalConverter))]
+        [JsonPropertyName("i")]
         public KlineInterval Interval { get; set; }
 
         /// <summary>
-        /// Ignore
+        /// ["<c>f</c>"] Ignore
         /// </summary>
-        [JsonProperty("f")]
+        [JsonPropertyName("f")]
         public string Ignore2 { get; set; } = string.Empty;
         /// <summary>
-        /// Ignore
+        /// ["<c>L</c>"] Ignore
         /// </summary>
-        [JsonProperty("L")]
+        [JsonPropertyName("L")]
         public string Ignore3 { get; set; } = string.Empty;
 
         /// <summary>
-        /// Open price of the kline
+        /// ["<c>o</c>"] Open price of the kline
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public decimal OpenPrice { get; set; }
         /// <summary>
-        /// Close price of the kline
+        /// ["<c>c</c>"] Close price of the kline
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public decimal ClosePrice { get; set; }
         /// <summary>
-        /// High price of the kline
+        /// ["<c>h</c>"] High price of the kline
         /// </summary>
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public decimal HighPrice { get; set; }
         /// <summary>
-        /// Low price of the kline
+        /// ["<c>l</c>"] Low price of the kline
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LowPrice { get; set; }
 
         /// <summary>
-        /// Ignore
+        /// ["<c>v</c>"] Ignore
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public string Ignore4 { get; set; } = string.Empty;
-        
+
         /// <summary>
-        /// Number of basic data
+        /// ["<c>n</c>"] Number of data points in the candle.
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public int NumberOfBasicData { get; set; }
 
         /// <summary>
-        /// Is the kline closed
+        /// ["<c>x</c>"] Is the kline closed
         /// </summary>
-        [JsonProperty("x")]
+        [JsonPropertyName("x")]
         public bool Closed { get; set; }
 
         /// <summary>
-        /// Ignore
+        /// ["<c>q</c>"] Ignore
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public string Ignore5 { get; set; } = string.Empty;
         /// <summary>
-        /// Ignore
+        /// ["<c>V</c>"] Ignore
         /// </summary>
-        [JsonProperty("V")]
+        [JsonPropertyName("V")]
         public string Ignore6 { get; set; } = string.Empty;
         /// <summary>
-        /// Ignore
+        /// ["<c>Q</c>"] Ignore
         /// </summary>
-        [JsonProperty("Q")]
+        [JsonPropertyName("Q")]
         public string Ignore7 { get; set; } = string.Empty;
         /// <summary>
-        /// Ignore
+        /// ["<c>b</c>"] Ignore
         /// </summary>
-        [JsonProperty("b")]
+        [JsonPropertyName("b")]
         public string Ignore8 { get; set; } = string.Empty;
     }
 }
+

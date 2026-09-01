@@ -1,4 +1,4 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 using Binance.Net.Objects.Models.Spot;
 using Binance.Net.Objects.Models.Spot.Blvt;
 using Binance.Net.Objects.Models.Spot.Convert;
@@ -13,406 +13,728 @@ namespace Binance.Net.Interfaces.Clients.SpotApi
     public interface IBinanceRestClientSpotApiExchangeData
     {
         /// <summary>
-        /// Gets the withdraw/deposit details for an asset
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#asset-detail-user_data" /></para>
+        /// Gets withdraw and deposit details per asset
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/wallet/asset" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/asset/assetDetail
+        /// </para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>Asset detail</returns>
-        Task<WebCallResult<Dictionary<string, BinanceAssetDetails>>> GetAssetDetailsAsync(int? receiveWindow = null, CancellationToken ct = default);
+        /// <returns>Asset details keyed by asset name</returns>
+        Task<HttpResult<Dictionary<string, BinanceAssetDetails>>> GetAssetDetailsAsync(int? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get general data for the products available on Binance
+        /// Gets general product data available on Binance
         /// NOTE: This is not an official endpoint and might be changed or removed at any point by Binance
         /// </summary>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceProduct>>> GetProductsAsync(CancellationToken ct = default);
+        /// <returns>Product data</returns>
+        Task<HttpResult<BinanceProduct[]>> GetProductsAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Pings the Binance API
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#test-connectivity" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#test-connectivity" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ping
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>True if successful ping, false if no response</returns>
-        Task<WebCallResult<long>> PingAsync(CancellationToken ct = default);
+        Task<HttpResult<long>> PingAsync(CancellationToken ct = default);
 
         /// <summary>
-        /// Requests the server for the local time
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#check-server-time" /></para>
+        /// Gets the current Binance server time
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#check-server-time" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/time
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Server time</returns>
-        Task<WebCallResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default);
+        Task<HttpResult<DateTime>> GetServerTimeAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets information about the exchange including rate limits and symbol list
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#exchange-information" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/exchangeInfo
+        /// </para>
         /// </summary>
+        /// <param name="returnPermissionSets">["<c>showPermissionSets</c>"] Whether or not permission sets should be returned</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status, Trading, Halt or Break</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Exchange info</returns>
-        Task<WebCallResult<BinanceExchangeInfo>> GetExchangeInfoAsync(CancellationToken ct = default);
+        Task<HttpResult<BinanceExchangeInfo>> GetExchangeInfoAsync(bool? returnPermissionSets = null, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get's information about the exchange including rate limits and information on the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
+        /// Gets information about the exchange including rate limits and information on the provided symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#exchange-information" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/exchangeInfo
+        /// </para>
         /// </summary>
-        /// <param name="symbol">Symbol to get data for token</param>
+        /// <param name="symbol">["<c>symbol</c>"] Symbol to get data for, for example `ETHUSDT`</param>
+        /// <param name="returnPermissionSets">["<c>showPermissionSets</c>"] Whether or not permission sets should be returned</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Exchange info</returns>
-        Task<WebCallResult<BinanceExchangeInfo>> GetExchangeInfoAsync(string symbol, CancellationToken ct = default);
+        Task<HttpResult<BinanceExchangeInfo>> GetExchangeInfoAsync(string symbol, bool? returnPermissionSets = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get's information about the exchange including rate limits and information on the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
+        /// Gets information about the exchange including rate limits and information on the provided symbols
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#exchange-information" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/exchangeInfo
+        /// </para>
         /// </summary>
-        /// <param name="symbols">Symbols to get data for token</param>
+        /// <param name="symbols">["<c>symbols</c>"] Symbols to get data for, for example `ETHUSDT`</param>
+        /// <param name="returnPermissionSets">["<c>showPermissionSets</c>"] Whether or not permission sets should be returned</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status, Trading, Halt or Break</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Exchange info</returns>
-        Task<WebCallResult<BinanceExchangeInfo>> GetExchangeInfoAsync(IEnumerable<string> symbols, CancellationToken ct = default);
+        Task<HttpResult<BinanceExchangeInfo>> GetExchangeInfoAsync(IEnumerable<string> symbols, bool? returnPermissionSets = null, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get's information about the exchange including rate limits and information on the provided symbol based on an account permission
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
+        /// Gets information about the exchange including rate limits and information on the provided symbol based on an account permission
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#exchange-information" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/exchangeInfo
+        /// </para>
         /// </summary>
-        /// <param name="permission">account type</param>
+        /// <param name="permission">["<c>permissions</c>"] Account permission to filter symbols by</param>
+        /// <param name="returnPermissionSets">["<c>showPermissionSets</c>"] Whether or not permission sets should be returned</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status, Trading, Halt or Break</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Exchange info</returns>
-        Task<WebCallResult<BinanceExchangeInfo>> GetExchangeInfoAsync(AccountType permission, CancellationToken ct = default);
+        Task<HttpResult<BinanceExchangeInfo>> GetExchangeInfoAsync(PermissionType permission, bool? returnPermissionSets = null, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get's information about the exchange including rate limits and information on the provided symbols based on account permissions
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#exchange-information" /></para>
+        /// Gets information about the exchange including rate limits and information on the provided symbols based on account permissions
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#exchange-information" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/exchangeInfo
+        /// </para>
         /// </summary>
-        /// <param name="permissions">account type</param>
+        /// <param name="permissions">["<c>permissions</c>"] Account permissions to filter symbols by</param>
+        /// <param name="returnPermissionSets">["<c>showPermissionSets</c>"] Whether or not permission sets should be returned</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status, Trading, Halt or Break</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Exchange info</returns>
-        Task<WebCallResult<BinanceExchangeInfo>> GetExchangeInfoAsync(AccountType[] permissions, CancellationToken ct = default);
+        Task<HttpResult<BinanceExchangeInfo>> GetExchangeInfoAsync(PermissionType[] permissions, bool? returnPermissionSets = null, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the status of the Binance platform
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#system-status-system" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#system-status-system" /><br />
+        /// Endpoint:<br />
+        /// /sapi/v1/system/status
+        /// </para>
         /// </summary>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The system status</returns>
-        Task<WebCallResult<BinanceSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default);
+        Task<HttpResult<BinanceSystemStatus>> GetSystemStatusAsync(CancellationToken ct = default);
 
         /// <summary>
         /// Gets the recent trades for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#recent-trades-list" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#recent-trades-list" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/trades
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get recent trades for</param>
-        /// <param name="limit">Result limit</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get historical trades for, for example `ETHUSDT`</param>
+        /// <param name="limit">["<c>limit</c>"] Result limit</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of recent trades</returns>
-        Task<WebCallResult<IEnumerable<IBinanceRecentTrade>>> GetRecentTradesAsync(string symbol, int? limit = null, CancellationToken ct = default);
+        Task<HttpResult<IBinanceRecentTrade[]>> GetRecentTradesAsync(string symbol, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the historical trades for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#old-trade-lookup-market_data" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#old-trade-lookup" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/historicalTrades
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get recent trades for</param>
-        /// <param name="limit">Result limit</param>
-        /// <param name="fromId">From which trade id on results should be retrieved</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get recent trades for, for example `ETHUSDT`</param>
+        /// <param name="limit">["<c>limit</c>"] Result limit</param>
+        /// <param name="fromId">["<c>fromId</c>"] From which trade id on results should be retrieved</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of recent trades</returns>
-        Task<WebCallResult<IEnumerable<IBinanceRecentTrade>>> GetTradeHistoryAsync(string symbol, int? limit = null, long? fromId = null, CancellationToken ct = default);
+        Task<HttpResult<IBinanceRecentTrade[]>> GetTradeHistoryAsync(string symbol, int? limit = null, long? fromId = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets compressed, aggregate trades. Trades that fill at the same time, from the same order, with the same price will have the quantity aggregated.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#compressed-aggregate-trades-list" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#compressedaggregate-trades-list" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/aggTrades
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the trades for</param>
-        /// <param name="fromId">ID to get aggregate trades from INCLUSIVE.</param>
-        /// <param name="startTime">Time to start getting trades from</param>
-        /// <param name="endTime">Time to stop getting trades from</param>
-        /// <param name="limit">Max number of results</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the trades for, for example `ETHUSDT`</param>
+        /// <param name="fromId">["<c>fromId</c>"] ID to get aggregate trades from INCLUSIVE.</param>
+        /// <param name="startTime">["<c>startTime</c>"] Time to start getting trades from</param>
+        /// <param name="endTime">["<c>endTime</c>"] Time to stop getting trades from</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The aggregated trades list for the symbol</returns>
-        Task<WebCallResult<IEnumerable<BinanceAggregatedTrade>>> GetAggregatedTradeHistoryAsync(string symbol, long? fromId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceAggregatedTrade[]>> GetAggregatedTradeHistoryAsync(string symbol, long? fromId = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get candlestick data for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#kline-candlestick-data" /></para>
+        /// Gets candlestick data for the provided symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#klinecandlestick-data" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/klines
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the data for</param>
-        /// <param name="interval">The candlestick timespan</param>
-        /// <param name="startTime">Start time to get candlestick data</param>
-        /// <param name="endTime">End time to get candlestick data</param>
-        /// <param name="limit">Max number of results</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the data for, for example `ETHUSDT`</param>
+        /// <param name="interval">["<c>interval</c>"] The candlestick timespan</param>
+        /// <param name="startTime">["<c>startTime</c>"] Start time to get candlestick data</param>
+        /// <param name="endTime">["<c>endTime</c>"] End time to get candlestick data</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The candlestick data for the provided symbol</returns>
-        Task<WebCallResult<IEnumerable<IBinanceKline>>> GetKlinesAsync(string symbol, KlineInterval interval,
+        Task<HttpResult<IBinanceKline[]>> GetKlinesAsync(string symbol, KlineInterval interval,
             DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get candlestick data for the provided symbol. Returns modified kline data, optimized for the presentation of candlestick charts
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#uiklines" /></para>
+        /// Gets candlestick data for the provided symbol. Returns modified kline data optimized for candlestick chart presentation
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#uiklines" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/uiKlines
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the data for</param>
-        /// <param name="interval">The candlestick timespan</param>
-        /// <param name="startTime">Start time to get candlestick data</param>
-        /// <param name="endTime">End time to get candlestick data</param>
-        /// <param name="limit">Max number of results</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the data for, for example `ETHUSDT`</param>
+        /// <param name="interval">["<c>interval</c>"] The candlestick timespan</param>
+        /// <param name="startTime">["<c>startTime</c>"] Start time to get candlestick data</param>
+        /// <param name="endTime">["<c>endTime</c>"] End time to get candlestick data</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The candlestick data for the provided symbol</returns>
-        Task<WebCallResult<IEnumerable<IBinanceKline>>> GetUiKlinesAsync(string symbol, KlineInterval interval,
+        Task<HttpResult<IBinanceKline[]>> GetUiKlinesAsync(string symbol, KlineInterval interval,
             DateTime? startTime = null, DateTime? endTime = null, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the order book for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#order-book" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#order-book" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/depth
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the order book for</param>
-        /// <param name="limit">Max number of results</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the order book for, for example `ETHUSDT`</param>
+        /// <param name="limit">["<c>limit</c>"] Max number of results</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>The order book for the symbol</returns>
-        Task<WebCallResult<BinanceOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceOrderBook>> GetOrderBookAsync(string symbol, int? limit = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Gets current average price for a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#current-average-price" /></para>
+        /// Gets the current average price for a symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#current-average-price" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/avgPrice
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the data for</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the data for, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceAveragePrice>> GetCurrentAvgPriceAsync(string symbol, CancellationToken ct = default);
+        /// <returns>Current average price information</returns>
+        Task<HttpResult<BinanceAveragePrice>> GetCurrentAvgPriceAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
-        /// Get data regarding the last 24 hours for the provided symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#24hr-ticker-price-change-statistics" /></para>
+        /// Gets 24-hour ticker statistics for the provided symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#24hr-ticker-price-change-statistics" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/24hr
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the data for</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the data for, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Data over the last 24 hours</returns>
-        Task<WebCallResult<IBinanceTick>> GetTickerAsync(string symbol,
+        Task<HttpResult<IBinanceTick>> GetTickerAsync(string symbol,
             CancellationToken ct = default);
 
         /// <summary>
-        /// Get data regarding the last 24 hours for the provided symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#24hr-ticker-price-change-statistics" /></para>
+        /// Gets 24-hour ticker statistics for the provided symbols
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#24hr-ticker-price-change-statistics" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/24hr
+        /// </para>
         /// </summary>
-        /// <param name="symbols">The symbols to get the data for</param>
+        /// <param name="symbols">["<c>symbols</c>"] The symbols to get the data for, for example `ETHUSDT`</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Data over the last 24 hours</returns>
-        Task<WebCallResult<IEnumerable<IBinanceTick>>> GetTickersAsync(IEnumerable<string> symbols,
+        Task<HttpResult<IBinanceTick[]>> GetTickersAsync(IEnumerable<string> symbols,
+            SymbolStatusFilter? symbolStatus = null,
             CancellationToken ct = default);
 
         /// <summary>
-        /// Get data regarding the last 24 hours for all symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#24hr-ticker-price-change-statistics" /></para>
+        /// Gets 24-hour ticker statistics for all symbols
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#24hr-ticker-price-change-statistics" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/24hr
+        /// </para>
         /// </summary>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of data over the last 24 hours</returns>
-        Task<WebCallResult<IEnumerable<IBinanceTick>>> GetTickersAsync(CancellationToken ct = default);
+        Task<HttpResult<IBinanceTick[]>> GetTickersAsync(SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get price change stats for a trading day
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#trading-day-ticker" /></para>
+        /// Gets price change statistics for a trading day
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#trading-day-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/tradingDay
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol</param>
-        /// <param name="timeZone">The timezone offset, for example -3 for UTC-3 or 5 for UTC+5</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol, for example `ETHUSDT`</param>
+        /// <param name="timeZone">["<c>timeZone</c>"] The timezone offset, for example -3 for UTC-3 or 5 for UTC+5</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceTradingDayTicker>> GetTradingDayTickerAsync(string symbol, string? timeZone = null, CancellationToken ct = default);
+        /// <returns>Trading day ticker statistics</returns>
+        Task<HttpResult<BinanceTradingDayTicker>> GetTradingDayTickerAsync(string symbol, string? timeZone = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get price change stats for a trading day
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#trading-day-ticker" /></para>
+        /// Gets price change statistics for a trading day
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#trading-day-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/tradingDay
+        /// </para>
         /// </summary>
-        /// <param name="symbols">The symbols</param>
-        /// <param name="timeZone">The timezone offset, for example -3 for UTC-3 or 5 for UTC+5</param>
+        /// <param name="symbols">["<c>symbols</c>"] The symbols, for example `ETHUSDT`</param>
+        /// <param name="timeZone">["<c>timeZone</c>"] The timezone offset, for example -3 for UTC-3 or 5 for UTC+5</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceTradingDayTicker>>> GetTradingDayTickersAsync(IEnumerable<string> symbols, string? timeZone = null, CancellationToken ct = default);
+        /// <returns>Trading day ticker statistics</returns>
+        Task<HttpResult<BinanceTradingDayTicker[]>> GetTradingDayTickersAsync(IEnumerable<string> symbols, string? timeZone = null, SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get data based on the last x time, specified as windowSize
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#rolling-window-price-change-statistics" /></para>
+        /// Gets ticker statistics over a rolling time window
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#rolling-window-price-change-statistics" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get data for</param>
-        /// <param name="windowSize">The window size to use</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get data for, for example `ETHUSDT`</param>
+        /// <param name="windowSize">["<c>windowSize</c>"] The window size to use</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IBinance24HPrice>> GetRollingWindowTickerAsync(string symbol, TimeSpan? windowSize = null, CancellationToken ct = default);
+        /// <returns>Rolling-window ticker statistics</returns>
+        Task<HttpResult<IBinance24HPrice>> GetRollingWindowTickerAsync(string symbol, TimeSpan? windowSize = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get data based on the last x time, specified as windowSize
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#rolling-window-price-change-statistics" /></para>
+        /// Gets ticker statistics over a rolling time window
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#rolling-window-price-change-statistics" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker
+        /// </para>
         /// </summary>
-        /// <param name="symbols">The symbols to get data for</param>
-        /// <param name="windowSize">The window size to use</param>
+        /// <param name="symbols">["<c>symbols</c>"] The symbols to get data for, for example `ETHUSDT`</param>
+        /// <param name="windowSize">["<c>windowSize</c>"] The window size to use</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<IBinance24HPrice>>> GetRollingWindowTickersAsync(IEnumerable<string> symbols, TimeSpan? windowSize = null, CancellationToken ct = default);
+        /// <returns>Rolling-window ticker statistics</returns>
+        Task<HttpResult<IBinance24HPrice[]>> GetRollingWindowTickersAsync(IEnumerable<string> symbols, TimeSpan? windowSize = null, SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the best price/quantity on the order book for a symbol.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#rolling-window-price-change-statistics" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-order-book-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/bookTicker
+        /// </para>
         /// </summary>
-        /// <param name="symbol">Symbol to get book price for</param>
+        /// <param name="symbol">["<c>symbol</c>"] Symbol to get book price for, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns>List of book prices</returns>
-        Task<WebCallResult<BinanceBookPrice>> GetBookPriceAsync(string symbol, CancellationToken ct = default);
+        /// <returns>Book price for the symbol</returns>
+        Task<HttpResult<BinanceBookPrice>> GetBookPriceAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the best price/quantity on the order book for a symbol.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#symbol-order-book-ticker" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-order-book-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/bookTicker
+        /// </para>
         /// </summary>
-        /// <param name="symbol">Symbol to get book price for</param>
+        /// <param name="symbols">["<c>symbols</c>"] Symbols to get book price for, for example `ETHUSDT`</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of book prices</returns>
-        Task<WebCallResult<IEnumerable<BinanceBookPrice>>> GetBookPricesAsync(IEnumerable<string> symbol, CancellationToken ct = default);
+        Task<HttpResult<BinanceBookPrice[]>> GetBookPricesAsync(IEnumerable<string> symbols, SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the best price/quantity on the order book for all symbols.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#symbol-order-book-ticker" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-order-book-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/bookTicker
+        /// </para>
         /// </summary>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of book prices</returns>
-        Task<WebCallResult<IEnumerable<BinanceBookPrice>>> GetBookPricesAsync(CancellationToken ct = default);
+        Task<HttpResult<BinanceBookPrice[]>> GetBookPricesAsync(SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
         /// Gets the price of a symbol
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-price-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/price
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get the price for</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get the price for, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Price of symbol</returns>
-        Task<WebCallResult<BinancePrice>> GetPriceAsync(string symbol, CancellationToken ct = default);
+        Task<HttpResult<BinancePrice>> GetPriceAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
-        ///  Gets the prices of symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker" /></para>
+        /// Gets the prices for the provided symbols
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-price-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/price
+        /// </para>
         /// </summary>
-        /// <param name="symbols">The symbols to get the price for</param>
+        /// <param name="symbols">["<c>symbols</c>"] The symbols to get the price for, for example `ETHUSDT`</param>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of prices</returns>
-        Task<WebCallResult<IEnumerable<BinancePrice>>> GetPricesAsync(IEnumerable<string> symbols, CancellationToken ct = default);
+        Task<HttpResult<BinancePrice[]>> GetPricesAsync(IEnumerable<string> symbols, SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get a list of the prices of all symbols
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker" /></para>
+        /// Gets the prices for all symbols
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#symbol-price-ticker" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/ticker/price
+        /// </para>
         /// </summary>
+        /// <param name="symbolStatus">["<c>symbolStatus</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of prices</returns>
-        Task<WebCallResult<IEnumerable<BinancePrice>>> GetPricesAsync(CancellationToken ct = default);
+        Task<HttpResult<BinancePrice[]>> GetPricesAsync(SymbolStatusFilter? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get all assets available for margin trading
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-all-margin-assets-market_data" /></para>
+        /// Gets all assets available for margin trading
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#get-all-margin-assets-market_data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/allAssets
+        /// </para>
         /// </summary>
-        /// <param name="asset">Filter by asset</param>
+        /// <param name="asset">["<c>asset</c>"] Filter by asset, for example `ETH`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of margin assets</returns>
-        Task<WebCallResult<IEnumerable<BinanceMarginAsset>>> GetMarginAssetsAsync(string? asset = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceMarginAsset[]>> GetMarginAssetsAsync(string? asset = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get all asset pairs available for margin trading
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-all-cross-margin-pairs-market_data" /></para>
+        /// Gets all asset pairs available for margin trading
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Get-All-Cross-Margin-Pairs" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/allPairs
+        /// </para>
         /// </summary>
-        /// <param name="symbol">Filter by symbol</param>
+        /// <param name="symbol">["<c>symbol</c>"] Filter by symbol, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>List of margin pairs</returns>
-        Task<WebCallResult<IEnumerable<BinanceMarginPair>>> GetMarginSymbolsAsync(string? symbol = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceMarginPair[]>> GetMarginSymbolsAsync(string? symbol = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get margin price index
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-margin-priceindex-market_data" /></para>
+        /// Gets the margin price index for a symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Query-Margin-PriceIndex" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/priceIndex
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The symbol to get</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
         /// <returns>Margin price index</returns>
-        Task<WebCallResult<BinanceMarginPriceIndex>> GetMarginPriceIndexAsync(string symbol, CancellationToken ct = default);
+        Task<HttpResult<BinanceMarginPriceIndex>> GetMarginPriceIndexAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
-        /// Isolated margin symbol info
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-all-isolated-margin-symbol-user_data" /></para>
+        /// Gets isolated margin symbol information
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Get-All-Isolated-Margin-Symbol" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/isolated/allPairs
+        /// </para>
         /// </summary>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="symbol">["<c>symbol</c>"] Filter by symbol, for example `ETHUSDT`</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Isolated margin symbols</returns>
+        Task<HttpResult<BinanceIsolatedMarginSymbol[]>> GetIsolatedMarginSymbolsAsync(string? symbol = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets historical leveraged token kline data
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/futures/en/#historical-blvt-nav-kline-candlestick" /><br />
+        /// Endpoint:<br />
+        /// GET /fapi/v1/lvtKlines
+        /// </para>
+        /// </summary>
+        /// <param name="symbol">["<c>symbol</c>"] The leveraged token symbol</param>
+        /// <param name="interval">["<c>interval</c>"] Kline interval</param>
+        /// <param name="startTime">["<c>startTime</c>"] Filter by start time</param>
+        /// <param name="endTime">["<c>endTime</c>"] Filter by end time</param>
+        /// <param name="limit">["<c>limit</c>"] Number of results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Historical leveraged token kline data</returns>
+        Task<HttpResult<BinanceBlvtKline[]>> GetLeveragedTokensHistoricalKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets cross margin collateral ratios
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/crossMarginCollateralRatio
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Cross margin collateral ratios</returns>
+        Task<HttpResult<BinanceCrossMarginCollateralRatio[]>> GetCrossMarginCollateralRatioAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets futures hourly interest rates
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#get-a-future-hourly-interest-rate-user_data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/next-hourly-interest-rate
+        /// </para>
+        /// </summary>
+        /// <param name="assets">["<c>assets</c>"] Assets, for example `ETH`</param>
+        /// <param name="isolated">["<c>isIsolated</c>"] Whether to query isolated margin (otherwise cross margin)</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Hourly interest rates for the provided assets</returns>
+        Task<HttpResult<BinanceFuturesInterestRate[]>> GetFutureHourlyInterestRateAsync(IEnumerable<string> assets, bool isolated, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets cross and isolated margin delist schedules
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Get-Delist-Schedule" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/delist-schedule
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Cross and isolated margin delist schedules</returns>
+        Task<HttpResult<BinanceMarginDelistSchedule[]>> GetMarginDelistScheduleAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets the assets which are currently restricted for margin trading. Assets in the open long restricted list can only be sold, not bought. Assets in the max collateral exceeded list have reached the platform wide collateral cap and can no longer be transfered in
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Get-Margin-Restricted-Assets" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/restricted-asset
+        /// </para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Margin restricted assets</returns>
+        Task<HttpResult<BinanceMarginRestrictedAssets>> GetMarginRestrictedAssetsAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets isolated margin tier data
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Query-Isolated-Margin-Tier-Data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/isolatedMarginTier
+        /// </para>
+        /// </summary>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol to get, for example `ETHUSDT`</param>
+        /// <param name="tier">["<c>tier</c>"] Tier level to filter by</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Isolated margin tier data</returns>
+        Task<HttpResult<BinanceIsolatedMarginTierData[]>> GetIsolatedMarginTierDataAsync(string symbol, int? tier = null, int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets margin available inventory
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Query-margin-avaliable-inventory" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/available-inventory
+        /// </para>
+        /// </summary>
+        /// <param name="type">["<c>type</c>"] The margin type to query for</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Available margin inventory for the specified type</returns>
+        Task<HttpResult<BinanceMarginAvailableInventory>> GetMarginAvailableInventoryAsync(MarginInventoryType type, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets liability coin leverage brackets in cross margin pro mode
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/margin_trading/market-data/Query-Liability-Coin-Leverage-Bracket-in-Cross-Margin-Pro-Mode" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/margin/leverageBracket
+        /// </para>
+        /// </summary>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Liability coin leverage brackets</returns>
+        Task<HttpResult<BinanceCrossMarginProLiabilityCoinLeverageBracket[]>> GetLiabilityCoinLeverageBracketInCrossMarginProModeAsync(CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets all convert pairs
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/convert/market-data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/convert/exchangeInfo
+        /// </para>
+        /// </summary>
+        /// <param name="quoteAsset">["<c>fromAsset</c>"] Quote asset, for example `ETH`</param>
+        /// <param name="baseAsset">["<c>toAsset</c>"] Base asset, for example `ETH`</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Convert asset pairs</returns>
+        Task<HttpResult<BinanceConvertAssetPair[]>> GetConvertListAllPairsAsync(string? quoteAsset = null, string? baseAsset = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets quantity precision per asset
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/convert/market-data/Query-order-quantity-precision-per-asset" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/convert/assetInfo
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Quantity precision settings per asset</returns>
+        Task<HttpResult<BinanceConvertQuantityPrecisionAsset[]>> GetConvertQuantityPrecisionPerAssetAsync(long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets spot symbol delist schedules
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#get-symbols-delist-schedule-for-spot-market_data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/spot/delist-schedule
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Spot symbol delist schedules</returns>
+        Task<HttpResult<BinanceDelistSchedule[]>> GetDelistScheduleAsync(int? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get order execution rules, checked at the moment the order would execute
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/general-endpoints#query-execution-rules" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/executionRules<br />
+        /// </para>
+        /// </summary>
         /// <param name="symbol">Filter by symbol</param>
+        /// <param name="status">Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceIsolatedMarginSymbol>>> GetIsolatedMarginSymbolsAsync(string? symbol = null, int? receiveWindow = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceExecutionRules[]>> GetExecutionRulesAsync(string? symbol = null, SymbolStatus? status = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get blvt info
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-blvt-info-market_data" /></para>
+        /// Get reference price for a symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#query-reference-price" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/referencePrice<br />
+        /// </para>
         /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol, for example `ETHUSDT`</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBlvtInfo>>> GetLeveragedTokenInfoAsync(int? receiveWindow = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceReferencePrice>> GetReferencePriceAsync(string symbol, CancellationToken ct = default);
 
         /// <summary>
-        /// Get's historical klines
-        /// <para><a href="https://binance-docs.github.io/apidocs/futures/en/#historical-blvt-nav-kline-candlestick" /></para>
+        /// Get reference price calculation info for a symbol
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#query-reference-price" /><br />
+        /// Endpoint:<br />
+        /// GET /api/v3/referencePrice/calculation<br />
+        /// </para>
         /// </summary>
-        /// <param name="symbol">The token</param>
-        /// <param name="interval">Kline interval</param>
-        /// <param name="startTime">Filter by startTime</param>
-        /// <param name="endTime">Filter by endTime</param>
-        /// <param name="limit">Number of results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="symbol">["<c>symbol</c>"] The symbol, for example `ETHUSDT`</param>
+        /// <param name="symbolStatus">["<c>status</c>"] Filter by symbol status</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceBlvtKline>>> GetLeveragedTokensHistoricalKlinesAsync(string symbol, KlineInterval interval, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, int? receiveWindow = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceReferencePriceCalculation>> GetReferencePriceCalculationAsync(string symbol, SymbolStatus? symbolStatus = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get cross margin collateral ratio
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#cross-margin-collateral-ratio-market_data" /></para>
+        /// Get asset tags (requires authentication)
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-wallet/api/rest-api/asset#get-spot-asset-tags" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/spot/asset/tags<br />
+        /// </para>
         /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
+        /// <param name="tag"></param>
+        /// <param name="ct"></param>
         /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceCrossMarginCollateralRatio>>> GetCrossMarginCollateralRatioAsync(int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get futures hourly interest rate
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-a-future-hourly-interest-rate-user_data" /></para>
-        /// </summary>
-        /// <param name="assets">Assets</param>
-        /// <param name="isolated">Isolated or cross</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceFuturesInterestRate>>> GetFutureHourlyInterestRateAsync(IEnumerable<string> assets, bool isolated, int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get cross and isolated delist schedule
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-tokens-or-symbols-delist-schedule-for-cross-margin-and-isolated-margin-market_data" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceMarginDelistSchedule>>> GetMarginDelistScheduleAsync(int? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get list all convert pairs
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#list-all-convert-pairs" /></para>
-        /// </summary>
-        /// <param name="quoteAsset">Quote asset</param>
-        /// <param name="baseAsset">Base asset</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceConvertAssetPair>>> GetConvertListAllPairsAsync(string? quoteAsset = null, string? baseAsset = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get quantity precision per asset
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#query-order-quantity-precision-per-asset-user_data" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceConvertQuantityPrecisionAsset>>> GetConvertQuantityPrecisionPerAssetAsync(long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get spot symbols delist schedule
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-symbols-delist-schedule-for-spot-market_data" /></para>
-        /// </summary>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceDelistSchedule>>> GetDelistScheduleAsync(int? receiveWindow = null, CancellationToken ct = default);
+        Task<HttpResult<BinanceAssetTags[]>> GetAssetTagsAsync(string? tag = null, CancellationToken ct = default);
     }
 }
+
+

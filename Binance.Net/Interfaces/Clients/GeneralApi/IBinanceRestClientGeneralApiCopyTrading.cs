@@ -1,0 +1,39 @@
+﻿using Binance.Net.Objects.Models.Spot.CopyTrading;
+
+namespace Binance.Net.Interfaces.Clients.GeneralApi
+{
+    /// <summary>
+    /// Binance copy trading endpoints
+    /// </summary>
+    public interface IBinanceRestClientGeneralApiCopyTrading
+    {
+        /// <summary>
+        /// Get Futures Lead Trader Status
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#copy-trading-endpoints" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/copyTrading/futures/userStatus
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<HttpResult<BinanceCopyTradingUserStatus>> GetUserStatusAsync(long? receiveWindow = null, CancellationToken ct = default);
+
+
+        /// <summary>
+        /// Get Futures Lead Trading Symbol Whitelist
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://binance-docs.github.io/apidocs/spot/en/#get-futures-lead-trading-symbol-whitelist-user_data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/copyTrading/futures/leadSymbol
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns></returns>
+        Task<HttpResult<BinanceCopyTradingLeadSymbol[]>> GetLeadSymbolAsync(long? receiveWindow = null, CancellationToken ct = default);
+    }
+}

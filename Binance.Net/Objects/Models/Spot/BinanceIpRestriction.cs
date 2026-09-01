@@ -1,27 +1,32 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// IP restriction info
     /// </summary>
+    [SerializationModel]
     public record BinanceIpRestriction
     {
         /// <summary>
-        /// Is currently restricted
+        /// ["<c>ipRestrict</c>"] Is currently restricted
         /// </summary>
-        [JsonProperty("ipRestrict")]
+        [JsonPropertyName("ipRestrict")]
         public bool IpRestricted { get; set; }
         /// <summary>
-        /// Ip whitelist
+        /// ["<c>ipList</c>"] IP whitelist.
         /// </summary>
-        public IEnumerable<string> IpList { get; set; } = Array.Empty<string>();
+        [JsonPropertyName("ipList")]
+        public string[] IpList { get; set; } = Array.Empty<string>();
         /// <summary>
-        /// Update Time
+        /// ["<c>updateTime</c>"] Update Time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("updateTime")]
         public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// The API key
+        /// ["<c>apiKey</c>"] The API key
         /// </summary>
+        [JsonPropertyName("apiKey")]
         public string ApiKey { get; set; } = string.Empty;
     }
 }
+

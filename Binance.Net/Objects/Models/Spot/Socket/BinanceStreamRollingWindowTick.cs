@@ -1,84 +1,86 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Socket
+namespace Binance.Net.Objects.Models.Spot.Socket
 {
     /// <summary>
     /// Rolling window tick info
     /// </summary>
-    public record BinanceStreamRollingWindowTick: BinanceStreamEvent
+    [SerializationModel]
+    public record BinanceStreamRollingWindowTick : BinanceStreamEvent
     {
         /// <summary>
-        /// The symbol this data is for
+        /// ["<c>s</c>"] The symbol this data is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The price change of this symbol
+        /// ["<c>p</c>"] The price change of this symbol
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal PriceChange { get; set; }
         /// <summary>
-        /// The price change percentage of this symbol
+        /// ["<c>P</c>"] The price change percentage of this symbol
         /// </summary>
-        [JsonProperty("P")]
+        [JsonPropertyName("P")]
         public decimal PriceChangePercent { get; set; }
         /// <summary>
-        /// The weighted average
+        /// ["<c>w</c>"] The weighted average
         /// </summary>
-        [JsonProperty("w")]
+        [JsonPropertyName("w")]
         public decimal WeightedAveragePrice { get; set; }
         /// <summary>
-        /// The current close price. This is the latest price for this symbol.
+        /// ["<c>c</c>"] The current close price. This is the latest price for this symbol.
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public decimal LastPrice { get; set; }
         /// <summary>
-        /// Tick open price
+        /// ["<c>o</c>"] Tick open price
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public decimal OpenPrice { get; set; }
         /// <summary>
-        /// Tick high price
+        /// ["<c>h</c>"] Tick high price
         /// </summary>
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public decimal HighPrice { get; set; }
         /// <summary>
-        /// Tick low price
+        /// ["<c>l</c>"] Tick low price
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LowPrice { get; set; }
         /// <summary>
-        /// The first trade id of the tick
+        /// ["<c>F</c>"] The first trade id of the tick
         /// </summary>
-        [JsonProperty("F")]
+        [JsonPropertyName("F")]
         public long FirstTradeId { get; set; }
         /// <summary>
-        /// The last trade id of the tick
+        /// ["<c>L</c>"] The last trade id of the tick
         /// </summary>
-        [JsonProperty("L")]
+        [JsonPropertyName("L")]
         public long LastTradeId { get; set; }
         /// <summary>
-        /// The total trades of id
+        /// ["<c>n</c>"] The total number of trades.
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public long TotalTrades { get; set; }
         /// <summary>
-        /// The open time of these stats
+        /// ["<c>O</c>"] The open time of these stats
         /// </summary>
-        [JsonProperty("O"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("O"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime OpenTime { get; set; }
         /// <summary>
-        /// The close time of these stats
+        /// ["<c>C</c>"] The close time of these stats
         /// </summary>
-        [JsonProperty("C"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("C"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CloseTime { get; set; }
         /// <summary>
-        /// Volume
+        /// ["<c>v</c>"] Volume
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public decimal Volume { get; set; }
         /// <summary>
-        /// Quote volume
+        /// ["<c>q</c>"] Quote volume
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public decimal QuoteVolume { get; set; }
     }
 }
+

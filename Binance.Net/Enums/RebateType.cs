@@ -3,6 +3,7 @@
     /// <summary>
     /// Type of rebate
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<RebateType>))]
     public enum RebateType
     {
         /// <summary>

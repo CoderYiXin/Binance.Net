@@ -1,40 +1,43 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.PortfolioMargin
 {
     /// <summary>
     /// Portfolio margin account info
     /// </summary>
+    [SerializationModel]
     public record BinancePortfolioMarginInfo
     {
         /// <summary>
-        /// Portfolio margin account maintenance margin rate
+        /// ["<c>uniMMR</c>"] Portfolio margin account maintenance margin rate
         /// </summary>
-        [JsonProperty("uniMMR")]
+        [JsonPropertyName("uniMMR")]
         public decimal UniMaintenanceMarginRate { get; set; }
         /// <summary>
-        /// Account equity, in USD
+        /// ["<c>accountEquity</c>"] Account equity, in USD
         /// </summary>
+        [JsonPropertyName("accountEquity")]
         public decimal AccountEquity { get; set; }
         /// <summary>
-        /// Portfolio margin account actual equity, in USD
+        /// ["<c>actualEquity</c>"] Portfolio margin account actual equity, in USD
         /// </summary>
-        [JsonProperty("actualEquity")]
+        [JsonPropertyName("actualEquity")]
         public decimal ActualEquity { get; set; }
         /// <summary>
-        /// Portfolio margin account maintenance margin, in USD
+        /// ["<c>accountMaintMargin</c>"] Portfolio margin account maintenance margin, in USD
         /// </summary>
-        [JsonProperty("accountMaintMargin")]
+        [JsonPropertyName("accountMaintMargin")]
         public decimal AccountMaintenanceMargin { get; set; }
         /// <summary>
-        /// Account status
+        /// ["<c>accountStatus</c>"] Account status
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("accountStatus")]
         public PortfolioMarginAccountStatus AccountStatus { get; set; }
         /// <summary>
-        /// Account type
+        /// ["<c>accountType</c>"] Account type
         /// </summary>
-        [JsonProperty("accountType")]
+        [JsonPropertyName("accountType")]
         public string AccountType { get; set; } = string.Empty;
     }
 }
+

@@ -1,37 +1,38 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Loans
+using Binance.Net.Enums;
+
+namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Borrow info
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanBorrow
     {
         /// <summary>
-        /// The loaning asset
+        /// ["<c>loanCoin</c>"] The loaning asset
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The collateral asset
+        /// ["<c>collateralCoin</c>"] The collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The loan quantity
+        /// ["<c>loanAmount</c>"] The loan quantity
         /// </summary>
-        [JsonProperty("loanAmount")]
+        [JsonPropertyName("loanAmount")]
         public decimal LoanQuantity { get; set; }
         /// <summary>
-        /// The collateral quantity
+        /// ["<c>collateralAmount</c>"] The collateral quantity
         /// </summary>
-        [JsonProperty("collateralAmount")]
+        [JsonPropertyName("collateralAmount")]
         public decimal CollateralQuantity { get; set; }
         /// <summary>
-        /// Hourly interest rate
+        /// ["<c>status</c>"] The borrow status.
         /// </summary>
-        public decimal HourlyInterestRate { get; set; }
-        /// <summary>
-        /// Borrow order id
-        /// </summary>
-        public long OrderId { get; set; }
+        [JsonPropertyName("status")]
+        public FlexibleBorrowStatus Status { get; set; }
     }
 }
+

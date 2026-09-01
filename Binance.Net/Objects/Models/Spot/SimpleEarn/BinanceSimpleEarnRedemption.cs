@@ -1,19 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Redemption
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnRedemption
     {
         /// <summary>
-        /// Success
+        /// ["<c>success</c>"] Whether the request succeeded.
         /// </summary>
-        [JsonProperty("success")]
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
         /// <summary>
-        /// Redeem id
+        /// ["<c>redeemId</c>"] Redemption identifier.
         /// </summary>
-        [JsonProperty("redeemId")]
+        [JsonPropertyName("redeemId")]
         public long RedeemId { get; set; }
     }
 }
+

@@ -1,31 +1,35 @@
-﻿using Binance.Net.Objects.Models.Spot;
+using Binance.Net.Objects.Models.Spot;
 
 namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// The order book for a asset
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesOrderBook : BinanceOrderBook
     {
         /// <summary>
-        /// Pair
+        /// ["<c>pair</c>"] Pair
         /// </summary>
+        [JsonPropertyName("pair")]
         public string? Pair { get; set; } = string.Empty;
         /// <summary>
-        /// The symbol of the order book 
+        /// ["<c>symbol</c>"] The symbol of the order book 
         /// </summary>
+        [JsonPropertyName("symbol")]
         public new string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// The symbol of the order book 
+        /// ["<c>E</c>"] The symbol of the order book 
         /// </summary>
-        [JsonProperty("E"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("E"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime MessageTime { get; set; }
 
         /// <summary>
-        /// The ID of the last update
+        /// ["<c>T</c>"] The ID of the last update
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
     }
 }
+

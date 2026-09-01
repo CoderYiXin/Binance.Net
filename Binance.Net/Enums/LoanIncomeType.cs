@@ -1,37 +1,48 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Income type
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<LoanIncomeType>))]
     public enum LoanIncomeType
     {
         /// <summary>
-        /// Borrow in
+        /// ["<c>borrowIn</c>"] Borrow in
         /// </summary>
+        [Map("borrowIn")]
         BorrowIn,
         /// <summary>
-        /// Collateral spent
+        /// ["<c>collateralSpent</c>"] Collateral spent
         /// </summary>
+        [Map("collateralSpent")]
         CollateralSpent,
         /// <summary>
-        /// Repay amount
+        /// ["<c>repayAmount</c>"] Repay amount
         /// </summary>
+        [Map("repayAmount")]
         RepayAmount,
         /// <summary>
-        /// Collateral return
+        /// ["<c>collateralReturn</c>"] Collateral return
         /// </summary>
+        [Map("collateralReturn")]
         CollateralReturn,
         /// <summary>
-        /// Add collateral
+        /// ["<c>addCollateral</c>"] Add collateral
         /// </summary>
+        [Map("addCollateral")]
         AddCollateral,
         /// <summary>
-        /// Remove collateral
+        /// ["<c>removeCollateral</c>"] Remove collateral
         /// </summary>
+        [Map("removeCollateral")]
         RemoveCollateral,
         /// <summary>
-        /// Collateral return after liquidation
+        /// ["<c>collateralReturnAfterLiquidation</c>"] Collateral return after liquidation
         /// </summary>
+        [Map("collateralReturnAfterLiquidation")]
         CollateralReturnAfterLiquidation
     }
 }
+

@@ -1,61 +1,66 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// The result of replacing an order
     /// </summary>
-    public record BinanceReplaceOrderResult: BinanceReplaceResult
+    [SerializationModel]
+    public record BinanceReplaceOrderResult : BinanceReplaceResult
     {
         /// <summary>
-        /// Cancel result
+        /// ["<c>cancelResult</c>"] Cancel result
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("cancelResult")]
         public OrderOperationResult CancelResult { get; set; }
         /// <summary>
-        /// New order result
+        /// ["<c>newOrderResult</c>"] New order result
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("newOrderResult")]
         public OrderOperationResult NewOrderResult { get; set; }
         /// <summary>
-        /// Cancel order response. Make sure to check that the CancelResult is Success, else the CancelResponse.Message will contain more info
+        /// ["<c>cancelResponse</c>"] Cancel order response. Check <see cref="CancelResult"/> for success; otherwise <see cref="BinanceReplaceCancelOrder.Message"/> contains additional information.
         /// </summary>
+        [JsonPropertyName("cancelResponse")]
         public BinanceReplaceCancelOrder? CancelResponse { get; set; }
         /// <summary>
-        /// New order response. Make sure to check that the NewOrderResult is Success, else the NewOrderResponse.Message will contain more info
+        /// ["<c>newOrderResponse</c>"] New order response. Make sure to check that the NewOrderResult is Success, else the NewOrderResponse.Message will contain more info
         /// </summary>
+        [JsonPropertyName("newOrderResponse")]
         public BinanceReplaceOrder? NewOrderResponse { get; set; }
     }
 
     /// <summary>
     /// Replace order
     /// </summary>
-    public record BinanceReplaceOrder: BinancePlacedOrder
+    public record BinanceReplaceOrder : BinancePlacedOrder
     {
         /// <summary>
-        /// Failure message
+        /// ["<c>msg</c>"] Failure message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string? Message { get; set; }
         /// <summary>
-        /// Error code if not successful
+        /// ["<c>code</c>"] Error code if not successful
         /// </summary>
+        [JsonPropertyName("code")]
         public int? Code { get; set; }
     }
 
     /// <summary>
     /// Replace cancel order info
     /// </summary>
-    public record BinanceReplaceCancelOrder: BinanceOrderBase
+    public record BinanceReplaceCancelOrder : BinanceOrderBase
     {
         /// <summary>
-        /// Failure message
+        /// ["<c>msg</c>"] Failure message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string? Message { get; set; }
         /// <summary>
-        /// Error code if not successful
+        /// ["<c>code</c>"] Error code if not successful
         /// </summary>
+        [JsonPropertyName("code")]
         public int? Code { get; set; }
     }
 
@@ -65,13 +70,22 @@ namespace Binance.Net.Objects.Models.Spot
     public record BinanceReplaceResult
     {
         /// <summary>
-        /// Failure message
+        /// ["<c>msg</c>"] Failure message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string? Message { get; set; }
         /// <summary>
-        /// Error code if not successful
+        /// ["<c>code</c>"] Error code if not successful
         /// </summary>
+        [JsonPropertyName("code")]
         public int? Code { get; set; }
+        /// <summary>
+        /// ["<c>data</c>"] The replace result, populated only when the request failed or partially failed: the
+        /// endpoint returns its payload at the top level on success, and nested here alongside the code and
+        /// message otherwise.
+        /// </summary>
+        [JsonPropertyName("data")]
+        public BinanceReplaceOrderResult? Data { get; set; }
     }
 }
+

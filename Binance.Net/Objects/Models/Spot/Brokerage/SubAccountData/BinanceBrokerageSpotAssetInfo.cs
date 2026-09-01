@@ -1,19 +1,22 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
 {
     /// <summary>
     /// Spot Asset Info
     /// </summary>
+    [SerializationModel]
     public record BinanceBrokerageSpotAssetInfo
     {
         /// <summary>
-        /// Data
+        /// ["<c>data</c>"] Data
         /// </summary>
-        public IEnumerable<BinanceBrokerageSubAccountSpotAssetInfo> Data { get; set; } = Array.Empty<BinanceBrokerageSubAccountSpotAssetInfo>();
+        [JsonPropertyName("data")]
+        public BinanceBrokerageSubAccountSpotAssetInfo[] Data { get; set; } = Array.Empty<BinanceBrokerageSubAccountSpotAssetInfo>();
 
         /// <summary>
-        /// Timestamp
+        /// ["<c>timestamp</c>"] Timestamp
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
     }
 
@@ -23,13 +26,15 @@
     public record BinanceBrokerageSubAccountSpotAssetInfo
     {
         /// <summary>
-        /// Sub Account Id
+        /// ["<c>subaccountId</c>"] Sub Account Id
         /// </summary>
+        [JsonPropertyName("subaccountId")]
         public string SubAccountId { get; set; } = string.Empty;
-        
+
         /// <summary>
-        /// Total Balance Of Btc
+        /// ["<c>totalBalanceOfBtc</c>"] Total Balance Of Btc
         /// </summary>
+        [JsonPropertyName("totalBalanceOfBtc")]
         public decimal TotalBalanceOfBtc { get; set; }
     }
 }

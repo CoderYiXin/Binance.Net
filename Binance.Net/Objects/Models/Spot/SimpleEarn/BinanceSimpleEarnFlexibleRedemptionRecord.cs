@@ -1,45 +1,48 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Simple Earn flexible product redemption record
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnFlexibleRedemptionRecord
     {
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Redeemed quantity.
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Product asset.
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Timestamp
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Project id
+        /// ["<c>projectId</c>"] Project id
         /// </summary>
-        [JsonProperty("projectId")]
+        [JsonPropertyName("projectId")]
         public string ProjectId { get; set; } = string.Empty;
         /// <summary>
-        /// Redeem id
+        /// ["<c>redeemId</c>"] Redeem id
         /// </summary>
-        [JsonProperty("redeemId")]
+        [JsonPropertyName("redeemId")]
         public long RedeemId { get; set; }
         /// <summary>
-        /// Destination account
+        /// ["<c>destAccount</c>"] Destination account
         /// </summary>
-        [JsonProperty("destAccount"), JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("destAccount")]
         public AccountSource DestinationAccount { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
     }
 }
+

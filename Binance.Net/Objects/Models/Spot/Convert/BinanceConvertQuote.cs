@@ -1,36 +1,42 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Convert
+namespace Binance.Net.Objects.Models.Spot.Convert
 {
     /// <summary>
     /// Convert Quote
     /// </summary>
+    [SerializationModel]
     public record BinanceConvertQuote
     {
         /// <summary>
-        /// Quote id
+        /// ["<c>quoteId</c>"] Quote id
         /// </summary>
+        [JsonPropertyName("quoteId")]
         public string? QuoteId { get; set; }
         /// <summary>
-        /// Price ratio
+        /// ["<c>ratio</c>"] Price ratio
         /// </summary>
+        [JsonPropertyName("ratio")]
         public decimal Ratio { get; set; }
         /// <summary>
-        /// Inverse price ratio
+        /// ["<c>inverseRatio</c>"] Inverse price ratio
         /// </summary>
+        [JsonPropertyName("inverseRatio")]
         public decimal InverseRatio { get; set; }
         /// <summary>
-        /// Valid Timestamp
+        /// ["<c>validTimestamp</c>"] Valid Timestamp
         /// </summary>
+        [JsonPropertyName("validTimestamp")]
         public long ValidTimestamp { get; set; }
         /// <summary>
-        /// Base quantity
+        /// ["<c>toAmount</c>"] Base quantity
         /// </summary>
-        [JsonProperty("toAmount")]
+        [JsonPropertyName("toAmount")]
         public decimal BaseQuantity { get; set; }
         /// <summary>
-        /// Quote quantity
+        /// ["<c>fromAmount</c>"] Quote quantity
         /// </summary>
-        [JsonProperty("fromAmount")]
+        [JsonPropertyName("fromAmount")]
         public decimal QuoteQuantity { get; set; }
-       
+
     }
 }
+

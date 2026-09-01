@@ -1,39 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Loans
+namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Collateral asset info
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanCollateralAsset
     {
         /// <summary>
-        /// Collateral asset
+        /// ["<c>collateralCoin</c>"] The collateral asset.
         /// </summary>
-        [JsonProperty("collateralCoin")]
-        public string ColleteralAsset { get; set; } = string.Empty;
+        [JsonPropertyName("collateralCoin")]
+        public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Initial ltv
+        /// ["<c>initialLTV</c>"] Initial ltv
         /// </summary>
-        [JsonProperty("initialLTV")]
+        [JsonPropertyName("initialLTV")]
         public decimal InitialLtv { get; set; }
         /// <summary>
-        /// Margin call ltv
+        /// ["<c>marginCallLTV</c>"] Margin call ltv
         /// </summary>
-        [JsonProperty("marginCallLTV")]
+        [JsonPropertyName("marginCallLTV")]
         public decimal MarginCallLtv { get; set; }
         /// <summary>
-        /// Liquidation ltv
+        /// ["<c>liquidationLTV</c>"] Liquidation ltv
         /// </summary>
-        [JsonProperty("liquidationLTV")]
+        [JsonPropertyName("liquidationLTV")]
         public decimal LiquidationLtv { get; set; }
         /// <summary>
-        /// Max limit
+        /// ["<c>maxLimit</c>"] The maximum collateral limit.
         /// </summary>
-        [JsonProperty("maxLimit")]
+        [JsonPropertyName("maxLimit")]
         public decimal MaxLimit { get; set; }
-        /// <summary>
-        /// Vip level
-        /// </summary>
-        [JsonProperty("vipLevel")]
-        public int VipLevel { get; set; }
     }
 }
+

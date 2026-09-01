@@ -1,19 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Futures.Socket
+namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Index price update
     /// </summary>
-    public record BinanceFuturesStreamIndexPrice: BinanceStreamEvent
+    [SerializationModel]
+    public record BinanceFuturesStreamIndexPrice : BinanceStreamEvent
     {
         /// <summary>
-        /// The pair
+        /// ["<c>i</c>"] The pair.
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public string Pair { get; set; } = string.Empty;
         /// <summary>
-        /// The index price
+        /// ["<c>p</c>"] The index price
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal IndexPrice { get; set; }
     }
 }
+

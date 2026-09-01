@@ -1,22 +1,21 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
+    [SerializationModel]
     internal record BinanceSubAccountAssetTransferHistoryList
     {
-        [JsonProperty("success")]
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
-        [JsonProperty("futuresType")]
-        [JsonConverter(typeof(EnumConverter))]
+
+        [JsonPropertyName("futuresType")]
         public FuturesAccountType AccountType { get; set; }
 
         /// <summary>
-        /// Transfers
+        /// ["<c>transfers</c>"] Transfers
         /// </summary>
-        [JsonProperty("transfers")]
-        public IEnumerable<BinanceSubAccountAssetTransferHistory> Transfers { get; set; } =
-            new List<BinanceSubAccountAssetTransferHistory>();
-
+        [JsonPropertyName("transfers")]
+        public BinanceSubAccountAssetTransferHistory[] Transfers { get; set; } = [];
     }
 
     /// <summary>
@@ -25,37 +24,41 @@ namespace Binance.Net.Objects.Models.Spot.SubAccountData
     public record BinanceSubAccountAssetTransferHistory
     {
         /// <summary>
-        /// Transaction id
+        /// ["<c>tranId</c>"] Transaction id
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
 
         /// <summary>
-        /// From email
+        /// ["<c>from</c>"] From email
         /// </summary>
-        public string From { get; set; } = "";
+        [JsonPropertyName("from")]
+        public string From { get; set; } = string.Empty;
 
         /// <summary>
-        /// To email
+        /// ["<c>to</c>"] To email
         /// </summary>
-        public string To { get; set; } = "";
+        [JsonPropertyName("to")]
+        public string To { get; set; } = string.Empty;
 
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
-        public string Asset { get; set; } = "";
+        [JsonPropertyName("asset")]
+        public string Asset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Quantity
+        /// ["<c>qty</c>"] Quantity
         /// </summary>
-        [JsonProperty("qty")]
+        [JsonPropertyName("qty")]
         public decimal Quantity { get; set; }
 
         /// <summary>
-        /// The time transaction was created
+        /// ["<c>time</c>"] The time transaction was created
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
     }
 }
+

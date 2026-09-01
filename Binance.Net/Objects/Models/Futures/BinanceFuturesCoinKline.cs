@@ -5,8 +5,9 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Candlestick information for symbol
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
-    public record BinanceFuturesCoinKline: BinanceKlineBase
+    [JsonConverter(typeof(ArrayConverter<BinanceFuturesCoinKline>))]
+    [SerializationModel]
+    public record BinanceFuturesCoinKline : BinanceKlineBase
     {
         /// <inheritdoc/>
         [ArrayProperty(7)]

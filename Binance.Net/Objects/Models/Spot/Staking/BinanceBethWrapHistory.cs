@@ -1,46 +1,48 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Staking
+namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Wrap history
     /// </summary>
+    [SerializationModel]
     public record BinanceBethWrapHistory
     {
         /// <summary>
-        /// Exchange rate
+        /// ["<c>exchangeRate</c>"] Exchange rate
         /// </summary>
-        [JsonProperty("exchangeRate")]
+        [JsonPropertyName("exchangeRate")]
         public decimal ExchangeRate { get; set; }
         /// <summary>
-        /// Output quantity
+        /// ["<c>toAmount</c>"] Output quantity
         /// </summary>
-        [JsonProperty("toAmount")]
+        [JsonPropertyName("toAmount")]
         public decimal ToQuantity { get; set; }
         /// <summary>
-        /// Input quantity
+        /// ["<c>fromAmount</c>"] Input quantity
         /// </summary>
-        [JsonProperty("fromAmount")]
+        [JsonPropertyName("fromAmount")]
         public decimal FromQuantity { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] The timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// From asset
+        /// ["<c>fromAsset</c>"] From asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
-        /// To asset
+        /// ["<c>toAsset</c>"] To asset
         /// </summary>
-        [JsonProperty("toAsset")]
+        [JsonPropertyName("toAsset")]
         public string ToAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
     }
 }
+

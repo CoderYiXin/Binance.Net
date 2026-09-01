@@ -1,32 +1,33 @@
-﻿namespace Binance.Net.Objects.Models.Futures.Socket
+namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Composite index info
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamCompositeIndex : BinanceStreamEvent
     {
         /// <summary>
-        /// The symbol
+        /// ["<c>s</c>"] The symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The price
+        /// ["<c>p</c>"] The price
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal Price { get; set; }
 
         /// <summary>
-        /// Base asset
+        /// ["<c>C</c>"] The base asset.
         /// </summary>
-        [JsonProperty("C")]
+        [JsonPropertyName("C")]
         public string BaseAsset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Composition
+        /// ["<c>c</c>"] Composition
         /// </summary>
-        [JsonProperty("c")]
-        public IEnumerable<BinanceFuturesStreamCompositeIndexAsset> Composition { get; set; } = Array.Empty<BinanceFuturesStreamCompositeIndexAsset>();
+        [JsonPropertyName("c")]
+        public BinanceFuturesStreamCompositeIndexAsset[] Composition { get; set; } = Array.Empty<BinanceFuturesStreamCompositeIndexAsset>();
     }
 
     /// <summary>
@@ -35,29 +36,30 @@
     public record BinanceFuturesStreamCompositeIndexAsset
     {
         /// <summary>
-        /// Base asset name
+        /// ["<c>b</c>"] Base asset name
         /// </summary>
-        [JsonProperty("b")]
+        [JsonPropertyName("b")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Quote asset name
+        /// ["<c>q</c>"] Quote asset name
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Weight in quantity
+        /// ["<c>w</c>"] Weight in quantity
         /// </summary>
-        [JsonProperty("w")]
+        [JsonPropertyName("w")]
         public decimal WeightInQuantity { get; set; }
         /// <summary>
-        /// Weight in percentage
+        /// ["<c>W</c>"] Weight in percentage
         /// </summary>
-        [JsonProperty("W")]
+        [JsonPropertyName("W")]
         public decimal WeightInPercentage { get; set; }
         /// <summary>
-        /// Index price
+        /// ["<c>i</c>"] Index price
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public decimal IndexPrice { get; set; }
     }
 }
+

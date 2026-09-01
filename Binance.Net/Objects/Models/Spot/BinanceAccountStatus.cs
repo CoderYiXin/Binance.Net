@@ -1,14 +1,16 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Account status info
     /// </summary>
+    [SerializationModel]
     public record BinanceAccountStatus
     {
         /// <summary>
-        /// The result status
+        /// ["<c>data</c>"] The account status result value.
         /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public string? Data { get; set; }
     }
 }
+

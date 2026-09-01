@@ -1,51 +1,53 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Compressed aggregated trade information. Trades that fill at the time, from the same order, with the same price will have the quantity aggregated.
     /// </summary>
+    [SerializationModel]
     public record BinanceAggregatedTrade : IBinanceAggregatedTrade
     {
         /// <summary>
-        /// The id of this aggregation
+        /// ["<c>a</c>"] The id of this aggregation
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public long Id { get; set; }
         /// <summary>
-        /// The price of trades in this aggregation
+        /// ["<c>p</c>"] The price of trades in this aggregation
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal Price { get; set; }
         /// <summary>
-        /// The total quantity of trades in the aggregation
+        /// ["<c>q</c>"] The total quantity of trades in the aggregation
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The first trade id in this aggregation
+        /// ["<c>f</c>"] The first trade id in this aggregation
         /// </summary>
-        [JsonProperty("f")]
+        [JsonPropertyName("f")]
         public long FirstTradeId { get; set; }
         /// <summary>
-        /// The last trade id in this aggregation
+        /// ["<c>l</c>"] The last trade id in this aggregation
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public long LastTradeId { get; set; }
         /// <summary>
-        /// The timestamp of the trades
+        /// ["<c>T</c>"] The trade timestamp.
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TradeTime { get; set; }
         /// <summary>
-        /// Whether the buyer was the maker
+        /// ["<c>m</c>"] Whether the buyer was the maker
         /// </summary>
-        [JsonProperty("m")]
+        [JsonPropertyName("m")]
         public bool BuyerIsMaker { get; set; }
         /// <summary>
-        /// Whether the trade was matched at the best price
+        /// ["<c>M</c>"] Whether the trade was matched at the best price
         /// </summary>
-        [JsonProperty("M")]
+        [JsonPropertyName("M")]
         public bool WasBestPriceMatch { get; set; }
     }
 }
+

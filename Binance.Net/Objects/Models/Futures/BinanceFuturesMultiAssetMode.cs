@@ -1,14 +1,16 @@
-﻿namespace Binance.Net.Objects.Models.Futures
+namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Multi asset mode info
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesMultiAssetMode
     {
         /// <summary>
-        /// Is multi assets mode enabled
+        /// ["<c>multiAssetsMargin</c>"] Whether multi-asset mode is enabled.
         /// </summary>
-        [JsonProperty("multiAssetsMargin")]
+        [JsonPropertyName("multiAssetsMargin")]
         public bool MultiAssetMode { get; set; }
     }
 }
+

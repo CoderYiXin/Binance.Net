@@ -1,4 +1,4 @@
-﻿using Binance.Net.Converters;
+using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
@@ -6,60 +6,60 @@ namespace Binance.Net.Objects.Models.Spot.Socket
     /// <summary>
     /// Order list info
     /// </summary>
-    public record BinanceStreamOrderList: BinanceStreamEvent
+    [SerializationModel]
+    public record BinanceStreamOrderList : BinanceStreamEvent
     {
         /// <summary>
-        /// The id of the order list
+        /// ["<c>g</c>"] The order list identifier.
         /// </summary>
-        [JsonProperty("g")]
+        [JsonPropertyName("g")]
         public long Id { get; set; }
         /// <summary>
-        /// The contingency type
+        /// ["<c>c</c>"] The contingency type
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public string ContingencyType { get; set; } = string.Empty;
         /// <summary>
-        /// The order list status
+        /// ["<c>l</c>"] The order list status
         /// </summary>
-        [JsonConverter(typeof(ListStatusTypeConverter))]
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public ListStatusType ListStatusType { get; set; }
         /// <summary>
-        /// The order status
+        /// ["<c>L</c>"] The order status
         /// </summary>
-        [JsonConverter(typeof(ListOrderStatusConverter))]
-        [JsonProperty("L")]
+        [JsonPropertyName("L")]
         public ListOrderStatus ListOrderStatus { get; set; }
         /// <summary>
-        /// Rejection reason
+        /// ["<c>r</c>"] Rejection reason
         /// </summary>
-        [JsonProperty("r")]
+        [JsonPropertyName("r")]
         public string? ListRejectReason { get; set; }
         /// <summary>
-        /// The client id of the order list
+        /// ["<c>C</c>"] The client id of the order list
         /// </summary>
-        [JsonProperty("C")]
+        [JsonPropertyName("C")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string ListClientOrderId { get; set; } = string.Empty;
         /// <summary>
-        /// The transaction time
+        /// ["<c>T</c>"] The transaction time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("T")]
+        [JsonPropertyName("T")]
         public DateTime TransactionTime { get; set; }
         /// <summary>
-        /// The symbol of the order list
+        /// ["<c>s</c>"] The symbol of the order list
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The order in this list
+        /// ["<c>O</c>"] The order in this list
         /// </summary>
-        [JsonProperty("O")]
-        public IEnumerable<BinanceStreamOrderId> Orders { get; set; } = Array.Empty<BinanceStreamOrderId>();
+        [JsonPropertyName("O")]
+        public BinanceStreamOrderId[] Orders { get; set; } = Array.Empty<BinanceStreamOrderId>();
         /// <summary>
-        /// The listen key the update was for
+        /// API key this update was for.
         /// </summary>
-        public string ListenKey { get; set; } = string.Empty;
+        public string ApiKey { get; set; } = string.Empty;
     }
 
     /// <summary>
@@ -68,19 +68,21 @@ namespace Binance.Net.Objects.Models.Spot.Socket
     public record BinanceStreamOrderId
     {
         /// <summary>
-        /// The symbol of the order
+        /// ["<c>s</c>"] The symbol of the order
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The id of the order
+        /// ["<c>i</c>"] The id of the order
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public long OrderId { get; set; }
         /// <summary>
-        /// The client order id
+        /// ["<c>c</c>"] The client order id
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string ClientOrderId { get; set; } = string.Empty;
     }
 }
+

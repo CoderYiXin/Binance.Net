@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,101 +5,114 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Trade info
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesTrade
     {
         /// <summary>
-        /// The symbol
+        /// ["<c>symbol</c>"] The symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Is buyer
+        /// ["<c>buyer</c>"] Whether the user was the buyer.
         /// </summary>
+        [JsonPropertyName("buyer")]
         public bool Buyer { get; set; }
         /// <summary>
-        /// Paid fee
+        /// ["<c>commission</c>"] Paid fee
         /// </summary>
-        [JsonProperty("commission")]
+        [JsonPropertyName("commission")]
         public decimal Fee { get; set; }
 
         /// <summary>
-        /// Asset the fee is paid in
+        /// ["<c>commissionAsset</c>"] Asset the fee is paid in
         /// </summary>
-        [JsonProperty("commissionAsset")]
+        [JsonPropertyName("commissionAsset")]
         public string FeeAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Trade id
+        /// ["<c>id</c>"] Trade id
         /// </summary>
+        [JsonPropertyName("id")]
         public long Id { get; set; }
         /// <summary>
-        /// Is maker
+        /// ["<c>maker</c>"] Whether the user was the maker.
         /// </summary>
+        [JsonPropertyName("maker")]
         public bool Maker { get; set; }
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
+        [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
         /// <summary>
-        /// Price
+        /// ["<c>price</c>"] Price
         /// </summary>
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>qty</c>"] Quantity
         /// </summary>
-        [JsonProperty("qty")]
+        [JsonPropertyName("qty")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Realized pnl
+        /// ["<c>realizedPnl</c>"] Realized pnl
         /// </summary>
+        [JsonPropertyName("realizedPnl")]
         public decimal RealizedPnl { get; set; }
         /// <summary>
-        /// Order side
+        /// ["<c>side</c>"] Order side
         /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("side")]
         public OrderSide Side { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>positionSide</c>"] Position side
         /// </summary>
-        [JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("positionSide")]
         public PositionSide PositionSide { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Timestamp
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
     }
 
     /// <summary>
     /// Trade details
     /// </summary>
-    public record BinanceFuturesUsdtTrade: BinanceFuturesTrade
+    [SerializationModel]
+    public record BinanceFuturesUsdtTrade : BinanceFuturesTrade
     {
         /// <summary>
-        /// Quote quantity
+        /// ["<c>quoteQty</c>"] Quote quantity
         /// </summary>
-        [JsonProperty("quoteQty")]
+        [JsonPropertyName("quoteQty")]
         public decimal QuoteQuantity { get; set; }
     }
 
     /// <summary>
     /// Trade details
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesCoinTrade : BinanceFuturesTrade
     {
         /// <summary>
-        /// The pair
+        /// ["<c>pair</c>"] The pair
         /// </summary>
+        [JsonPropertyName("pair")]
         public string Pair { get; set; } = string.Empty;
 
         /// <summary>
-        /// The margin asset
+        /// ["<c>marginAsset</c>"] The margin asset
         /// </summary>
+        [JsonPropertyName("marginAsset")]
         public string MarginAsset { get; set; } = string.Empty;
 
         /// <summary>
-        /// Base quantity
+        /// ["<c>baseQty</c>"] Base quantity
         /// </summary>
-        [JsonProperty("baseQty")]
+        [JsonPropertyName("baseQty")]
         public decimal BaseQuantity { get; set; }
     }
 }
+

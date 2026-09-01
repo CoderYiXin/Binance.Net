@@ -1,21 +1,28 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Status of a blvt action
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<BlvtStatus>))]
     public enum BlvtStatus
     {
         /// <summary>
-        /// Pending
+        /// ["<c>P</c>"] Pending
         /// </summary>
+        [Map("P")]
         Pending,
         /// <summary>
-        /// Success
+        /// ["<c>S</c>"] Success
         /// </summary>
+        [Map("S")]
         Success,
         /// <summary>
-        /// Failure
+        /// ["<c>F</c>"] Failure
         /// </summary>
+        [Map("F")]
         Failure
     }
 }
+

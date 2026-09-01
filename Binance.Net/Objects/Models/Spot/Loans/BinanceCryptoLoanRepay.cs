@@ -1,42 +1,48 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Repay info
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanRepay
     {
         /// <summary>
-        /// The loaning asset
+        /// ["<c>loanCoin</c>"] The loaning asset
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The collateral asset
+        /// ["<c>collateralCoin</c>"] The collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Current LTV
+        /// ["<c>remainingDebt</c>"] Remaining debt
         /// </summary>
-        public decimal? CurrentLTV { get; set; }
+        [JsonPropertyName("remainingDebt")]
+        public decimal? RemainingDebt { get; set; }
         /// <summary>
-        /// Remaining principal
+        /// ["<c>remainingCollateral</c>"] Remaining collateral
         /// </summary>
-        public decimal? RemainingPrincipal { get; set; }
-        /// <summary>
-        /// Repay status
-        /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
-        public BorrowStatus RepayStatus { get; set; }
-        /// <summary>
-        /// Remaining collateral
-        /// </summary>
+        [JsonPropertyName("remainingCollateral")]
         public decimal? RemainingCollateral { get; set; }
         /// <summary>
-        /// Remaining interest
+        /// ["<c>fullRepayment</c>"] Whether the loan is fully repaid.
         /// </summary>
-        public decimal? RemainingInterest { get; set; }
+        [JsonPropertyName("fullRepayment")]
+        public bool FullRepayment{ get; set; }
+        /// <summary>
+        /// ["<c>currentLTV</c>"] Current LTV
+        /// </summary>
+        [JsonPropertyName("currentLTV")]
+        public decimal? CurrentLTV { get; set; }
+        /// <summary>
+        /// ["<c>repayStatus</c>"] Repay status
+        /// </summary>
+        [JsonPropertyName("repayStatus")]
+        public RepayStatus RepayStatus { get; set; }
     }
 }
+

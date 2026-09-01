@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,50 +5,56 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Fiat payment info
     /// </summary>
+    [SerializationModel]
     public record BinanceFiatWithdrawDeposit
     {
         /// <summary>
-        /// Order number
+        /// ["<c>orderNo</c>"] The order number.
         /// </summary>
-        [JsonProperty("orderNo")]
+        [JsonPropertyName("orderNo")]
         public string OrderNumber { get; set; } = string.Empty;
         /// <summary>
-        /// The used asset
+        /// ["<c>fiatCurrency</c>"] The used asset
         /// </summary>
-        [JsonProperty("fiatCurrency")]
+        [JsonPropertyName("fiatCurrency")]
         public string FiatAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The quantity
+        /// ["<c>amount</c>"] The quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The indicated quantity
+        /// ["<c>indicatedAmount</c>"] The indicated quantity
         /// </summary>
-        [JsonProperty("indicatedAmount")]
+        [JsonPropertyName("indicatedAmount")]
         public decimal IndicatedQuantity { get; set; }
         /// <summary>
-        /// The method
+        /// ["<c>method</c>"] The method
         /// </summary>
+        [JsonPropertyName("method")]
         public string Method { get; set; } = string.Empty;
         /// <summary>
-        /// The total fee of the order
+        /// ["<c>totalFee</c>"] The total fee of the order
         /// </summary>
+        [JsonPropertyName("totalFee")]
         public decimal TotalFee { get; set; }
         /// <summary>
-        /// The status 
+        /// ["<c>status</c>"] The status 
         /// </summary>
-        [JsonConverter(typeof(FiatWithdrawDepositStatusConverter))]
+        [JsonPropertyName("status")]
         public FiatWithdrawDepositStatus Status { get; set; }
         /// <summary>
-        /// Creation time
+        /// ["<c>createTime</c>"] The creation time.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime")]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Last update time
+        /// ["<c>updateTime</c>"] Last update time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("updateTime")]
         public DateTime UpdateTime { get; set; }
     }
 }
+

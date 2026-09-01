@@ -1,24 +1,28 @@
-﻿using Binance.Net.Converters;
+using CryptoExchange.Net.Attributes;
 
 namespace Binance.Net.Enums
 {
     /// <summary>
     /// Types of indicators
     /// </summary>
-    [JsonConverter(typeof(IndicatorTypeConverter))]
+    [JsonConverter(typeof(EnumConverter<IndicatorType>))]
     public enum IndicatorType
     {
         /// <summary>
-        /// Unfilled ratio
+        /// ["<c>UFR</c>"] Unfilled ratio
         /// </summary>
+        [Map("UFR")]
         UnfilledRatio,
         /// <summary>
-        /// Expired orders ratio
+        /// ["<c>IFER</c>"] Expired orders ratio
         /// </summary>
+        [Map("IFER")]
         ExpirationRatio,
         /// <summary>
-        /// Canceled orders ratio
+        /// ["<c>GCR</c>"] Canceled orders ratio
         /// </summary>
+        [Map("GCR")]
         CancelationRatio
     }
 }
+

@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,38 +5,43 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Open interest
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesOpenInterest
     {
         /// <summary>
-        /// The symbol the information is about
+        /// ["<c>symbol</c>"] The symbol the information is about
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Open Interest info
+        /// ["<c>openInterest</c>"] The open interest value.
         /// </summary>
+        [JsonPropertyName("openInterest")]
         public decimal OpenInterest { get; set; }
 
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] The data timestamp.
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime? Timestamp { get; set; }
     }
 
     /// <summary>
     /// Open interest
     /// </summary>
-    public record BinanceFuturesCoinOpenInterest: BinanceFuturesOpenInterest
+    [SerializationModel]
+    public record BinanceFuturesCoinOpenInterest : BinanceFuturesOpenInterest
     {
         /// <summary>
-        /// The pair
+        /// ["<c>pair</c>"] The pair
         /// </summary>
+        [JsonPropertyName("pair")]
         public string Pair { get; set; } = string.Empty;
         /// <summary>
-        /// The contract type
+        /// ["<c>contractType</c>"] The contract type
         /// </summary>
-        [JsonConverter(typeof(ContractTypeConverter))]
+        [JsonPropertyName("contractType")]
         public ContractType ContractType { get; set; }
     }
 

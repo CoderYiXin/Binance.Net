@@ -1,66 +1,73 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Locked product subscription record
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnLockedRecord
     {
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Subscribed quantity.
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Product asset.
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Position id
+        /// ["<c>positionId</c>"] Position identifier.
         /// </summary>
-        [JsonProperty("positionId")]
+        [JsonPropertyName("positionId"), JsonConverter(typeof(NumberStringConverter))]
         public string PositionId { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Subscription timestamp.
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Purchase id
+        /// ["<c>purchaseId</c>"] Purchase identifier.
         /// </summary>
-        [JsonProperty("purchaseId")]
+        [JsonPropertyName("purchaseId")]
         public long PurchaseId { get; set; }
         /// <summary>
-        /// Subscription type
+        /// ["<c>projectId</c>"] Project identifier.
         /// </summary>
-        [JsonProperty("type"), JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("projectId")]
+        public string ProjectId { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>type</c>"] Subscription type
+        /// </summary>
+        [JsonPropertyName("type")]
         public SubscriptionType Type { get; set; }
         /// <summary>
-        /// Source account
+        /// ["<c>sourceAccount</c>"] Source account
         /// </summary>
-        [JsonProperty("sourceAccount"), JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("sourceAccount")]
         public AccountSource SourceAccount { get; set; }
         /// <summary>
-        /// Quantity from spot
+        /// ["<c>amtFromSpot</c>"] Quantity from spot
         /// </summary>
-        [JsonProperty("amtFromSpot")]
+        [JsonPropertyName("amtFromSpot")]
         public decimal SpotQuantity { get; set; }
         /// <summary>
-        /// Quantity from funding
+        /// ["<c>amtFromFunding</c>"] Quantity from funding
         /// </summary>
-        [JsonProperty("amtFromFunding")]
+        [JsonPropertyName("amtFromFunding")]
         public decimal FundingQuantity { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
-        [JsonProperty("status"), JsonConverter(typeof(EnumConverter))]
-        public SubscriptionStatus Status { get; set; }
+        [JsonPropertyName("status")]
+        public Enums.SubscriptionStatus Status { get; set; }
         /// <summary>
-        /// Lock period
+        /// ["<c>lockPeriod</c>"] Lock period in days.
         /// </summary>
-        [JsonProperty("lockPeriod")]
+        [JsonPropertyName("lockPeriod")]
         public int LockPeriod { get; set; }
     }
 }
+

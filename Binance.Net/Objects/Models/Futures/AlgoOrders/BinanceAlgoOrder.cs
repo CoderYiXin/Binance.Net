@@ -1,4 +1,4 @@
-﻿using Binance.Net.Converters;
+using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.AlgoOrders
@@ -6,16 +6,19 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
     /// <summary>
     /// Algo orders
     /// </summary>
+    [SerializationModel]
     public record BinanceAlgoOrders
     {
         /// <summary>
-        /// Total items
+        /// ["<c>total</c>"] Total items
         /// </summary>
+        [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
-        /// Orders
+        /// ["<c>orders</c>"] Orders
         /// </summary>
-        public IEnumerable<BinanceAlgoOrder> Orders { get; set; } = Array.Empty<BinanceAlgoOrder>();
+        [JsonPropertyName("orders")]
+        public BinanceAlgoOrder[] Orders { get; set; } = Array.Empty<BinanceAlgoOrder>();
     }
 
     /// <summary>
@@ -24,69 +27,78 @@ namespace Binance.Net.Objects.Models.Futures.AlgoOrders
     public record BinanceAlgoOrder
     {
         /// <summary>
-        /// Algo id
+        /// ["<c>algoId</c>"] Algo id
         /// </summary>
+        [JsonPropertyName("algoId")]
         public long AlgoId { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>symbol</c>"] Symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Order side
+        /// ["<c>side</c>"] Order side
         /// </summary>
-        [JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("side")]
         public OrderSide Side { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>positionSide</c>"] Position side
         /// </summary>
-        [JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("positionSide")]
         public PositionSide? PositionSide { get; set; }
         /// <summary>
-        /// Total quantity
+        /// ["<c>totalQty</c>"] Total quantity
         /// </summary>
-        [JsonProperty("totalQty")]
+        [JsonPropertyName("totalQty")]
         public decimal TotalQuantity { get; set; }
         /// <summary>
-        /// Executed quantity
+        /// ["<c>executedQty</c>"] Executed quantity
         /// </summary>
-        [JsonProperty("executedQty")]
+        [JsonPropertyName("executedQty")]
         public decimal ExecutedQuantity { get; set; }
         /// <summary>
-        /// exceuted amount
+        /// ["<c>executedAmt</c>"] Executed amount
         /// </summary>
-        [JsonProperty("executedAmt")]
+        [JsonPropertyName("executedAmt")]
         public decimal ExecutedAmount { get; set; }
         /// <summary>
-        /// Average price
+        /// ["<c>avgPrice</c>"] Average price
         /// </summary>
-        [JsonProperty("avgPrice")]
+        [JsonPropertyName("avgPrice")]
         public decimal AveragePrice { get; set; }
         /// <summary>
-        /// Client algo id
+        /// ["<c>clientAlgoId</c>"] Client algo id
         /// </summary>
+        [JsonPropertyName("clientAlgoId")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string ClientAlgoId { get; set; } = string.Empty;
         /// <summary>
-        /// Book time
+        /// ["<c>bookTime</c>"] Book time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("bookTime")]
         public DateTime BookTime { get; set; }
         /// <summary>
-        /// End time
+        /// ["<c>endTime</c>"] End time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("endTime")]
         public DateTime? EndTime { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>algoStatus</c>"] Status
         /// </summary>
+        [JsonPropertyName("algoStatus")]
         public string AlgoStatus { get; set; } = string.Empty;
         /// <summary>
-        /// Algo type
+        /// ["<c>algoType</c>"] Algo type
         /// </summary>
+        [JsonPropertyName("algoType")]
         public string AlgoType { get; set; } = string.Empty;
         /// <summary>
-        /// Urgency
+        /// ["<c>urgency</c>"] Urgency
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("urgency")]
         public OrderUrgency? Urgency { get; set; }
     }
 }
+

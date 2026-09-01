@@ -1,25 +1,33 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Status of a margin action
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<MarginStatus>))]
     public enum MarginStatus
     {
         /// <summary>
-        /// Pending to execution
+        /// ["<c>PENDING</c>"] Pending to execution
         /// </summary>
+        [Map("PENDING")]
         Pending,
         /// <summary>
-        /// Executed, waiting to be confirmed
+        /// ["<c>COMPLETED</c>"] Executed, waiting to be confirmed
         /// </summary>
+        [Map("COMPLETED")]
         Completed,
         /// <summary>
-        /// Successfully loaned/repayed
+        /// ["<c>CONFIRMED</c>"] Successfully loaned/repaid
         /// </summary>
+        [Map("CONFIRMED")]
         Confirmed,
         /// <summary>
-        /// execution failed, nothing happened to your account
+        /// ["<c>FAILED</c>"] execution failed, nothing happened to your account
         /// </summary>
+        [Map("FAILED")]
         Failed
     }
 }
+

@@ -1,23 +1,26 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
     /// <summary>
     /// Sub accounts btc value summary
     /// </summary>
+    [SerializationModel]
     public record BinanceSubAccountSpotAssetsSummary
     {
         /// <summary>
-        /// Total records
+        /// ["<c>totalCount</c>"] The total number of returned records.
         /// </summary>
+        [JsonPropertyName("totalCount")]
         public int TotalCount { get; set; }
         /// <summary>
-        /// Master account total asset value
+        /// ["<c>masterAccountTotalAsset</c>"] Master account total asset value
         /// </summary>
+        [JsonPropertyName("masterAccountTotalAsset")]
         public decimal MasterAccountTotalAsset { get; set; }
         /// <summary>
-        /// Sub account values
+        /// ["<c>spotSubUserAssetBtcVoList</c>"] Spot asset values per sub account.
         /// </summary>
-        [JsonProperty("spotSubUserAssetBtcVoList")]
-        public IEnumerable<BinanceSubAccountBtcValue> SubAccountsBtcValues { get; set; } = Array.Empty<BinanceSubAccountBtcValue>();
+        [JsonPropertyName("spotSubUserAssetBtcVoList")]
+        public BinanceSubAccountBtcValue[] SubAccountsBtcValues { get; set; } = Array.Empty<BinanceSubAccountBtcValue>();
     }
 
     /// <summary>
@@ -26,12 +29,15 @@
     public record BinanceSubAccountBtcValue
     {
         /// <summary>
-        /// Sub account email
+        /// ["<c>email</c>"] The sub account email address.
         /// </summary>
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
         /// <summary>
-        /// Sub account total asset 
+        /// ["<c>totalAsset</c>"] The total asset value of the sub account.
         /// </summary>
+        [JsonPropertyName("totalAsset")]
         public decimal TotalAsset { get; set; }
     }
 }
+

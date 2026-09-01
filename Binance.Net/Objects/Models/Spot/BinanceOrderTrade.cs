@@ -1,33 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Trade info
     /// </summary>
+    [SerializationModel]
     public record BinanceOrderTrade
     {
         /// <summary>
-        /// The id of the trade
+        /// ["<c>tradeId</c>"] The trade identifier.
         /// </summary>
-        [JsonProperty("tradeId")]
+        [JsonPropertyName("tradeId")]
         public long Id { get; set; }
         /// <summary>
-        /// Price of the trade
+        /// ["<c>price</c>"] Price of the trade
         /// </summary>
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// Quantity of the trade
+        /// ["<c>qty</c>"] Quantity of the trade
         /// </summary>
-        [JsonProperty("qty")]
+        [JsonPropertyName("qty")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Fee paid over this trade
+        /// ["<c>commission</c>"] Fee paid over this trade
         /// </summary>
-        [JsonProperty("commission")]
+        [JsonPropertyName("commission")]
         public decimal Fee { get; set; }
         /// <summary>
-        /// The asset the fee is paid in
+        /// ["<c>commissionAsset</c>"] The asset the fee is paid in.
         /// </summary>
-        [JsonProperty("commissionAsset")]
+        [JsonPropertyName("commissionAsset")]
         public string FeeAsset { get; set; } = string.Empty;
     }
 }
+

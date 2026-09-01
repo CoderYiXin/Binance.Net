@@ -1,40 +1,42 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Small liability history
     /// </summary>
+    [SerializationModel]
     public record BinanceSmallLiabilityHistory
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Target asset
+        /// ["<c>targetAsset</c>"] Target asset
         /// </summary>
-        [JsonProperty("targetAsset")]
+        [JsonPropertyName("targetAsset")]
         public string TargetAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Target quantity
+        /// ["<c>targetAmount</c>"] Target quantity
         /// </summary>
-        [JsonProperty("targetAmount")]
+        [JsonPropertyName("targetAmount")]
         public decimal TargetQuantity { get; set; }
         /// <summary>
-        /// Biz type
+        /// ["<c>bizType</c>"] Biz type
         /// </summary>
-        [JsonProperty("bizType")]
+        [JsonPropertyName("bizType")]
         public string BizType { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>timestamp</c>"] Timestamp
         /// </summary>
-        [JsonProperty("timestamp")]
+        [JsonPropertyName("timestamp")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
     }
 }
+

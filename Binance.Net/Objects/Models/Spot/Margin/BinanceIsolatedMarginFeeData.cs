@@ -1,30 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Fee data
     /// </summary>
+    [SerializationModel]
     public record BinanceIsolatedMarginFeeData
     {
         /// <summary>
-        /// Vip level
+        /// ["<c>vipLevel</c>"] Vip level
         /// </summary>
-        [JsonProperty("vipLevel")]
+        [JsonPropertyName("vipLevel")]
         public int VipLevel { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>symbol</c>"] Symbol
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Leverage
+        /// ["<c>leverage</c>"] Leverage
         /// </summary>
-        [JsonProperty("leverage")]
+        [JsonPropertyName("leverage")]
         public int Leverage { get; set; }
         /// <summary>
-        /// Data
+        /// ["<c>data</c>"] Data
         /// </summary>
-        [JsonProperty("data")]
-        public IEnumerable<BinanceIsolatedMarginFeeInfo> FeeInfo { get; set; } = Array.Empty<BinanceIsolatedMarginFeeInfo>();
+        [JsonPropertyName("data")]
+        public BinanceIsolatedMarginFeeInfo[] FeeInfo { get; set; } = Array.Empty<BinanceIsolatedMarginFeeInfo>();
+        /// <summary>
+        /// ["<c>isPublic</c>"] Is public
+        /// </summary>
+        [JsonPropertyName("isPublic")]
+        public bool IsPublic { get; set; }
     }
 
     /// <summary>
@@ -33,19 +39,20 @@
     public record BinanceIsolatedMarginFeeInfo
     {
         /// <summary>
-        /// Asset
+        /// ["<c>coin</c>"] Asset
         /// </summary>
-        [JsonProperty("coin")]
+        [JsonPropertyName("coin")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Daily interest
+        /// ["<c>dailyInterest</c>"] Daily interest
         /// </summary>
-        [JsonProperty("dailyInterest")]
+        [JsonPropertyName("dailyInterest")]
         public decimal DailyInterest { get; set; }
         /// <summary>
-        /// Borrow limit
+        /// ["<c>borrowLimit</c>"] Borrow limit
         /// </summary>
-        [JsonProperty("borrowLimit")]
+        [JsonPropertyName("borrowLimit")]
         public decimal BorrowLimit { get; set; }
     }
 }
+

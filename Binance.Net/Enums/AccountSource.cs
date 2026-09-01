@@ -1,26 +1,28 @@
-﻿using CryptoExchange.Net.Attributes;
+using CryptoExchange.Net.Attributes;
 
 namespace Binance.Net.Enums
 {
     /// <summary>
     /// Account source
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<AccountSource>))]
     public enum AccountSource
     {
         /// <summary>
-        /// Spot
+        /// ["<c>SPOT</c>"] Spot
         /// </summary>
         [Map("SPOT")]
         Spot,
         /// <summary>
-        /// Fund
+        /// ["<c>FUND</c>"] Fund
         /// </summary>
         [Map("FUND")]
         Fund,
         /// <summary>
-        /// All
+        /// ["<c>ALL</c>"] All
         /// </summary>
         [Map("ALL")]
         All
     }
 }
+

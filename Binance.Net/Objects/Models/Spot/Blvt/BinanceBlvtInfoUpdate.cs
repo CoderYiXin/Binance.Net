@@ -1,45 +1,46 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Blvt
+namespace Binance.Net.Objects.Models.Spot.Blvt
 {
     /// <summary>
     /// Blvt info update
     /// </summary>
-    public record BinanceBlvtInfoUpdate: BinanceStreamEvent
+    [SerializationModel]
+    public record BinanceBlvtInfoUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Token name
+        /// ["<c>s</c>"] Token name
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string TokenName { get; set; } = string.Empty;
         /// <summary>
-        /// Token issued
+        /// ["<c>m</c>"] Token issued
         /// </summary>
-        [JsonProperty("m")]
+        [JsonPropertyName("m")]
         public decimal TokenIssued { get; set; }
         /// <summary>
-        /// Nav
+        /// ["<c>n</c>"] Nav
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public decimal Nav { get; set; }
 
         /// <summary>
-        /// Baskets
+        /// ["<c>b</c>"] Baskets
         /// </summary>
-        [JsonProperty("b")]
-        public IEnumerable<BlvtBasket> Baskets { get; set; } = Array.Empty<BlvtBasket>();
+        [JsonPropertyName("b")]
+        public BlvtBasket[] Baskets { get; set; } = Array.Empty<BlvtBasket>();
         /// <summary>
-        /// Token issued
+        /// ["<c>l</c>"] Real leverage.
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal RealLeverage { get; set; }
         /// <summary>
-        /// Token issued
+        /// ["<c>t</c>"] Target leverage.
         /// </summary>
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public decimal TargetLeverage { get; set; }
         /// <summary>
-        /// Funding ratio
+        /// ["<c>f</c>"] Funding ratio
         /// </summary>
-        [JsonProperty("f")]
+        [JsonPropertyName("f")]
         public decimal FundingRatio { get; set; }
     }
 
@@ -49,14 +50,15 @@
     public record BlvtBasket
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>s</c>"] Symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Position
+        /// ["<c>n</c>"] Position
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public decimal Position { get; set; }
     }
 }
+

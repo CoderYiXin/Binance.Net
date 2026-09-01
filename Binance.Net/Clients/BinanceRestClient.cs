@@ -9,11 +9,13 @@ using Binance.Net.Clients.UsdFuturesApi;
 using Binance.Net.Clients.CoinFuturesApi;
 using Binance.Net.Objects.Options;
 using CryptoExchange.Net.Clients;
+using Microsoft.Extensions.Options;
+using CryptoExchange.Net.Objects.Options;
 
 namespace Binance.Net.Clients
 {
     /// <inheritdoc cref="IBinanceRestClient" />
-    public class BinanceRestClient : BaseRestClient, IBinanceRestClient
+    public class BinanceRestClient : BaseRestClient<BinanceEnvironment, BinanceCredentials>, IBinanceRestClient
     {
         #region Api clients
 
@@ -34,27 +36,25 @@ namespace Binance.Net.Clients
         /// Create a new instance of the BinanceRestClient using provided options
         /// </summary>
         /// <param name="optionsDelegate">Option configuration delegate</param>
-        public BinanceRestClient(Action<BinanceRestOptions>? optionsDelegate = null) : this(null, null, optionsDelegate)
+        public BinanceRestClient(Action<BinanceRestOptions>? optionsDelegate = null)
+            : this(null, null, Options.Create(ApplyOptionsDelegate(optionsDelegate)))
         {
         }
 
         /// <summary>
         /// Create a new instance of the BinanceRestClient using provided options
         /// </summary>
-        /// <param name="optionsDelegate">Option configuration delegate</param>
+        /// <param name="options">Option configuration</param>
         /// <param name="loggerFactory">The logger factory</param>
         /// <param name="httpClient">Http client for this client</param>
-        public BinanceRestClient(HttpClient? httpClient, ILoggerFactory? loggerFactory, Action<BinanceRestOptions>? optionsDelegate = null) : base(loggerFactory, "Binance")
+        public BinanceRestClient(HttpClient? httpClient, ILoggerFactory? loggerFactory, IOptions<BinanceRestOptions> options) : base(loggerFactory, "Binance")
         {
-            var options = BinanceRestOptions.Default.Copy();
-            if (optionsDelegate != null)
-                optionsDelegate(options);
-            Initialize(options);
+            Initialize(options.Value);
 
-            GeneralApi = AddApiClient(new BinanceRestClientGeneralApi(_logger, httpClient, this, options));
-            SpotApi = AddApiClient(new BinanceRestClientSpotApi(_logger, httpClient, options));
-            UsdFuturesApi = AddApiClient(new BinanceRestClientUsdFuturesApi(_logger, httpClient, options));
-            CoinFuturesApi = AddApiClient(new BinanceRestClientCoinFuturesApi(_logger, httpClient, options));
+            GeneralApi = AddApiClient(new BinanceRestClientGeneralApi(loggerFactory, httpClient, this, options.Value));
+            SpotApi = AddApiClient(new BinanceRestClientSpotApi(loggerFactory, httpClient, options.Value));
+            UsdFuturesApi = AddApiClient(new BinanceRestClientUsdFuturesApi(loggerFactory, httpClient, options.Value));
+            CoinFuturesApi = AddApiClient(new BinanceRestClientCoinFuturesApi(loggerFactory, httpClient, options.Value));
         }
 
         #endregion
@@ -65,18 +65,7 @@ namespace Binance.Net.Clients
         /// <param name="optionsDelegate">Option configuration delegate</param>
         public static void SetDefaultOptions(Action<BinanceRestOptions> optionsDelegate)
         {
-            var options = BinanceRestOptions.Default.Copy();
-            optionsDelegate(options);
-            BinanceRestOptions.Default = options;
-        }
-
-        /// <inheritdoc />
-        public void SetApiCredentials(ApiCredentials credentials)
-        {
-            GeneralApi.SetApiCredentials(credentials);
-            SpotApi.SetApiCredentials(credentials);
-            UsdFuturesApi.SetApiCredentials(credentials);
-            CoinFuturesApi.SetApiCredentials(credentials);
+            BinanceRestOptions.Default = ApplyOptionsDelegate(optionsDelegate);
         }
     }
 }

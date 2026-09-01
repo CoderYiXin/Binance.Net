@@ -1,24 +1,26 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Wallet balance
     /// </summary>
+    [SerializationModel]
     public record BinanceWalletBalance
     {
         /// <summary>
-        /// Is the wallet activated
+        /// ["<c>activate</c>"] Is the wallet activated
         /// </summary>
-        [JsonProperty("activate")]
+        [JsonPropertyName("activate")]
         public bool Active { get; set; }
         /// <summary>
-        /// Balance
+        /// ["<c>balance</c>"] Balance
         /// </summary>
-        [JsonProperty("balance")]
+        [JsonPropertyName("balance")]
         public decimal Balance { get; set; }
         /// <summary>
-        /// Name of the wallet
+        /// ["<c>walletName</c>"] Name of the wallet
         /// </summary>
-        [JsonProperty("walletName")]
+        [JsonPropertyName("walletName")]
         public string WalletName { get; set; } = string.Empty;
     }
 }
+

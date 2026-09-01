@@ -1,27 +1,31 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
     /// <summary>
     /// Sub accounts margin summary
     /// </summary>
+    [SerializationModel]
     public record BinanceSubAccountsMarginSummary
     {
         /// <summary>
-        /// Total btc asset
+        /// ["<c>totalAssetOfBtc</c>"] The total asset value in BTC.
         /// </summary>
+        [JsonPropertyName("totalAssetOfBtc")]
         public decimal TotalAssetOfBtc { get; set; }
         /// <summary>
-        /// Total liability
+        /// ["<c>totalLiabilityOfBtc</c>"] Total liability
         /// </summary>
+        [JsonPropertyName("totalLiabilityOfBtc")]
         public decimal TotalLiabilityOfBtc { get; set; }
         /// <summary>
-        /// Total net btc
+        /// ["<c>totalNetAssetOfBtc</c>"] The total net asset value in BTC.
         /// </summary>
+        [JsonPropertyName("totalNetAssetOfBtc")]
         public decimal TotalNetAssetOfBtc { get; set; }
         /// <summary>
-        /// Sub account details
+        /// ["<c>subAccountList</c>"] Sub account details
         /// </summary>
-        [JsonProperty("subAccountList")]
-        public IEnumerable<BinanceSubAccountMarginInfo> SubAccounts { get; set; } = Array.Empty<BinanceSubAccountMarginInfo>();
+        [JsonPropertyName("subAccountList")]
+        public BinanceSubAccountMarginInfo[] SubAccounts { get; set; } = Array.Empty<BinanceSubAccountMarginInfo>();
     }
 
     /// <summary>
@@ -30,20 +34,25 @@
     public record BinanceSubAccountMarginInfo
     {
         /// <summary>
-        /// Sub account email
+        /// ["<c>email</c>"] The sub account email address.
         /// </summary>
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
         /// <summary>
-        /// Total btc asset
+        /// ["<c>totalAssetOfBtc</c>"] The total asset value in BTC.
         /// </summary>
+        [JsonPropertyName("totalAssetOfBtc")]
         public decimal TotalAssetOfBtc { get; set; }
         /// <summary>
-        /// Total liability
+        /// ["<c>totalLiabilityOfBtc</c>"] Total liability
         /// </summary>
+        [JsonPropertyName("totalLiabilityOfBtc")]
         public decimal TotalLiabilityOfBtc { get; set; }
         /// <summary>
-        /// Total net btc
+        /// ["<c>totalNetAssetOfBtc</c>"] The total net asset value in BTC.
         /// </summary>
+        [JsonPropertyName("totalNetAssetOfBtc")]
         public decimal TotalNetAssetOfBtc { get; set; }
     }
 }
+

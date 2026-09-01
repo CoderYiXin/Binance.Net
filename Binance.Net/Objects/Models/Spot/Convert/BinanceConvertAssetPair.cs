@@ -1,39 +1,46 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Convert
+namespace Binance.Net.Objects.Models.Spot.Convert
 {
     /// <summary>
     /// Convert Pairs
     /// </summary>
+    [SerializationModel]
     public record BinanceConvertAssetPair
     {
         /// <summary>
-        /// Quote asset
+        /// ["<c>fromAsset</c>"] Quote asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Base asset
+        /// ["<c>toAsset</c>"] Base asset
         /// </summary>
-        [JsonProperty("toAsset")]
+        [JsonPropertyName("toAsset")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Quote asset min quantity
+        /// ["<c>fromAssetMinAmount</c>"] Quote asset min quantity
         /// </summary>
-        [JsonProperty("fromAssetMinAmount")]
+        [JsonPropertyName("fromAssetMinAmount")]
         public decimal QuoteAssetMinQuantity { get; set; }
         /// <summary>
-        /// Quote asset max quantity
+        /// ["<c>fromAssetMaxAmount</c>"] Quote asset max quantity
         /// </summary>
-        [JsonProperty("fromAssetMaxAmount")]
+        [JsonPropertyName("fromAssetMaxAmount")]
         public decimal QuoteAssetMaxQuantity { get; set; }
         /// <summary>
-        /// Base asset min quantity
+        /// ["<c>toAssetMinAmount</c>"] Base asset min quantity
         /// </summary>
-        [JsonProperty("toAssetMinAmount")]
+        [JsonPropertyName("toAssetMinAmount")]
         public decimal BaseAssetMinQuantity { get; set; }
         /// <summary>
-        /// Base asset max quantity
+        /// ["<c>toAssetMaxAmount</c>"] Base asset max quantity
         /// </summary>
-        [JsonProperty("toAssetMaxAmount")]
+        [JsonPropertyName("toAssetMaxAmount")]
         public decimal BaseAssetMaxQuantity { get; set; }
+        /// <summary>
+        /// From asset is the base asset of the pair
+        /// </summary>
+        [JsonPropertyName("fromIsBase")]
+        public bool? FromIsBase { get; set; }
     }
 }
+

@@ -1,0 +1,15 @@
+namespace Binance.Net.Objects.Models.Spot
+{
+    /// <summary>
+    /// Travel rule requirement
+    /// </summary>
+    public record BinanceTravelRuleRequirement
+    {
+        /// <summary>
+        /// ["<c>questionnaireCountryCode</c>"] Country code of the required questionnaire, or `NIL` if not required.
+        /// </summary>
+        [JsonPropertyName("questionnaireCountryCode")]
+        public string QuestionnaireCountryCode { get; set; } = string.Empty;
+    }
+}
+

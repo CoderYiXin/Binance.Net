@@ -1,81 +1,83 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Enums;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
 {
     /// <summary>
     /// Tick info
     /// </summary>
-    public abstract record BinanceStreamTickBase: BinanceStreamEvent, IBinanceTick
-    {        
+    [SerializationModel]
+    public abstract record BinanceStreamTickBase : BinanceStreamEvent, IBinanceTick
+    {
         /// <summary>
-        /// The symbol this data is for
+        /// ["<c>s</c>"] The symbol this data is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The price change of this symbol
+        /// ["<c>p</c>"] The price change of this symbol
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal PriceChange { get; set; }
         /// <summary>
-        /// The price change percentage of this symbol
+        /// ["<c>P</c>"] The price change percentage of this symbol
         /// </summary>
-        [JsonProperty("P")]
+        [JsonPropertyName("P")]
         public decimal PriceChangePercent { get; set; }
         /// <summary>
-        /// The weighted average
+        /// ["<c>w</c>"] The weighted average
         /// </summary>
-        [JsonProperty("w")]
+        [JsonPropertyName("w")]
         public decimal WeightedAveragePrice { get; set; }
         /// <summary>
-        /// The close price of the previous day
+        /// ["<c>x</c>"] The close price of the previous day
         /// </summary>
-        [JsonProperty("x")]
+        [JsonPropertyName("x")]
         public decimal PrevDayClosePrice { get; set; }
         /// <summary>
-        /// The current day close price. This is the latest price for this symbol.
+        /// ["<c>c</c>"] The current day close price. This is the latest price for this symbol.
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public decimal LastPrice { get; set; }
         /// <summary>
-        /// The most recent trade quantity
+        /// ["<c>Q</c>"] The most recent trade quantity
         /// </summary>
-        [JsonProperty("Q")]
+        [JsonPropertyName("Q")]
         public decimal LastQuantity { get; set; }
         /// <summary>
-        /// The best bid price in the order book
+        /// ["<c>b</c>"] The best bid price in the order book
         /// </summary>
-        [JsonProperty("b")]
+        [JsonPropertyName("b")]
         public decimal BestBidPrice { get; set; }
         /// <summary>
-        /// The quantity of the best bid price in the order book
+        /// ["<c>B</c>"] The quantity of the best bid price in the order book
         /// </summary>
-        [JsonProperty("B")]
+        [JsonPropertyName("B")]
         public decimal BestBidQuantity { get; set; }
         /// <summary>
-        /// The best ask price in the order book
+        /// ["<c>a</c>"] The best ask price in the order book
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public decimal BestAskPrice { get; set; }
         /// <summary>
-        /// The quantity of the best ask price in the order book
+        /// ["<c>A</c>"] The quantity of the best ask price in the order book
         /// </summary>
-        [JsonProperty("A")]
+        [JsonPropertyName("A")]
         public decimal BestAskQuantity { get; set; }
         /// <summary>
-        /// Todays open price
+        /// ["<c>o</c>"] Today's open price.
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public decimal OpenPrice { get; set; }
         /// <summary>
-        /// Todays high price
+        /// ["<c>h</c>"] Todays high price
         /// </summary>
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public decimal HighPrice { get; set; }
         /// <summary>
-        /// Todays low price
+        /// ["<c>l</c>"] Todays low price
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LowPrice { get; set; }
         /// <summary>
         /// Total traded volume in the base asset
@@ -86,63 +88,71 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         /// </summary>
         public abstract decimal QuoteVolume { get; set; }
         /// <summary>
-        /// The first trade id of today
+        /// ["<c>F</c>"] The first trade id of today
         /// </summary>
-        [JsonProperty("F")]
+        [JsonPropertyName("F")]
         public long FirstTradeId { get; set; }
         /// <summary>
-        /// The last trade id of today
+        /// ["<c>L</c>"] The last trade id of today
         /// </summary>
-        [JsonProperty("L")]
+        [JsonPropertyName("L")]
         public long LastTradeId { get; set; }
         /// <summary>
-        /// The total trades of id
+        /// ["<c>n</c>"] The total number of trades.
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public long TotalTrades { get; set; }
         /// <summary>
-        /// The open time of these stats
+        /// ["<c>O</c>"] The open time of these stats
         /// </summary>
-        [JsonProperty("O"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("O"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime OpenTime { get; set; }
         /// <summary>
-        /// The close time of these stats
+        /// ["<c>C</c>"] The close time of these stats
         /// </summary>
-        [JsonProperty("C"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("C"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CloseTime { get; set; }
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
     }
 
     /// <summary>
     /// Stream tick
     /// </summary>
-    public record BinanceStreamTick: BinanceStreamTickBase
+    [SerializationModel]
+    public record BinanceStreamTick : BinanceStreamTickBase
     {
         /// <summary>
-        /// Total traded volume in the base asset
+        /// ["<c>v</c>"] Total traded volume in the base asset
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public override decimal Volume { get; set; }
         /// <summary>
-        /// Total traded volume in the quote asset
+        /// ["<c>q</c>"] Total traded volume in the quote asset
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public override decimal QuoteVolume { get; set; }
     }
 
     /// <summary>
     /// Stream tick
     /// </summary>
+    [SerializationModel]
     public record BinanceStreamCoinTick : BinanceStreamTickBase
     {
         /// <summary>
-        /// Total traded volume in the base asset
+        /// ["<c>q</c>"] Total traded volume in the base asset
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public override decimal Volume { get; set; }
         /// <summary>
-        /// Total traded volume in the quote asset
+        /// ["<c>v</c>"] Total traded volume in the quote asset
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public override decimal QuoteVolume { get; set; }
     }
 }
+

@@ -1,58 +1,64 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Convert
 {
     /// <summary>
     /// Convert trade info
     /// </summary>
+    [SerializationModel]
     public record BinanceConvertTrade
     {
         /// <summary>
-        /// Quote id
+        /// ["<c>quoteId</c>"] Quote id
         /// </summary>
+        [JsonPropertyName("quoteId")]
         public string QuoteId { get; set; } = string.Empty;
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
-        public string OrderId { get; set; } = string.Empty;
+        [JsonPropertyName("orderId")]
+        public long OrderId { get; set; }
         /// <summary>
-        /// Order status
+        /// ["<c>orderStatus</c>"] Order status
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
-        [JsonProperty("orderStatus")]
+        [JsonPropertyName("orderStatus")]
         public ConvertOrderStatus Status { get; set; }
         /// <summary>
-        /// Quote asset 
+        /// ["<c>fromAsset</c>"] Quote asset 
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Quote quantity
+        /// ["<c>fromAmount</c>"] Quote quantity
         /// </summary>
-        [JsonProperty("fromAmount")]
+        [JsonPropertyName("fromAmount")]
         public decimal QuoteQuantity { get; set; }
         /// <summary>
-        /// Base asset
+        /// ["<c>toAsset</c>"] Base asset
         /// </summary>
-        [JsonProperty("toAsset")]
+        [JsonPropertyName("toAsset")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Base quantity
+        /// ["<c>toAmount</c>"] Base quantity
         /// </summary>
-        [JsonProperty("toAmount")]
+        [JsonPropertyName("toAmount")]
         public decimal BaseQuantity { get; set; }
         /// <summary>
-        /// Price ratio
+        /// ["<c>ratio</c>"] Price ratio
         /// </summary>
+        [JsonPropertyName("ratio")]
         public decimal Ratio { get; set; }
         /// <summary>
-        /// Inverse price ratio
+        /// ["<c>inverseRatio</c>"] Inverse price ratio
         /// </summary>
+        [JsonPropertyName("inverseRatio")]
         public decimal InverseRatio { get; set; }
         /// <summary>
-        /// Creation time
+        /// ["<c>createTime</c>"] Creation time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime")]
         public DateTime CreateTime { get; set; }
     }
 }
+

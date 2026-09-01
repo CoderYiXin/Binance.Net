@@ -1,39 +1,41 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Simple Earn flexible product subscription preview
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnFlexiblePreview
     {
         /// <summary>
-        /// Reward asset
+        /// ["<c>rewardAsset</c>"] Reward asset
         /// </summary>
-        [JsonProperty("rewardAsset")]
+        [JsonPropertyName("rewardAsset")]
         public string RewardAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Airdrop asset
+        /// ["<c>airDropAsset</c>"] Airdrop asset
         /// </summary>
-        [JsonProperty("airDropAsset")]
+        [JsonPropertyName("airDropAsset")]
         public string AirDropAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Total amount
+        /// ["<c>totalAmount</c>"] Total amount.
         /// </summary>
-        [JsonProperty("totalAmount")]
+        [JsonPropertyName("totalAmount")]
         public decimal TotalQuantity { get; set; }
         /// <summary>
-        /// Estimated daily bonus rewards
+        /// ["<c>estDailyBonusRewards</c>"] Estimated daily bonus rewards
         /// </summary>
-        [JsonProperty("estDailyBonusRewards")]
+        [JsonPropertyName("estDailyBonusRewards")]
         public decimal EstimatedDailyBonusRewards { get; set; }
         /// <summary>
-        /// Estimated daily realtime rewards
+        /// ["<c>estDailyRealTimeRewards</c>"] Estimated daily realtime rewards
         /// </summary>
-        [JsonProperty("estDailyRealTimeRewards")]
+        [JsonPropertyName("estDailyRealTimeRewards")]
         public decimal EstimatedDailyRealTimeRewards { get; set; }
         /// <summary>
-        /// Estimated daily airdrop rewards
+        /// ["<c>estDailyAirdropRewards</c>"] Estimated daily airdrop rewards
         /// </summary>
-        [JsonProperty("estDailyAirdropRewards")]
+        [JsonPropertyName("estDailyAirdropRewards")]
         public decimal EstimatedDailyAirdropRewards { get; set; }
     }
 }
+

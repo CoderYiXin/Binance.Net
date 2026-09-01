@@ -1,57 +1,71 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Enums;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
 {
     /// <summary>
     /// Aggregated information about trades for a symbol
     /// </summary>
-    public record BinanceStreamAggregatedTrade: BinanceStreamEvent, IBinanceAggregatedTrade
+    [SerializationModel]
+    public record BinanceStreamAggregatedTrade : BinanceStreamEvent, IBinanceAggregatedTrade
     {
         /// <summary>
-        /// The symbol the trade was for
+        /// ["<c>s</c>"] The symbol the trade was for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The id of this aggregated trade
+        /// ["<c>a</c>"] The id of this aggregated trade
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public long Id { get; set; }
         /// <summary>
-        /// The price of the trades
+        /// ["<c>p</c>"] The price of the trades
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal Price { get; set; }
         /// <summary>
-        /// The combined quantity of the trades
+        /// ["<c>q</c>"] The combined quantity of the trades
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The first trade id in this aggregation
+        /// ["<c>nq</c>"] The quantity without trades involving RPI orders.
         /// </summary>
-        [JsonProperty("f")]
+        [JsonPropertyName("nq")]
+        public decimal? QuantityWithoutRpi { get; set; }
+        /// <summary>
+        /// ["<c>f</c>"] The first trade id in this aggregation
+        /// </summary>
+        [JsonPropertyName("f")]
         public long FirstTradeId { get; set; }
         /// <summary>
-        /// The last trade id in this aggregation
+        /// ["<c>l</c>"] The last trade id in this aggregation
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public long LastTradeId { get; set; }
         /// <summary>
-        /// The time of the trades
+        /// ["<c>T</c>"] The time of the trades
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TradeTime { get; set; }
         /// <summary>
-        /// Whether the buyer was the maker
+        /// ["<c>m</c>"] Whether the buyer was the maker
         /// </summary>
-        [JsonProperty("m")]
+        [JsonPropertyName("m")]
         public bool BuyerIsMaker { get; set; }
-        
+
         /// <summary>
-        /// Unused
+        /// ["<c>M</c>"] Unused
         /// </summary>
-        [JsonProperty("M")]
+        [JsonPropertyName("M")]
         public bool Ignore { get; set; }
+
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
     }
 }
+

@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,35 +5,40 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Transfer info
     /// </summary>
+    [SerializationModel]
     public record BinanceTransfer
     {
         /// <summary>
-        /// The asset which was transfered
+        /// ["<c>asset</c>"] The asset which was transferred
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Quantity transfered
+        /// ["<c>amount</c>"] Quantity transferred
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Transfer type
+        /// ["<c>type</c>"] Transfer type
         /// </summary>
-        [JsonConverter(typeof(UniversalTransferTypeConverter))]
+        [JsonPropertyName("type")]
         public UniversalTransferType Type { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
-        /// Id
+        /// ["<c>tranId</c>"] The transfer identifier.
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long Id { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>timestamp</c>"] The transfer timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
     }
 }
+

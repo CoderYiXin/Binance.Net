@@ -5,66 +5,75 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Mark price update
     /// </summary>
-    public record BinanceFuturesStreamMarkPrice: BinanceStreamEvent, IBinanceFuturesMarkPrice
+    [SerializationModel]
+    public record BinanceFuturesStreamMarkPrice : BinanceStreamEvent, IBinanceFuturesMarkPrice
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>s</c>"] Symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Mark Price
+        /// ["<c>p</c>"] Mark Price
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal MarkPrice { get; set; }
 
         /// <summary>
-        /// Estimated Settle Price, only useful in the last hour before the settlement starts
+        /// ["<c>P</c>"] Estimated Settle Price, only useful in the last hour before the settlement starts
         /// </summary>
-        [JsonProperty("P")]
+        [JsonPropertyName("P")]
         public decimal EstimatedSettlePrice { get; set; }
 
         /// <summary>
-        /// Next Funding Rate
+        /// ["<c>r</c>"] Next Funding Rate
         /// </summary>
-        [JsonProperty("r")]
+        [JsonPropertyName("r")]
         public decimal? FundingRate { get; set; }
-        
+
         /// <summary>
-        /// Next Funding Time
+        /// ["<c>T</c>"] Next Funding Time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime NextFundingTime { get; set; }
     }
 
     /// <summary>
     /// Mark price update
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesUsdtStreamMarkPrice : BinanceFuturesStreamMarkPrice
     {
         /// <summary>
-        /// Mark Price
+        /// ["<c>i</c>"] Index Price
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public decimal IndexPrice { get; set; }
+        /// <summary>
+        /// ["<c>i</c>"] Mark private moving average
+        /// </summary>
+        [JsonPropertyName("ap")]
+        public decimal MarkPriceMovingAverage { get; set; }
     }
 
     /// <summary>
     /// Mark price update
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesCoinStreamMarkPrice : BinanceFuturesStreamMarkPrice
     {
         /// <summary>
-        /// Mark Price
+        /// ["<c>P</c>"] Mark Price
         /// </summary>
-        [JsonProperty("P")]
+        [JsonPropertyName("P")]
         public new decimal EstimatedSettlePrice { get; set; }
 
         /// <summary>
-        /// Mark Price
+        /// ["<c>i</c>"] Mark Price
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public decimal IndexPrice { get; set; }
     }
 }
+

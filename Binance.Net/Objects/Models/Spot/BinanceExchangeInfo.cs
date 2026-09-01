@@ -1,30 +1,60 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
+
     /// <summary>
     /// Exchange info
     /// </summary>
+    [SerializationModel]
     public record BinanceExchangeInfo
     {
         /// <summary>
-        /// The timezone the server uses
+        /// ["<c>timezone</c>"] The timezone the server uses
         /// </summary>
+        [JsonPropertyName("timezone")]
         public string TimeZone { get; set; } = string.Empty;
         /// <summary>
-        /// The current server time
+        /// ["<c>serverTime</c>"] The current server time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("serverTime")]
         public DateTime ServerTime { get; set; }
         /// <summary>
-        /// The rate limits used
+        /// ["<c>rateLimits</c>"] The rate limits used
         /// </summary>
-        public IEnumerable<BinanceRateLimit> RateLimits { get; set; } = Array.Empty<BinanceRateLimit>();
+        [JsonPropertyName("rateLimits")]
+        public BinanceRateLimit[] RateLimits { get; set; } = Array.Empty<BinanceRateLimit>();
         /// <summary>
-        /// All symbols supported
+        /// ["<c>symbols</c>"] All symbols supported
         /// </summary>
-        public IEnumerable<BinanceSymbol> Symbols { get; set; } = Array.Empty<BinanceSymbol>();
+        [JsonPropertyName("symbols")]
+        public BinanceSymbol[] Symbols { get; set; } = Array.Empty<BinanceSymbol>();
         /// <summary>
-        /// Filters
+        /// ["<c>exchangeFilters</c>"] Exchange-level filters.
         /// </summary>
-        public IEnumerable<object> ExchangeFilters { get; set; } = Array.Empty<object>();
+        [JsonPropertyName("exchangeFilters")]
+        public object[] ExchangeFilters { get; set; } = Array.Empty<object>();
+        /// <summary>
+        /// ["<c>sors</c>"] Smart order routing
+        /// </summary>
+        [JsonPropertyName("sors")]
+        public BinanceSor[]? SmartOrderRoutings { get; set; }
+    }
+
+    /// <summary>
+    /// Smart order routing configuration
+    /// </summary>
+    public record BinanceSor
+    {
+        /// <summary>
+        /// ["<c>baseAsset</c>"] The base asset
+        /// </summary>
+        [JsonPropertyName("baseAsset")]
+        public string BaseAsset { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>symbols</c>"] The symbols used for SOR
+        /// </summary>
+        [JsonPropertyName("symbols")]
+        public string[] Symbols { get; set; } = [];
     }
 }
+

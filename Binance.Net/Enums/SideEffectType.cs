@@ -1,25 +1,33 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Side effect for a margin order
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<SideEffectType>))]
     public enum SideEffectType
     {
         /// <summary>
-        /// Normal trade
+        /// ["<c>NO_SIDE_EFFECT</c>"] Normal trade
         /// </summary>
+        [Map("NO_SIDE_EFFECT")]
         NoSideEffect,
         /// <summary>
-        /// Margin trade order
+        /// ["<c>MARGIN_BUY</c>"] Margin trade order
         /// </summary>
+        [Map("MARGIN_BUY")]
         MarginBuy,
         /// <summary>
-        /// Make auto repayment after order is filled
+        /// ["<c>AUTO_REPAY</c>"] Make auto repayment after order is filled
         /// </summary>
+        [Map("AUTO_REPAY")]
         AutoRepay,
         /// <summary>
-        /// Automatic borrowing and repayment, simultaneously
+        /// ["<c>AUTO_BORROW_REPAY</c>"] Automatic borrowing and repayment, simultaneously
         /// </summary>
+        [Map("AUTO_BORROW_REPAY")]
         AutoBorrowRepay,
     }
 }
+

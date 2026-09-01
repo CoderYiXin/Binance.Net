@@ -3,9 +3,10 @@
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
-    /// Kline for mark or index price
+    /// Kline for mark or index price or Premium index
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<BinanceMarkIndexKline>))]
+    [SerializationModel]
     public record BinanceMarkIndexKline
     {
         /// <summary>
@@ -43,7 +44,7 @@ namespace Binance.Net.Objects.Models.Spot
 
         [ArrayProperty(7)] internal string? Ignore2 { get; set; } = string.Empty;
         /// <summary>
-        /// Number of basic data
+        /// Number of data points in the candle.
         /// </summary>
         [ArrayProperty(8)]
         public int BasicDataCount { get; set; }

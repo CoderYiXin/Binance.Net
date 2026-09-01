@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,32 +5,37 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Result of the requested margin amount change
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesPositionMarginResult
     {
         /// <summary>
-        /// New margin amount
+        /// ["<c>amount</c>"] The updated margin amount.
         /// </summary>
+        [JsonPropertyName("amount")]
         public decimal Amount { get; set; }
         /// <summary>
-        /// Request response code
+        /// ["<c>code</c>"] The request response code.
         /// </summary>
+        [JsonPropertyName("code")]
         public int Code { get; set; }
         /// <summary>
-        /// Message
+        /// ["<c>msg</c>"] Message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
 
         /// <summary>
-        /// Maximum margin value
-        /// NOTE: string type, because the value van be 'inf' (infinite)
+        /// ["<c>maxNotionalValue</c>"] Maximum margin value
+        /// NOTE: string type, because the value can be 'inf' (infinite)
         /// </summary>
+        [JsonPropertyName("maxNotionalValue")]
         public string MaxNotionalValue { get; set; } = string.Empty;
         /// <summary>
-        /// Direction of the requested margin change
+        /// ["<c>type</c>"] Direction of the requested margin change
         /// </summary>
-        [JsonConverter(typeof(FuturesMarginChangeDirectionTypeConverter))]
+        [JsonPropertyName("type")]
         public FuturesMarginChangeDirectionType Type { get; set; }
     }
 
 }
+

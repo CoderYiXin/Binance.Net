@@ -1,4 +1,4 @@
-﻿using Binance.Net.Converters;
+using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
@@ -6,209 +6,211 @@ namespace Binance.Net.Objects.Models.Spot.Socket
     /// <summary>
     /// Update data about an order
     /// </summary>
-    public record BinanceStreamOrderUpdate: BinanceStreamEvent
+    public record BinanceStreamOrderUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// The id of the order as assigned by Binance
+        /// ["<c>i</c>"] The id of the order as assigned by Binance
         /// </summary>
-        [JsonProperty("i")]
+        [JsonPropertyName("i")]
         public long Id { get; set; }
         /// <summary>
-        /// The symbol the order is for
+        /// ["<c>s</c>"] The symbol the order is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The new client order id
+        /// ["<c>c</c>"] The new client order id
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string ClientOrderId { get; set; } = string.Empty;
         /// <summary>
-        /// The side of the order
+        /// ["<c>S</c>"] The side of the order
         /// </summary>
-        [JsonProperty("S"), JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("S")]
         public OrderSide Side { get; set; }
         /// <summary>
-        /// The type of the order
+        /// ["<c>o</c>"] The type of the order
         /// </summary>
-        [JsonProperty("o"), JsonConverter(typeof(SpotOrderTypeConverter))]
+        [JsonPropertyName("o")]
         public SpotOrderType Type { get; set; }
         /// <summary>
-        /// The timespan the order is active
+        /// ["<c>f</c>"] The timespan the order is active
         /// </summary>
-        [JsonProperty("f"), JsonConverter(typeof(TimeInForceConverter))]
+        [JsonPropertyName("f")]
         public TimeInForce TimeInForce { get; set; }
         /// <summary>
-        /// The quantity of the order
+        /// ["<c>q</c>"] The quantity of the order
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The price of the order
+        /// ["<c>p</c>"] The price of the order
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal Price { get; set; }
         /// <summary>
-        /// The stop price of the order
+        /// ["<c>P</c>"] The stop price of the order
         /// </summary>
-        [JsonProperty("P")]
+        [JsonPropertyName("P")]
         public decimal StopPrice { get; set; }
         /// <summary>
-        /// The trailing delta of the order
+        /// ["<c>d</c>"] The trailing delta of the order
         /// </summary>
-        [JsonProperty("d")]
+        [JsonPropertyName("d")]
         public int? TrailingDelta { get; set; }
         /// <summary>
-        /// Trailing Time; This is only visible if the trailing stop order has been activated.
+        /// ["<c>D</c>"] Trailing Time; This is only visible if the trailing stop order has been activated.
         /// </summary>
-        [JsonProperty("D"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("D")]
         public DateTime TrailingTime { get; set; }
         /// <summary>
-        /// The iceberg quantity of the order
+        /// ["<c>F</c>"] The iceberg quantity of the order
         /// </summary>
-        [JsonProperty("F")]
+        [JsonPropertyName("F")]
         public decimal IcebergQuantity { get; set; }
         /// <summary>
-        /// The original client order id
+        /// ["<c>C</c>"] The original client order id
         /// </summary>
-        [JsonProperty("C")]
+        [JsonPropertyName("C")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string? OriginalClientOrderId { get; set; } = string.Empty;
         /// <summary>
-        /// The execution type
+        /// ["<c>x</c>"] The execution type
         /// </summary>
-        [JsonProperty("x"), JsonConverter(typeof(ExecutionTypeConverter))]
+        [JsonPropertyName("x")]
         public ExecutionType ExecutionType { get; set; }
         /// <summary>
-        /// The status of the order
+        /// ["<c>X</c>"] The status of the order
         /// </summary>
-        [JsonProperty("X"), JsonConverter(typeof(OrderStatusConverter))]
+        [JsonPropertyName("X")]
         public OrderStatus Status { get; set; }
         /// <summary>
-        /// The reason the order was rejected
+        /// ["<c>r</c>"] The reason the order was rejected
         /// </summary>
-        [JsonProperty("r"), JsonConverter(typeof(OrderRejectReasonConverter))]
+        [JsonPropertyName("r")]
         public OrderRejectReason RejectReason { get; set; }
         /// <summary>
-        /// The quantity of the last filled trade of this order
+        /// ["<c>l</c>"] The quantity of the last filled trade of this order
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LastQuantityFilled { get; set; }
         /// <summary>
-        /// The quantity of all trades that were filled for this order
+        /// ["<c>z</c>"] The quantity of all trades that were filled for this order
         /// </summary>
-        [JsonProperty("z")]
+        [JsonPropertyName("z")]
         public decimal QuantityFilled { get; set; }
         /// <summary>
-        /// The price of the last filled trade
+        /// ["<c>L</c>"] The price of the last filled trade
         /// </summary>
-        [JsonProperty("L")]
+        [JsonPropertyName("L")]
         public decimal LastPriceFilled { get; set; }
         /// <summary>
-        /// The fee payed
+        /// ["<c>n</c>"] The fee paid
         /// </summary>
-        [JsonProperty("n")]
+        [JsonPropertyName("n")]
         public decimal Fee { get; set; }
         /// <summary>
-        /// The asset the fee was taken from
+        /// ["<c>N</c>"] The asset the fee was taken from
         /// </summary>
-        [JsonProperty("N")]
+        [JsonPropertyName("N")]
         public string FeeAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The time of the update
+        /// ["<c>T</c>"] The time of the update
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// The trade id
+        /// ["<c>t</c>"] The trade id
         /// </summary>
-        [JsonProperty("t")]
+        [JsonPropertyName("t")]
         public long TradeId { get; set; }
         /// <summary>
-        /// Is working
+        /// ["<c>w</c>"] Is working
         /// </summary>
-        [JsonProperty("w")]
+        [JsonPropertyName("w")]
         public bool IsWorking { get; set; }
         /// <summary>
-        /// Whether the buyer is the maker
+        /// ["<c>m</c>"] Whether the buyer is the maker
         /// </summary>
-        [JsonProperty("m")]
+        [JsonPropertyName("m")]
         public bool BuyerIsMaker { get; set; }
         /// <summary>
-        /// Time the order was created
+        /// ["<c>O</c>"] Time the order was created
         /// </summary>
-        [JsonProperty("O"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("O"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Cummulative quantity
+        /// ["<c>Z</c>"] Cumulative quantity
         /// </summary>
-        [JsonProperty("Z")]
+        [JsonPropertyName("Z")]
         public decimal QuoteQuantityFilled { get; set; }
         /// <summary>
-        /// Quote order quantity
+        /// ["<c>Q</c>"] Quote order quantity
         /// </summary>
-        [JsonProperty("Q")]
+        [JsonPropertyName("Q")]
         public decimal QuoteQuantity { get; set; }
         /// <summary>
-        /// Last quote asset transacted quantity (i.e. LastPrice * LastQuantity)
+        /// ["<c>Y</c>"] Last quote asset transacted quantity (i.e. LastPrice * LastQuantity)
         /// </summary>
-        [JsonProperty("Y")]
+        [JsonPropertyName("Y")]
         public decimal LastQuoteQuantity { get; set; }
         /// <summary>
-        /// This id of the corresponding order list. (-1 if not part of an order list)
+        /// ["<c>g</c>"] This id of the corresponding order list. (-1 if not part of an order list)
         /// </summary>
-        [JsonProperty("g")]
+        [JsonPropertyName("g")]
         public long OrderListId { get; set; }
         /// <summary>
-        /// The listen key for which the update was
+        /// API key this update was for.
         /// </summary>
-        public string ListenKey { get; set; } = string.Empty;
+        public string ApiKey { get; set; } = string.Empty;
 
         // These are unused properties, but are mapped to prevent mapping error of lower/upper case
         /// <summary>
-        /// Unused
+        /// ["<c>I</c>"] Unused
         /// </summary>
-        [JsonProperty("I")]
+        [JsonPropertyName("I")]
         public long I { get; set; }
         /// <summary>
-        /// Unused
+        /// ["<c>M</c>"] Unused
         /// </summary>
-        [JsonProperty("M")]
+        [JsonPropertyName("M")]
         public bool M { get; set; }
         /// <summary>
-        /// Trade group id
+        /// ["<c>u</c>"] Trade group id
         /// </summary>
-        [JsonProperty("u")]
+        [JsonPropertyName("u")]
         public long? TradeGroupId { get; set; }
         /// <summary>
-        /// Prevented match id
+        /// ["<c>v</c>"] Prevented match id
         /// </summary>
-        [JsonProperty("v")]
+        [JsonPropertyName("v")]
         public long? PreventedMatchId { get; set; }
         /// <summary>
-        /// Counter order id
+        /// ["<c>U</c>"] Counter order id
         /// </summary>
-        [JsonProperty("U")]
+        [JsonPropertyName("U")]
         public long? CounterOrderId { get; set; }
         /// <summary>
-        /// Prevented quantity
+        /// ["<c>A</c>"] Prevented quantity
         /// </summary>
-        [JsonProperty("A")]
+        [JsonPropertyName("A")]
         public decimal? PreventedQuantity { get; set; }
         /// <summary>
-        /// Last prevented quantiy
+        /// ["<c>B</c>"] Last prevented quantity
         /// </summary>
-        [JsonProperty("B")]
+        [JsonPropertyName("B")]
         public decimal? LastPreventedQuantity { get; set; }
         /// <summary>
-        /// Prevented match id
+        /// ["<c>V</c>"] Self-trade prevention mode.
         /// </summary>
-        [JsonProperty("V")]
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("V")]
         public SelfTradePreventionMode? SelfTradePreventionMode { get; set; }
         /// <summary>
-        /// Working time; when it entered the order book
+        /// ["<c>W</c>"] Working time; when it entered the order book
         /// </summary>
-        [JsonProperty("W"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("W"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime? WorkingTime { get; set; }
     }
 }
+

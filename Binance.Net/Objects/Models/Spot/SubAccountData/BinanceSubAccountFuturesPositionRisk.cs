@@ -1,42 +1,51 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
     /// <summary>
     /// Sub account position risk
     /// </summary>
+    [SerializationModel]
     public record BinanceSubAccountFuturesPositionRisk
     {
         /// <summary>
-        /// The entry price
+        /// ["<c>entryPrice</c>"] The entry price
         /// </summary>
+        [JsonPropertyName("entryPrice")]
         public decimal EntryPrice { get; set; }
         /// <summary>
-        /// Leverage
+        /// ["<c>leverage</c>"] Leverage
         /// </summary>
+        [JsonPropertyName("leverage")]
         public decimal Leverage { get; set; }
         /// <summary>
-        /// Max notional
+        /// ["<c>maxNotional</c>"] Max notional
         /// </summary>
+        [JsonPropertyName("maxNotional")]
         public decimal MaxNotional { get; set; }
         /// <summary>
-        /// Liquidation price
+        /// ["<c>liquidationPrice</c>"] Liquidation price
         /// </summary>
+        [JsonPropertyName("liquidationPrice")]
         public decimal LiquidationPrice { get; set; }
         /// <summary>
-        /// Mark price
+        /// ["<c>markPrice</c>"] Mark price
         /// </summary>
+        [JsonPropertyName("markPrice")]
         public decimal MarkPrice { get; set; }
         /// <summary>
-        /// Position quantity
+        /// ["<c>positionAmount</c>"] Position quantity
         /// </summary>
-        [JsonProperty("positionAmount")]
+        [JsonPropertyName("positionAmount")]
         public decimal PositionQuantity { get; set; }
         /// <summary>
-        /// Symbol
+        /// ["<c>symbol</c>"] Symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Unrealized profit
+        /// ["<c>unrealizedProfit</c>"] Unrealized profit
         /// </summary>
+        [JsonPropertyName("unrealizedProfit")]
         public decimal UnrealizedProfit { get; set; }
     }
 }
+

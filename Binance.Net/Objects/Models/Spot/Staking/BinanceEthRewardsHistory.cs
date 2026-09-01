@@ -1,40 +1,42 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Staking
+namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Rewards history
     /// </summary>
+    [SerializationModel]
     public record BinanceEthRewardsHistory
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] The reward asset.
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Amount
+        /// ["<c>amount</c>"] Amount
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
-        [JsonProperty("status")]
+        [JsonPropertyName("status")]
         public string Status { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] The timestamp.
         /// </summary>
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// BETH holding balance
+        /// ["<c>holding</c>"] BETH holding balance
         /// </summary>
-        [JsonProperty("holding")]
+        [JsonPropertyName("holding")]
         public decimal Holding { get; set; }
         /// <summary>
-        /// Annual percentage rate
+        /// ["<c>annualPercentageRate</c>"] Annual percentage rate
         /// </summary>
-        [JsonProperty("annualPercentageRate")]
+        [JsonPropertyName("annualPercentageRate")]
         public decimal AnnualPercentageRate { get; set; }
     }
 }
+

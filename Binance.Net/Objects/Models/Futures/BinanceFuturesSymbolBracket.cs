@@ -1,31 +1,33 @@
-﻿namespace Binance.Net.Objects.Models.Futures
+namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Notional and Leverage Brackets
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesSymbolBracket
     {
         /// <summary>
-        /// Symbol or pair
+        /// ["<c>symbol</c>"] Symbol or pair
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// //user symbol bracket multiplier, only appears when user's symbol bracket is adjusted 
+        /// ["<c>notionalCoef</c>"] user symbol bracket multiplier, only appears when user's symbol bracket is adjusted 
         /// </summary>
-        [JsonProperty("notionalCoef")]
+        [JsonPropertyName("notionalCoef")]
         public decimal? NotionalCoef { get; set; }
-        [JsonProperty("pair")]
-        private string Pair
+        [JsonInclude, JsonPropertyName("pair")]
+        internal string Pair
         {
             set => Symbol = value;
         }
 
         /// <summary>
-        /// Brackets
+        /// ["<c>brackets</c>"] Brackets
         /// </summary>
-        public IEnumerable<BinanceFuturesBracket> Brackets { get; set; } = Array.Empty<BinanceFuturesBracket>();
+        [JsonPropertyName("brackets")]
+        public BinanceFuturesBracket[] Brackets { get; set; } = Array.Empty<BinanceFuturesBracket>();
 
     }
 
@@ -35,47 +37,50 @@
     public record BinanceFuturesBracket
     {
         /// <summary>
-        /// Bracket
+        /// ["<c>bracket</c>"] Bracket
         /// </summary>
+        [JsonPropertyName("bracket")]
         public int Bracket { get; set; }
 
         /// <summary>
-        /// Max initial leverage for this bracket
+        /// ["<c>initialLeverage</c>"] Max initial leverage for this bracket
         /// </summary>
+        [JsonPropertyName("initialLeverage")]
         public int InitialLeverage { get; set; }
 
         /// <summary>
-        /// Cap of this bracket
+        /// ["<c>notionalCap</c>"] Cap of this bracket
         /// </summary>
-        [JsonProperty("notionalCap")]
+        [JsonPropertyName("notionalCap")]
         public long Cap { get; set; }
-        [JsonProperty("qtyCap")]
-        private long QuantityCap
+        [JsonInclude, JsonPropertyName("qtyCap")]
+        internal long QuantityCap
         {
             set => Cap = value;
         }
 
         /// <summary>
-        /// Floor of this bracket
+        /// ["<c>notionalFloor</c>"] Floor of this bracket
         /// </summary>
-        [JsonProperty("notionalFloor")]
+        [JsonPropertyName("notionalFloor")]
         public long Floor { get; set; }
-        [JsonProperty("qtylFloor")]
-        private long QuantityFloor
+        [JsonInclude, JsonPropertyName("qtyFloor")]
+        internal long QuantityFloor
         {
             set => Floor = value;
         }
 
         /// <summary>
-        /// Maintenance ratio for this bracket
+        /// ["<c>maintMarginRatio</c>"] Maintenance ratio for this bracket
         /// </summary>
-        [JsonProperty("maintMarginRatio")]
+        [JsonPropertyName("maintMarginRatio")]
         public decimal MaintenanceMarginRatio { get; set; }
 
         /// <summary>
-        /// Auxiliary number for quick calculation 
+        /// ["<c>cum</c>"] Auxiliary number for quick calculation 
         /// </summary>
-        [JsonProperty("cum")]
+        [JsonPropertyName("cum")]
         public decimal MaintAmount { get; set; }
     }
 }
+

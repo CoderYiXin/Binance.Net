@@ -1,20 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Futures.Socket
+namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Strategy update
     /// </summary>
+    [SerializationModel]
     public record BinanceGridUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Update info
+        /// ["<c>gu</c>"] Update info
         /// </summary>
-        [JsonProperty("gu")]
+        [JsonPropertyName("gu")]
         public BinanceGridInfo GridUpdate { get; set; } = null!;
 
         /// <summary>
-        /// Transaction time
+        /// ["<c>T</c>"] Transaction time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
     }
 
@@ -24,55 +25,56 @@
     public record BinanceGridInfo
     {
         /// <summary>
-        /// The strategy id
+        /// ["<c>si</c>"] The strategy id
         /// </summary>
-        [JsonProperty("si")]
+        [JsonPropertyName("si")]
         public int StrategyId { get; set; }
         /// <summary>
-        /// Strategy type
+        /// ["<c>st</c>"] Strategy type
         /// </summary>
-        [JsonProperty("st")]
+        [JsonPropertyName("st")]
         public string StrategyType { get; set; } = string.Empty;
         /// <summary>
-        /// Stategy status
+        /// ["<c>ss</c>"] Strategy status
         /// </summary>
-        [JsonProperty("ss")]
+        [JsonPropertyName("ss")]
         public string StrategyStatus { get; set; } = string.Empty;
         /// <summary>
-        /// Symbol
+        /// ["<c>s</c>"] The symbol.
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Update time
+        /// ["<c>ut</c>"] Update time
         /// </summary>
-        [JsonProperty("ut")]
+        [JsonPropertyName("ut")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// Realized profit and loss
+        /// ["<c>r</c>"] Realized profit and loss
         /// </summary>
-        [JsonProperty("r")]
+        [JsonPropertyName("r")]
         public decimal RealizedPnl { get; set; }
         /// <summary>
-        /// Unmatched average price
+        /// ["<c>up</c>"] Unmatched average price
         /// </summary>
-        [JsonProperty("up")]
+        [JsonPropertyName("up")]
         public decimal UnmatchedAveragePrice { get; set; }
         /// <summary>
-        /// Unmatched quantity
+        /// ["<c>uq</c>"] Unmatched quantity
         /// </summary>
-        [JsonProperty("uq")]
+        [JsonPropertyName("uq")]
         public decimal UnmatchedQuantity { get; set; }
         /// <summary>
-        /// Unmatched fee
+        /// ["<c>uf</c>"] Unmatched fee
         /// </summary>
-        [JsonProperty("uf")]
+        [JsonPropertyName("uf")]
         public decimal UnmatchedFee { get; set; }
         /// <summary>
-        /// Matched profit and loss
+        /// ["<c>mp</c>"] Matched profit and loss
         /// </summary>
-        [JsonProperty("mp")]
+        [JsonPropertyName("mp")]
         public decimal MatchedPnl { get; set; }
     }
 }
+

@@ -1,0 +1,100 @@
+using Binance.Net.Objects;
+using Binance.Net.Objects.Models;
+using Binance.Net.Objects.Models.Futures;
+using Binance.Net.Objects.Models.Futures.Socket;
+using CryptoExchange.Net.Objects.Sockets;
+
+namespace Binance.Net.Interfaces.Clients.CoinFuturesApi
+{
+    /// <summary>
+    /// Binance Coin futures account websocket API
+    /// </summary>
+    public interface IBinanceSocketClientCoinFuturesApiAccount
+    {
+        /// <summary>
+        /// Gets account balances
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-coin-m-futures/api/ws-api/account#futures-account-balance" /><br />
+        /// Endpoint:<br />
+        /// account.balance
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account balances</returns>
+        Task<QueryResult<BinanceResponse<BinanceCoinFuturesAccountBalance[]>>> GetBalancesAsync(long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Gets account information, including positions and balances
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-coin-m-futures/api/ws-api/account#account-information" /><br />
+        /// Endpoint:<br />
+        /// account.status
+        /// </para>
+        /// </summary>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Account information</returns>
+        Task<QueryResult<BinanceResponse<BinanceFuturesCoinAccountInfo>>> GetAccountInfoAsync(long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to the account update stream. Listen key is initially requested and kept alive when needed
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-coin-m-futures/api/rest-api/user-data-streams" /><br />
+        /// Endpoint:<br />
+        /// listenKey
+        /// </para>
+        /// </summary>
+        /// <param name="onLeverageUpdate">The event handler for leverage changed update</param>
+        /// <param name="onMarginUpdate">The event handler for whenever a margin has changed</param>
+        /// <param name="onAccountUpdate">The event handler for whenever an account update is received</param>
+        /// <param name="onOrderUpdate">The event handler for whenever an order status update is received</param>
+        /// <param name="onListenKeyExpired">Responds when the listen key for the stream has expired. Initiate a new instance of the stream here</param>
+        /// <param name="onStrategyUpdate">The event handler for whenever a strategy update is received</param>
+        /// <param name="onGridUpdate">The event handler for whenever a grid update is received</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToUserDataUpdatesAsync(
+            Action<DataEvent<BinanceFuturesStreamConfigUpdate>>? onLeverageUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamMarginUpdate>>? onMarginUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamAccountUpdate>>? onAccountUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamOrderUpdate>>? onOrderUpdate = null,
+            Action<DataEvent<BinanceStreamEvent>>? onListenKeyExpired = null,
+            Action<DataEvent<BinanceStrategyUpdate>>? onStrategyUpdate = null,
+            Action<DataEvent<BinanceGridUpdate>>? onGridUpdate = null,
+            CancellationToken ct = default);
+
+        /// <summary>
+        /// Subscribes to the account update stream. Before using this method, call <see cref="IBinanceRestClientCoinFuturesApiAccount.StartUserStreamAsync(CancellationToken)">restClient.CoinFuturesApi.Account.StartUserStreamAsync</see> to start the stream and obtain a listen key.
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/en/docs/catalog/core-trading-derivatives-trading-coin-m-futures/api/rest-api/user-data-streams" /><br />
+        /// Endpoint:<br />
+        /// listenKey
+        /// </para>
+        /// </summary>
+        /// <param name="listenKey">Listen key retrieved by the <see cref="IBinanceRestClientCoinFuturesApiAccount.StartUserStreamAsync(CancellationToken)">restClient.CoinFuturesApi.Account.StartUserStreamAsync</see> method</param>
+        /// <param name="onLeverageUpdate">The event handler for leverage changed update</param>
+        /// <param name="onMarginUpdate">The event handler for whenever a margin has changed</param>
+        /// <param name="onAccountUpdate">The event handler for whenever an account update is received</param>
+        /// <param name="onOrderUpdate">The event handler for whenever an order status update is received</param>
+        /// <param name="onListenKeyExpired">Responds when the listen key for the stream has expired. Initiate a new instance of the stream here</param>
+        /// <param name="onStrategyUpdate">The event handler for whenever a strategy update is received</param>
+        /// <param name="onGridUpdate">The event handler for whenever a grid update is received</param>
+        /// <param name="ct">Cancellation token for closing this subscription</param>
+        /// <returns>A stream subscription. This stream subscription can be used to be notified when the socket is disconnected/reconnected</returns>
+        Task<WebSocketResult<UpdateSubscription>> SubscribeToUserDataUpdatesAsync(
+            string listenKey,
+            Action<DataEvent<BinanceFuturesStreamConfigUpdate>>? onLeverageUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamMarginUpdate>>? onMarginUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamAccountUpdate>>? onAccountUpdate = null,
+            Action<DataEvent<BinanceFuturesStreamOrderUpdate>>? onOrderUpdate = null,
+            Action<DataEvent<BinanceStreamEvent>>? onListenKeyExpired = null,
+            Action<DataEvent<BinanceStrategyUpdate>>? onStrategyUpdate = null,
+            Action<DataEvent<BinanceGridUpdate>>? onGridUpdate = null,
+            CancellationToken ct = default);
+    }
+}

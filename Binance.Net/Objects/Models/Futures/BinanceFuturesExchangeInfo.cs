@@ -1,4 +1,4 @@
-﻿namespace Binance.Net.Objects.Models.Futures
+namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Exchange info
@@ -6,48 +6,58 @@
     public record BinanceFuturesExchangeInfo
     {
         /// <summary>
-        /// The timezone the server uses
+        /// ["<c>timezone</c>"] The timezone the server uses
         /// </summary>
+        [JsonPropertyName("timezone")]
         public string TimeZone { get; set; } = string.Empty;
         /// <summary>
-        /// The current server time
+        /// ["<c>serverTime</c>"] The current server time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("serverTime")]
         public DateTime ServerTime { get; set; }
         /// <summary>
-        /// The rate limits used
+        /// ["<c>rateLimits</c>"] The rate limits used
         /// </summary>
-        public IEnumerable<BinanceRateLimit> RateLimits { get; set; } = Array.Empty<BinanceRateLimit>();
+        [JsonPropertyName("rateLimits")]
+        public BinanceRateLimit[] RateLimits { get; set; } = Array.Empty<BinanceRateLimit>();
         /// <summary>
-        /// Filters
+        /// ["<c>exchangeFilters</c>"] Filters
         /// </summary>
-        public IEnumerable<object> ExchangeFilters { get; set; } = Array.Empty<object>();
+        [JsonPropertyName("exchangeFilters")]
+        public object[] ExchangeFilters { get; set; } = Array.Empty<object>();
     }
 
     /// <summary>
     /// Exchange info
     /// </summary>
-    public record BinanceFuturesUsdtExchangeInfo: BinanceFuturesExchangeInfo
+    [SerializationModel]
+    public record BinanceFuturesUsdtExchangeInfo : BinanceFuturesExchangeInfo
     {
         /// <summary>
-        /// All symbols supported
+        /// ["<c>symbols</c>"] All symbols supported
         /// </summary>
-        public IEnumerable<BinanceFuturesUsdtSymbol> Symbols { get; set; } = Array.Empty<BinanceFuturesUsdtSymbol>();
+        [JsonPropertyName("symbols")]
+        public BinanceFuturesUsdtSymbol[] Symbols { get; set; } = Array.Empty<BinanceFuturesUsdtSymbol>();
 
         /// <summary>
-        /// All assets
+        /// ["<c>assets</c>"] All assets
         /// </summary>
-        public IEnumerable<BinanceFuturesUsdtAsset> Assets { get; set; } = Array.Empty<BinanceFuturesUsdtAsset>();
+        [JsonPropertyName("assets")]
+        public BinanceFuturesUsdtAsset[] Assets { get; set; } = Array.Empty<BinanceFuturesUsdtAsset>();
     }
 
     /// <summary>
     /// Exchange info
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesCoinExchangeInfo : BinanceFuturesExchangeInfo
     {
         /// <summary>
-        /// All symbols supported
+        /// ["<c>symbols</c>"] All symbols supported
         /// </summary>
-        public IEnumerable<BinanceFuturesCoinSymbol> Symbols { get; set; } = Array.Empty<BinanceFuturesCoinSymbol>();
+        [JsonPropertyName("symbols")]
+        public BinanceFuturesCoinSymbol[] Symbols { get; set; } = Array.Empty<BinanceFuturesCoinSymbol>();
     }
 }
+

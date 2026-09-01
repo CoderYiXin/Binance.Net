@@ -1,27 +1,36 @@
-﻿using Binance.Net.Objects.Models.Spot.Socket;
+using Binance.Net.Enums;
+using Binance.Net.Objects.Models.Spot.Socket;
 
 namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// Futures book price
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamBookPrice : BinanceStreamBookPrice
     {
         /// <summary>
-        /// Timestamp
+        /// ["<c>T</c>"] The transaction timestamp.
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime? TransactionTime { get; set; }
         /// <summary>
-        /// The time the event happened
+        /// ["<c>E</c>"] The time the event happened
         /// </summary>
-        [JsonProperty("E"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("E"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime EventTime { get; set; }
 
         /// <summary>
-        /// The type of the event
+        /// ["<c>e</c>"] The type of the event
         /// </summary>
-        [JsonProperty("e")] 
+        [JsonPropertyName("e")]
         public string Event { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
     }
 }
+

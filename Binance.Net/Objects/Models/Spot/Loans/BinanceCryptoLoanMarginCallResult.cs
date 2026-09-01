@@ -1,35 +1,37 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Loans
+namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Customize margin call result
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanMarginCallResult
     {
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] The order identifier.
         /// </summary>
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public string OrderId { get; set; } = string.Empty;
         /// <summary>
-        /// Collateral asset
+        /// ["<c>collateralCoin</c>"] Collateral asset
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Pre margin call 
+        /// ["<c>preMarginCall</c>"] Pre margin call 
         /// </summary>
-        [JsonProperty("preMarginCall")]
+        [JsonPropertyName("preMarginCall")]
         public decimal PreMarginCall { get; set; }
         /// <summary>
-        /// After margin call
+        /// ["<c>afterMarginCall</c>"] After margin call
         /// </summary>
-        [JsonProperty("afterMarginCall")]
+        [JsonPropertyName("afterMarginCall")]
         public decimal AfterMarginCall { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>customizeTime</c>"] The customization timestamp.
         /// </summary>
-        [JsonProperty("customizeTime")]
+        [JsonPropertyName("customizeTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
     }
 }
+

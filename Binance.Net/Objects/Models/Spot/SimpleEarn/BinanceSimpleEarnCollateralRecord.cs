@@ -1,44 +1,46 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Simple Earn collateral record
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnCollateralRecord
     {
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Product Id
+        /// ["<c>productId</c>"] Product identifier.
         /// </summary>
-        [JsonProperty("productId")]
+        [JsonPropertyName("productId")]
         public string ProductId { get; set; } = string.Empty;
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Create time
+        /// ["<c>createTime</c>"] Create time.
         /// </summary>
-        [JsonProperty("createTime"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("createTime"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
         /// <summary>
-        /// Type
+        /// ["<c>type</c>"] Type
         /// </summary>
-        [JsonProperty("type")]
+        [JsonPropertyName("type")]
         public string Type { get; set; } = string.Empty;
         /// <summary>
-        /// Product name
+        /// ["<c>productName</c>"] Product name
         /// </summary>
-        [JsonProperty("productName")]
+        [JsonPropertyName("productName")]
         public string ProductName { get; set; } = string.Empty;
         /// <summary>
-        /// Order id
+        /// ["<c>orderId</c>"] Order id
         /// </summary>
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public long OrderId { get; set; }
     }
 }
+

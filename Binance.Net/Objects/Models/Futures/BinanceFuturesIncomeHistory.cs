@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,52 +5,56 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Futures income history result
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesIncomeHistory
     {
         /// <summary>
-        /// Symbol for the resulting income history, may be null if not associated with a trading pair
+        /// ["<c>symbol</c>"] Symbol for the resulting income history, may be null if not associated with a trading pair
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string? Symbol { get; set; }
 
         /// <summary>
-        /// Type of income as string
+        /// ["<c>incomeType</c>"] Type of income as string
         /// </summary>
-        [JsonProperty("incomeType")]
-        public string? IncomeTypeString { get; set; }
+        [JsonPropertyName("incomeType")]
+        public IncomeType? IncomeType { get; set; }
 
         /// <summary>
-        /// Type of income
+        /// ["<c>income</c>"] Quantity of income
         /// </summary>
-        public IncomeType? IncomeType => IncomeTypeString != null ? new IncomeTypeConverter().ReadString(IncomeTypeString): (IncomeType?)null;
-
-        /// <summary>
-        /// Quantity of income
-        /// </summary>
+        [JsonPropertyName("income")]
         public decimal Income { get; set; }
         /// <summary>
-        /// Base asset for the income
+        /// ["<c>asset</c>"] Base asset for the income
         /// </summary>
+        [JsonPropertyName("asset")]
         public string? Asset { get; set; }
         /// <summary>
-        /// Additional info
+        /// ["<c>info</c>"] Additional info
         /// </summary>
+        [JsonPropertyName("info")]
         public string? Info { get; set; }
         /// <summary>
-        /// Time of the income
+        /// ["<c>time</c>"] Time of the income
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
 
         /// <summary>
-        /// Transaction id if relevant
+        /// ["<c>tranId</c>"] Transaction id if relevant
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
+        [JsonConverter(typeof(NumberStringConverter))]
         public string TransactionId { get; set; } = string.Empty;
         /// <summary>
-        /// Trade id if existing
+        /// ["<c>tradeId</c>"] Trade id if existing
         /// </summary>
-        public string TradeId { get; set; } = string.Empty;
+        [JsonPropertyName("tradeId")]
+        [JsonConverter(typeof(NumberStringConverter))]
+        public string? TradeId { get; set; }
     }
 
 }
+

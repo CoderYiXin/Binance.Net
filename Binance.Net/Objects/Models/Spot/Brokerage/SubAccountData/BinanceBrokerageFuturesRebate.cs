@@ -1,39 +1,45 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
 {
     /// <summary>
     /// Futures Commission Rebate
     /// </summary>
+    [SerializationModel]
     public record BinanceBrokerageFuturesRebate
     {
         /// <summary>
-        /// Sub Account Id
+        /// ["<c>subaccountId</c>"] Sub Account Id
         /// </summary>
+        [JsonPropertyName("subaccountId")]
         public string SubAccountId { get; set; } = string.Empty;
 
         /// <summary>
-        /// Income
+        /// ["<c>income</c>"] Income
         /// </summary>
+        [JsonPropertyName("income")]
         public decimal Income { get; set; }
-        
+
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
-        
+
         /// <summary>
-        /// Symbol
+        /// ["<c>symbol</c>"] Symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
-        
+
         /// <summary>
-        /// TradeId
+        /// ["<c>tradeId</c>"] TradeId
         /// </summary>
+        [JsonPropertyName("tradeId")]
         public long TradeId { get; set; }
-        
+
         /// <summary>
-        /// Date
+        /// ["<c>time</c>"] Date
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Date { get; set; }
     }
 }

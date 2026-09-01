@@ -3,27 +3,34 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Funding rate information for Futures trading
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesFundingInfo
     {
         /// <summary>
-        /// The symbol the information is about
+        /// ["<c>symbol</c>"] The symbol the information is about
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Adjusted funding rate cap
+        /// ["<c>adjustedFundingRateCap</c>"] Adjusted funding rate cap
         /// </summary>
-        [JsonProperty("adjustedFundingRateCap")]
+        [JsonPropertyName("adjustedFundingRateCap")]
         public decimal AdjustedFundingRateCap { get; set; }
         /// <summary>
-        /// Adjusted funding rate floor
+        /// ["<c>adjustedFundingRateFloor</c>"] Adjusted funding rate floor
         /// </summary>
-        [JsonProperty("adjustedFundingRateFloor")]
+        [JsonPropertyName("adjustedFundingRateFloor")]
         public decimal AdjustedFundingRateFloor { get; set; }
         /// <summary>
-        /// Funding interval in hours
+        /// ["<c>fundingIntervalHours</c>"] Funding interval in hours.
         /// </summary>
-        [JsonProperty("fundingIntervalHours")]
+        [JsonPropertyName("fundingIntervalHours")]
         public int FundingIntervalHours { get; set; }
+        /// <summary>
+        /// ["<c>updateTime</c>"] Last update time of the funding interval.
+        /// </summary>
+        [JsonPropertyName("updateTime")]
+        public DateTime? UpdateTime { get; set; }
     }
 }
+

@@ -1,4 +1,4 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,78 +6,85 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Information about an account
     /// </summary>
+    [SerializationModel]
     public record BinanceAccountInfo
     {
         /// <summary>
-        /// Fee percentage to pay when making trades
+        /// ["<c>makerCommission</c>"] Fee percentage to pay when making trades
         /// </summary>
-        [JsonProperty("makerCommission")]
+        [JsonPropertyName("makerCommission")]
         public decimal MakerFee { get; set; }
         /// <summary>
-        /// Fee percentage to pay when taking trades
+        /// ["<c>takerCommission</c>"] Fee percentage to pay when taking trades
         /// </summary>
-        [JsonProperty("takerCommission")]
+        [JsonPropertyName("takerCommission")]
         public decimal TakerFee { get; set; }
         /// <summary>
-        /// Fee percentage to pay when buying
+        /// ["<c>buyerCommission</c>"] Fee percentage to pay when buying
         /// </summary>
-        [JsonProperty("buyerCommission")]
+        [JsonPropertyName("buyerCommission")]
         public decimal BuyerFee { get; set; }
         /// <summary>
-        /// Fee percentage to pay when selling
+        /// ["<c>sellerCommission</c>"] Fee percentage to pay when selling
         /// </summary>
-        [JsonProperty("sellerCommission")]
+        [JsonPropertyName("sellerCommission")]
         public decimal SellerFee { get; set; }
         /// <summary>
-        /// Boolean indicating if this account can trade
+        /// ["<c>canTrade</c>"] Boolean indicating if this account can trade
         /// </summary>
+        [JsonPropertyName("canTrade")]
         public bool CanTrade { get; set; }
         /// <summary>
-        /// Boolean indicating if this account can withdraw
+        /// ["<c>canWithdraw</c>"] Boolean indicating if this account can withdraw
         /// </summary>
+        [JsonPropertyName("canWithdraw")]
         public bool CanWithdraw { get; set; }
         /// <summary>
-        /// Boolean indicating if this account can deposit
+        /// ["<c>canDeposit</c>"] Boolean indicating if this account can deposit
         /// </summary>
+        [JsonPropertyName("canDeposit")]
         public bool CanDeposit { get; set; }
         /// <summary>
-        /// Account is brokered
+        /// ["<c>brokered</c>"] Account is brokered
         /// </summary>
+        [JsonPropertyName("brokered")]
         public bool Brokered { get; set; }
         /// <summary>
-        /// Require self trade prevention
+        /// ["<c>requireSelfTradePrevention</c>"] Require self trade prevention
         /// </summary>
-        [JsonProperty("requireSelfTradePrevention")]
+        [JsonPropertyName("requireSelfTradePrevention")]
         public bool RequireSelfTradePrevention { get; set; }
         /// <summary>
-        /// Prevent smart order routing
+        /// ["<c>preventSor</c>"] Prevent smart order routing
         /// </summary>
-        [JsonProperty("preventSor")]
+        [JsonPropertyName("preventSor")]
         public bool PreventSmartOrderRouting { get; set; }
         /// <summary>
-        /// User id
+        /// ["<c>uid</c>"] The user identifier.
         /// </summary>
-        [JsonProperty("uid")]
+        [JsonPropertyName("uid")]
         public long UserId { get; set; }
         /// <summary>
-        /// The time of the update
+        /// ["<c>updateTime</c>"] The time of the update
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("updateTime")]
         public DateTime UpdateTime { get; set; }
         /// <summary>
-        /// The type of account
+        /// ["<c>accountType</c>"] The type of account
         /// </summary>
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("accountType")]
         public AccountType AccountType { get; set; }
         /// <summary>
-        /// Permissions types
+        /// ["<c>permissions</c>"] Permissions types
         /// </summary>
-        [JsonProperty(ItemConverterType = typeof(EnumConverter), ItemConverterParameters = new object[] { false, false })]
-        public IEnumerable<AccountType> Permissions { get; set; } = Array.Empty<AccountType>();
+        [JsonPropertyName("permissions")]
+        public PermissionType[] Permissions { get; set; } = Array.Empty<PermissionType>();
         /// <summary>
-        /// List of assets with their current balances
+        /// ["<c>balances</c>"] List of assets with their current balances
         /// </summary>
-        public IEnumerable<BinanceBalance> Balances { get; set; } = Array.Empty<BinanceBalance>();
+        [JsonPropertyName("balances")]
+        public BinanceBalance[] Balances { get; set; } = Array.Empty<BinanceBalance>();
     }
 
     /// <summary>
@@ -86,17 +93,19 @@ namespace Binance.Net.Objects.Models.Spot
     public record BinanceBalance : IBinanceBalance
     {
         /// <summary>
-        /// The asset this balance is for
+        /// ["<c>asset</c>"] The asset this balance is for
         /// </summary>
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// The quantity that isn't locked in a trade
+        /// ["<c>free</c>"] The quantity that isn't locked in a trade
         /// </summary>
-        [JsonProperty("free")]
+        [JsonPropertyName("free")]
         public decimal Available { get; set; }
         /// <summary>
-        /// The quantity that is currently locked in a trade
+        /// ["<c>locked</c>"] The quantity that is currently locked in a trade
         /// </summary>
+        [JsonPropertyName("locked")]
         public decimal Locked { get; set; }
         /// <summary>
         /// The total balance of this asset (Free + Locked)
@@ -104,3 +113,4 @@ namespace Binance.Net.Objects.Models.Spot
         public decimal Total => Available + Locked;
     }
 }
+

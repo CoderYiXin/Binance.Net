@@ -1,23 +1,32 @@
-﻿namespace Binance.Net.Objects.Models
+namespace Binance.Net.Objects.Models
 {
     /// <summary>
+    /// Base stream wrapper
+    /// </summary>
+    public record BinanceCombinedStream
+    {
+        /// <summary>
+        /// ["<c>stream</c>"] The stream combined
+        /// </summary>
+        [JsonPropertyName("stream")]
+        public string Stream { get; set; } = string.Empty;
+
+    }
+
+    /// <summary>
     /// Represents the binance result for combined data on a single socket connection
-    /// See on https://github.com/binance-exchange/binance-official-api-docs/blob/master/web-socket-streams.md
+    /// See on https://developers.binance.com/en/docs/catalog/core-trading-spot-trading/api/ws-streams/~
     /// Combined streams
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public record BinanceCombinedStream<T>
+    //[SerializationModel]
+    public record BinanceCombinedStream<T> : BinanceCombinedStream
     {
         /// <summary>
-        /// The stream combined
+        /// ["<c>data</c>"] The data of stream
         /// </summary>
-        [JsonProperty("stream")]
-        public string Stream { get; set; } = string.Empty;
-
-        /// <summary>
-        /// The data of stream
-        /// </summary>
-        [JsonProperty("data")]
+        [JsonPropertyName("data")]
         public T Data { get; set; } = default!;
     }
 }
+

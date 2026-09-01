@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,72 +5,94 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Information about a deposit
     /// </summary>
+    [SerializationModel]
     public record BinanceDeposit
     {
         /// <summary>
-        /// Time the deposit was added to Binance
+        /// ["<c>insertTime</c>"] Time the deposit was added to Binance
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("insertTime")]
         public DateTime InsertTime { get; set; }
         /// <summary>
-        /// The quantity deposited
+        /// ["<c>completeTime</c>"] Time the deposit was completed
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("completeTime")]
+        public DateTime? CompleteTime { get; set; }
+        /// <summary>
+        /// ["<c>amount</c>"] The quantity deposited
+        /// </summary>
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The asset deposited
+        /// ["<c>coin</c>"] The asset deposited
         /// </summary>
-        [JsonProperty("coin")]
+        [JsonPropertyName("coin")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// The address of the deposit
+        /// ["<c>address</c>"] The address of the deposit
         /// </summary>
+        [JsonPropertyName("address")]
         public string Address { get; set; } = string.Empty;
         /// <summary>
-        /// The tag of the address of the deposit
+        /// ["<c>addressTag</c>"] The tag of the address of the deposit
         /// </summary>
+        [JsonPropertyName("addressTag")]
         public string AddressTag { get; set; } = string.Empty;
         /// <summary>
-        /// The network
+        /// ["<c>network</c>"] The network
         /// </summary>
+        [JsonPropertyName("network")]
         public string Network { get; set; } = string.Empty;
         /// <summary>
-        /// The  id
+        /// ["<c>id</c>"] The deposit identifier.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public string Id { get; set; } = string.Empty;
         /// <summary>
-        /// The transaction id
+        /// ["<c>txId</c>"] The transaction id
         /// </summary>
-        [JsonProperty("txId")]
+        [JsonPropertyName("txId")]
         public string TransactionId { get; set; } = string.Empty;
         /// <summary>
-        /// The status of the deposit
+        /// ["<c>status</c>"] The status of the deposit
         /// </summary>
-        [JsonConverter(typeof(DepositStatusConverter))]
+        [JsonPropertyName("status")]
         public DepositStatus Status { get; set; }
 
         /// <summary>
-        /// The transfer type
+        /// ["<c>transferType</c>"] The transfer type
         /// </summary>
-        [JsonConverter(typeof(WithdrawDepositTransferTypeConverter))]
+        [JsonPropertyName("transferType")]
         public WithdrawDepositTransferType TransferType { get; set; }
 
         /// <summary>
-        /// Confirmations
+        /// ["<c>confirmTimes</c>"] Confirmations
         /// </summary>
-        [JsonProperty("confirmTimes")]
+        [JsonPropertyName("confirmTimes")]
         public string Confirmations { get; set; } = string.Empty;
         /// <summary>
-        /// Network confirmations for unlocking
+        /// ["<c>unlockConfirm</c>"] Network confirmations for unlocking
         /// </summary>
-        [JsonProperty("unlockConfirm")]
-        public string ConfirmationsForUnlock { get; set; } = string.Empty;
+        [JsonPropertyName("unlockConfirm")]
+        public int ConfirmationsForUnlock { get; set; }
         /// <summary>
-        /// The wallet type
+        /// ["<c>walletType</c>"] The wallet type
         /// </summary>
-        [JsonProperty("walletType")]
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("walletType")]
         public WalletType WalletType { get; set; }
+
+        /// <summary>
+        /// ["<c>sourceAddress</c>"] Transaction source address. Note: Please note that the source address returned may not be accurate due to network-specific characteristics. If multiple source addresses found, only the first address will be returned
+        /// </summary>
+        [JsonPropertyName("sourceAddress")]
+        public string? SourceAddress { get; set; }
+        /// <summary>
+        /// ["<c>travelRuleStatus</c>"] Travel rule status
+        /// </summary>
+        [JsonPropertyName("travelRuleStatus")]
+        public TravelRuleStatus TravelRuleStatus { get; set; }
     }
 }
+

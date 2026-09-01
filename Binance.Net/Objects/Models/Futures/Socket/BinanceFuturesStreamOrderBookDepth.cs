@@ -1,54 +1,62 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Enums;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Futures.Socket
 {
     /// <summary>
     /// The order book for a asset
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamOrderBookDepth : BinanceStreamEvent, IBinanceFuturesEventOrderBook
     {
         /// <summary>
-        /// The symbol of the order book (only filled from stream updates)
+        /// ["<c>s</c>"] The symbol of the order book (only filled from stream updates)
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
 
         /// <summary>
-        /// The time the event happened
+        /// ["<c>T</c>"] The time the event happened
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
 
         /// <summary>
-        /// The ID of the first update
+        /// ["<c>U</c>"] The ID of the first update
         /// </summary>
-        [JsonProperty("U")]
+        [JsonPropertyName("U")]
         public long? FirstUpdateId { get; set; }
 
         /// <summary>
-        /// The ID of the last update
+        /// ["<c>u</c>"] The ID of the last update
         /// </summary>
-        [JsonProperty("u")]
+        [JsonPropertyName("u")]
         public long LastUpdateId { get; set; }
 
 
         /// <summary>
-        /// The ID of the last update Id in last stream
+        /// ["<c>pu</c>"] The ID of the last update Id in last stream
         /// </summary>
-        [JsonProperty("pu")]
+        [JsonPropertyName("pu")]
         public long LastUpdateIdStream { get; set; }
 
 
         /// <summary>
-        /// The list of diff bids
+        /// ["<c>b</c>"] The list of diff bids
         /// </summary>
-        [JsonProperty("b")]
-        public IEnumerable<BinanceOrderBookEntry> Bids { get; set; } = Array.Empty<BinanceOrderBookEntry>();
+        [JsonPropertyName("b")]
+        public BinanceOrderBookEntry[] Bids { get; set; } = Array.Empty<BinanceOrderBookEntry>();
 
         /// <summary>
-        /// The list of diff asks
+        /// ["<c>a</c>"] The list of diff asks
         /// </summary>
-        [JsonProperty("a")]
-        public IEnumerable<BinanceOrderBookEntry> Asks { get; set; } = Array.Empty<BinanceOrderBookEntry>();
+        [JsonPropertyName("a")]
+        public BinanceOrderBookEntry[] Asks { get; set; } = Array.Empty<BinanceOrderBookEntry>();
     }
 }
+

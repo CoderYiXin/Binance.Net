@@ -5,7 +5,8 @@ namespace Binance.Net.Objects.Models
     /// <summary>
     /// An entry in the order book
     /// </summary>
-    [JsonConverter(typeof(ArrayConverter))]
+    [JsonConverter(typeof(ArrayConverter<BinanceOrderBookEntry>))]
+    [SerializationModel]
     public record BinanceOrderBookEntry : ISymbolOrderBookEntry
     {
         /// <summary>

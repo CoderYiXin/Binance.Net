@@ -1,19 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Staking
+namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Eth staking quota
     /// </summary>
+    [SerializationModel]
     public record BinanceEthStakingQuota
     {
         /// <summary>
-        /// Staking quota left
+        /// ["<c>leftStakingPersonalQuota</c>"] Remaining staking quota.
         /// </summary>
-        [JsonProperty("leftStakingPersonalQuota")]
+        [JsonPropertyName("leftStakingPersonalQuota")]
         public decimal LeftStakingPersonalQuota { get; set; }
         /// <summary>
-        /// Redemption quota left
+        /// ["<c>leftRedemptionPersonalQuota</c>"] Remaining redemption quota.
         /// </summary>
-        [JsonProperty("leftRedemptionPersonalQuota")]
+        [JsonPropertyName("leftRedemptionPersonalQuota")]
         public decimal LeftRedemptionPersonalQuota { get; set; }
     }
 }
+

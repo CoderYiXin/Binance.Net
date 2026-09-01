@@ -1,24 +1,30 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Test order commission info
     /// </summary>
+    [SerializationModel]
     public record BinanceTestOrderCommission
     {
         /// <summary>
-        /// Standard fee rates on trades from the order
+        /// ["<c>standardCommissionForOrder</c>"] Standard fee rates on trades from the order
         /// </summary>
-        [JsonProperty("standardCommissionForOrder")]
+        [JsonPropertyName("standardCommissionForOrder")]
         public BinanceFee StandardFeeForOrder { get; set; } = null!;
         /// <summary>
-        /// Tax fee rates on trades from the order
+        /// ["<c>taxCommissionForOrder</c>"] Tax fee rates on trades from the order
         /// </summary>
-        [JsonProperty("taxCommissionForOrder")]
+        [JsonPropertyName("taxCommissionForOrder")]
         public BinanceFee TaxFeeForOrder { get; set; } = null!;
         /// <summary>
-        /// Discount info
+        /// ["<c>specialCommission</c>"] Special fee rates on trades from the order
         /// </summary>
-        [JsonProperty("discount")]
+        [JsonPropertyName("specialCommission")]
+        public BinanceFee SpecialFeeForOrder { get; set; } = null!;
+        /// <summary>
+        /// ["<c>discount</c>"] Discount info
+        /// </summary>
+        [JsonPropertyName("discount")]
         public BinanceDiscount Discount { get; set; } = null!;
     }
 
@@ -28,14 +34,14 @@
     public record BinanceFee
     {
         /// <summary>
-        /// Maker fee
+        /// ["<c>maker</c>"] Maker fee
         /// </summary>
-        [JsonProperty("maker")]
+        [JsonPropertyName("maker")]
         public decimal Maker { get; set; }
         /// <summary>
-        /// Taker fee
+        /// ["<c>taker</c>"] Taker fee
         /// </summary>
-        [JsonProperty("taker")]
+        [JsonPropertyName("taker")]
         public decimal Taker { get; set; }
     }
 
@@ -45,24 +51,25 @@
     public record BinanceDiscount
     {
         /// <summary>
-        /// Is discount enabled for the account
+        /// ["<c>enabledForAccount</c>"] Whether discount is enabled for the account.
         /// </summary>
-        [JsonProperty("enabledForAccount")]
+        [JsonPropertyName("enabledForAccount")]
         public bool EnabledForAccount { get; set; }
         /// <summary>
-        /// Is discount enabled for the symbol
+        /// ["<c>enabledForSymbol</c>"] Whether discount is enabled for the symbol.
         /// </summary>
-        [JsonProperty("enabledForSymbol")]
+        [JsonPropertyName("enabledForSymbol")]
         public bool EnabledForSymbol { get; set; }
         /// <summary>
-        /// The discount asset
+        /// ["<c>discountAsset</c>"] The discount asset
         /// </summary>
-        [JsonProperty("discountAsset")]
+        [JsonPropertyName("discountAsset")]
         public string DiscountAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Discount rate
+        /// ["<c>discount</c>"] Discount rate
         /// </summary>
-        [JsonProperty("discount")]
+        [JsonPropertyName("discount")]
         public decimal Discount { get; set; }
     }
 }
+

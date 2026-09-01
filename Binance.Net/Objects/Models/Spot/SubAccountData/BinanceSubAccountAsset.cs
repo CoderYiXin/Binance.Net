@@ -1,10 +1,13 @@
 ﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
+    [SerializationModel]
     internal record BinanceSubAccountAsset
     {
+        [JsonPropertyName("success")]
         public bool Success { get; set; } = true;
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
-        public IEnumerable<BinanceBalance> Balances { get; set; } = Array.Empty<BinanceBalance>();
+        [JsonPropertyName("balances")]
+        public BinanceBalance[] Balances { get; set; } = Array.Empty<BinanceBalance>();
     }
 }

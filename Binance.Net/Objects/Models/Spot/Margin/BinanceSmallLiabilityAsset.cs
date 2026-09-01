@@ -1,34 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Margin
+namespace Binance.Net.Objects.Models.Spot.Margin
 {
     /// <summary>
     /// Small liability asset
     /// </summary>
+    [SerializationModel]
     public record BinanceSmallLiabilityAsset
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Asset
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Interest
+        /// ["<c>interest</c>"] Interest
         /// </summary>
-        [JsonProperty("interest")]
+        [JsonPropertyName("interest")]
         public decimal Interest { get; set; }
         /// <summary>
-        /// Principal
+        /// ["<c>principal</c>"] Principal
         /// </summary>
-        [JsonProperty("principal")]
+        [JsonPropertyName("principal")]
         public decimal Principal { get; set; }
         /// <summary>
-        /// Liability asset
+        /// ["<c>liabilityAsset</c>"] Liability asset
         /// </summary>
-        [JsonProperty("liabilityAsset")]
+        [JsonPropertyName("liabilityAsset")]
         public string LiabilityAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Liability quantity
+        /// ["<c>liabilityQty</c>"] Liability quantity
         /// </summary>
-        [JsonProperty("liabilityQty")]
+        [JsonPropertyName("liabilityQty")]
         public decimal LiabilityQuantity { get; set; }
     }
 }
+

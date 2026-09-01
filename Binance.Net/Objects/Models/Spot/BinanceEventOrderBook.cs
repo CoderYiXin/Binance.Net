@@ -1,46 +1,53 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Stream order book
     /// </summary>
-    public record BinanceEventOrderBook: BinanceOrderBook, IBinanceEventOrderBook
+    [SerializationModel]
+    public record BinanceEventOrderBook : IBinanceEventOrderBook
     {
         /// <summary>
-        /// The id of this update, can be synced with BinanceClient.Spot.GetOrderBook to update the order book
+        /// ["<c>U</c>"] The id of this update, can be synced with BinanceClient.Spot.GetOrderBook to update the order book
         /// </summary>
-        [JsonProperty("U")]
+        [JsonPropertyName("U")]
         public long? FirstUpdateId { get; set; }
 
         /// <summary>
-        /// Setter for last update id, need for Json.Net
+        /// ["<c>u</c>"] Setter for last update id, need for Json.Net
         /// </summary>
-        [JsonProperty("u")]
-        internal long LastUpdateIdStream { set => LastUpdateId = value; }
+        [JsonPropertyName("u")]
+        public long LastUpdateId { get; set; }
 
         /// <summary>
-        /// Event type
+        /// ["<c>s</c>"] The symbol of the order book 
         /// </summary>
-        [JsonProperty("e")]
+        [JsonPropertyName("s")]
+        public string Symbol { get; set; } = string.Empty;
+
+        /// <summary>
+        /// ["<c>e</c>"] Event type
+        /// </summary>
+        [JsonPropertyName("e")]
         internal string EventType { get; set; } = string.Empty;
 
         /// <summary>
-        /// Event time of the update
+        /// ["<c>E</c>"] Event time of the update
         /// </summary>
-        [JsonProperty("E"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("E"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime EventTime { get; set; }
-        
-        /// <summary>
-        /// Setter for bids (needed forJson.Net)
-        /// </summary>
-        [JsonProperty("b")]
-        internal IEnumerable<BinanceOrderBookEntry> BidsStream { set => Bids = value; }
 
         /// <summary>
-        /// Setter for asks (needed forJson.Net)
+        /// ["<c>b</c>"] The list of bids
         /// </summary>
-        [JsonProperty("a")]
-        internal IEnumerable<BinanceOrderBookEntry> AsksStream { set => Asks = value; }
+        [JsonPropertyName("b")]
+        public BinanceOrderBookEntry[] Bids { get; set; } = Array.Empty<BinanceOrderBookEntry>();
+        /// <summary>
+        /// ["<c>a</c>"] The list of asks
+        /// </summary>
+        [JsonPropertyName("a")]
+        public BinanceOrderBookEntry[] Asks { get; set; } = Array.Empty<BinanceOrderBookEntry>();
     }
 }
+

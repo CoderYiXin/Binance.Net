@@ -1,18 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Dust log response details
     /// </summary>
+    [SerializationModel]
     public record BinanceDustLogList
     {
         /// <summary>
-        /// Total counts of exchange
+        /// ["<c>total</c>"] Total counts of exchange
         /// </summary>
+        [JsonPropertyName("total")]
         public int Total { get; set; }
         /// <summary>
-        /// Rows
+        /// ["<c>userAssetDribblets</c>"] Dust conversion logs.
         /// </summary>
-        public IEnumerable<BinanceDustLog> UserAssetDribblets { get; set; } = Array.Empty<BinanceDustLog>();
+        [JsonPropertyName("userAssetDribblets")]
+        public BinanceDustLog[] UserAssetDribblets { get; set; } = Array.Empty<BinanceDustLog>();
     }
 
     /// <summary>
@@ -21,29 +24,29 @@
     public record BinanceDustLog
     {
         /// <summary>
-        /// Total transferred
+        /// ["<c>totalTransferedAmount</c>"] Total transferred
         /// </summary>
-        [JsonProperty("totalTransferedAmount")]
+        [JsonPropertyName("totalTransferedAmount")]
         public decimal TransferredTotal { get; set; }
         /// <summary>
-        /// Total service charge
+        /// ["<c>totalServiceChargeAmount</c>"] Total service charge
         /// </summary>
-        [JsonProperty("totalServiceChargeAmount")]
+        [JsonPropertyName("totalServiceChargeAmount")]
         public decimal ServiceChargeTotal { get; set; }
         /// <summary>
-        /// Transaction id
+        /// ["<c>transId</c>"] Transaction id
         /// </summary>
-        [JsonProperty("transId")]
+        [JsonPropertyName("transId")]
         public long TransactionId { get; set; }
         /// <summary>
-        /// Detail logs
+        /// ["<c>userAssetDribbletDetails</c>"] Detailed conversion entries.
         /// </summary>
-        [JsonProperty("userAssetDribbletDetails")]
-        public IEnumerable<BinanceDustLogDetails> Logs { get; set; } = Array.Empty<BinanceDustLogDetails>();
+        [JsonPropertyName("userAssetDribbletDetails")]
+        public BinanceDustLogDetails[] Logs { get; set; } = Array.Empty<BinanceDustLogDetails>();
         /// <summary>
-        /// Timestamp
+        /// ["<c>operateTime</c>"] Timestamp
         /// </summary>
-        [JsonProperty("operateTime")]
+        [JsonPropertyName("operateTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime OperateTime { get; set; }
     }
@@ -54,35 +57,41 @@
     public record BinanceDustLogDetails
     {
         /// <summary>
-        /// Transaction id
+        /// ["<c>transId</c>"] Transaction id
         /// </summary>
-        [JsonProperty("transId")]
+        [JsonPropertyName("transId")]
         public long TransactionId { get; set; }
         /// <summary>
-        /// Service charge
+        /// ["<c>serviceChargeAmount</c>"] Service charge
         /// </summary>
-        [JsonProperty("serviceChargeAmount")]
+        [JsonPropertyName("serviceChargeAmount")]
         public decimal ServiceChargeQuantity { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>amount</c>"] Quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>operateTime</c>"] Timestamp
         /// </summary>
-        [JsonProperty("operateTime")]
+        [JsonPropertyName("operateTime")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime OperateTime { get; set; }
         /// <summary>
-        /// Transferred quantity
+        /// ["<c>transferedAmount</c>"] Transferred quantity
         /// </summary>
-        [JsonProperty("transferedAmount")]
+        [JsonPropertyName("transferedAmount")]
         public decimal TransferredQuantity { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>fromAsset</c>"] Asset
         /// </summary>
-        [JsonProperty("fromAsset")]
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>targetAsset</c>"] To asset
+        /// </summary>
+        [JsonPropertyName("targetAsset")]
+        public string ToAsset { get; set; } = string.Empty;
     }
 }
+

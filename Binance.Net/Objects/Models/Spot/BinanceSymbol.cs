@@ -1,4 +1,4 @@
-﻿using Binance.Net.Converters;
+using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,114 +6,146 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Symbol info
     /// </summary>
+    [SerializationModel]
     public record BinanceSymbol
     {
         /// <summary>
-        /// The symbol
+        /// ["<c>symbol</c>"] The symbol
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Name { get; set; } = string.Empty;
         /// <summary>
-        /// The status of the symbol
+        /// ["<c>status</c>"] The status of the symbol
         /// </summary>
-        [JsonConverter(typeof(SymbolStatusConverter))]
+        [JsonPropertyName("status")]
         public SymbolStatus Status { get; set; }
         /// <summary>
-        /// The base asset
+        /// ["<c>baseAsset</c>"] The base asset
         /// </summary>
+        [JsonPropertyName("baseAsset")]
         public string BaseAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The precision of the base asset
+        /// ["<c>baseAssetPrecision</c>"] The precision of the base asset
         /// </summary>
+        [JsonPropertyName("baseAssetPrecision")]
         public int BaseAssetPrecision { get; set; }
         /// <summary>
-        /// The quote asset
+        /// ["<c>quoteAsset</c>"] The quote asset
         /// </summary>
+        [JsonPropertyName("quoteAsset")]
         public string QuoteAsset { get; set; } = string.Empty;
         /// <summary>
-        /// The precision of the quote asset
+        /// ["<c>quotePrecision</c>"] The precision of the quote asset
         /// </summary>
-        [JsonProperty("quotePrecision")]
+        [JsonPropertyName("quotePrecision")]
         public int QuoteAssetPrecision { get; set; }
 
         /// <summary>
-        /// Allowed order types
+        /// ["<c>orderTypes</c>"] Allowed order types
         /// </summary>
-        [JsonProperty(ItemConverterType = typeof(SpotOrderTypeConverter))]
-        public IEnumerable<SpotOrderType> OrderTypes { get; set; } = Array.Empty<SpotOrderType>();
+        [JsonPropertyName("orderTypes")]
+        public SpotOrderType[] OrderTypes { get; set; } = Array.Empty<SpotOrderType>();
         /// <summary>
-        /// Ice berg orders allowed
+        /// ["<c>icebergAllowed</c>"] Iceberg orders allowed
         /// </summary>
-        public bool IceBergAllowed { get; set; }
+        [JsonPropertyName("icebergAllowed")]
+        public bool IcebergAllowed { get; set; }
         /// <summary>
-        /// Cancel replace allowed
+        /// ["<c>cancelReplaceAllowed</c>"] Cancel replace allowed
         /// </summary>
+        [JsonPropertyName("cancelReplaceAllowed")]
         public bool CancelReplaceAllowed { get; set; }
         /// <summary>
-        /// Spot trading orders allowed
+        /// ["<c>allowAmend</c>"] Whether order amendments are allowed.
         /// </summary>
+        [JsonPropertyName("allowAmend")]
+        public bool AllowAmend { get; set; }
+        /// <summary>
+        /// ["<c>isSpotTradingAllowed</c>"] Spot trading orders allowed
+        /// </summary>
+        [JsonPropertyName("isSpotTradingAllowed")]
         public bool IsSpotTradingAllowed { get; set; }
         /// <summary>
-        /// Trailling stop orders are allowed
+        /// ["<c>allowTrailingStop</c>"] Trailing stop orders are allowed
         /// </summary>
+        [JsonPropertyName("allowTrailingStop")]
         public bool AllowTrailingStop { get; set; }
         /// <summary>
-        /// Margin trading orders allowed
+        /// ["<c>isMarginTradingAllowed</c>"] Margin trading orders allowed
         /// </summary>
+        [JsonPropertyName("isMarginTradingAllowed")]
         public bool IsMarginTradingAllowed { get; set; }
         /// <summary>
-        /// If OCO(One Cancels Other) orders are allowed
+        /// ["<c>ocoAllowed</c>"] If OCO(One Cancels Other) orders are allowed
         /// </summary>
+        [JsonPropertyName("ocoAllowed")]
         public bool OCOAllowed { get; set; }
         /// <summary>
-        /// If OTO(One Triggers Other) orders are allowed
+        /// ["<c>otoAllowed</c>"] If OTO(One Triggers Other) orders are allowed
         /// </summary>
-        [JsonProperty("otoAllowed")]
+        [JsonPropertyName("otoAllowed")]
         public bool OTOAllowed { get; set; }
         /// <summary>
-        /// Whether or not it is allowed to specify the quantity of a market order in the quote asset
+        /// ["<c>opoAllowed</c>"] If OPO(One Pays Other) orders are allowed
         /// </summary>
-        [JsonProperty("quoteOrderQtyMarketAllowed")]
+        [JsonPropertyName("opoAllowed")]
+        public bool OPOAllowed { get; set; }
+        /// <summary>
+        /// ["<c>amendAllowed</c>"] Amend allowed
+        /// </summary>
+        [JsonPropertyName("amendAllowed")]
+        public bool AmendAllowed { get; set; }
+        /// <summary>
+        /// ["<c>quoteOrderQtyMarketAllowed</c>"] Whether or not it is allowed to specify the quantity of a market order in the quote asset
+        /// </summary>
+        [JsonPropertyName("quoteOrderQtyMarketAllowed")]
         public bool QuoteOrderQuantityMarketAllowed { get; set; }
         /// <summary>
-        /// The precision of the base asset fee
+        /// ["<c>pegInstructionsAllowed</c>"] Peg instructions allowed
         /// </summary>
-        [JsonProperty("baseCommissionPrecision")]
+        [JsonPropertyName("pegInstructionsAllowed")]
+        public bool PegInstructionsAllowed { get; set; }
+        /// <summary>
+        /// ["<c>baseCommissionPrecision</c>"] The precision of the base asset fee
+        /// </summary>
+        [JsonPropertyName("baseCommissionPrecision")]
         public int BaseFeePrecision { get; set; }
         /// <summary>
-        /// The precision of the quote asset fee
+        /// ["<c>quoteCommissionPrecision</c>"] The precision of the quote asset fee
         /// </summary>
-        [JsonProperty("quoteCommissionPrecision")]
+        [JsonPropertyName("quoteCommissionPrecision")]
         public int QuoteFeePrecision { get; set; }
         /// <summary>
-        /// Permissions types
+        /// ["<c>permissions</c>"] Permissions types
         /// </summary>
-        [JsonProperty(ItemConverterType = typeof(EnumConverter), ItemConverterParameters = new object[] { false, false })]
-        public IEnumerable<AccountType> Permissions { get; set; } = Array.Empty<AccountType>();
-        
-        // To be implemented and tested
-        //[JsonProperty("permissionSets")]
-        //public IEnumerable<IEnumerable<AccountType>> PermissionSets { get; set; } = Array.Empty<IEnumerable<AccountType>>();
+        [JsonPropertyName("permissions")]
+        public PermissionType[] Permissions { get; set; } = Array.Empty<PermissionType>();
+        /// <summary>
+        /// ["<c>permissionSets</c>"] Permission sets
+        /// </summary>
+        [JsonPropertyName("permissionSets"), JsonConverter(typeof(AccountTypeConverterImp<PermissionType[][]>))]
+        public PermissionType[][] PermissionSets { get; set; } = Array.Empty<PermissionType[]>();
 
         /// <summary>
-        /// Filters for order on this symbol
+        /// ["<c>filters</c>"] Filters for orders on this symbol.
         /// </summary>
-        public IEnumerable<BinanceSymbolFilter> Filters { get; set; } = Array.Empty<BinanceSymbolFilter>();
+        [JsonPropertyName("filters")]
+        public BinanceSymbolFilter[] Filters { get; set; } = Array.Empty<BinanceSymbolFilter>();
         /// <summary>
-        /// Default self trade prevention
+        /// ["<c>defaultSelfTradePreventionMode</c>"] Default self trade prevention
         /// </summary>
-        [JsonProperty("defaultSelfTradePreventionMode")]
-        [JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("defaultSelfTradePreventionMode")]
         public SelfTradePreventionMode DefaultSelfTradePreventionMode { get; set; }
         /// <summary>
-        /// Allowed self trade prevention modes
+        /// ["<c>allowedSelfTradePreventionModes</c>"] Allowed self trade prevention modes
         /// </summary>
-        [JsonProperty("allowedSelfTradePreventionModes", ItemConverterType = typeof(EnumConverter))]
-        public IEnumerable<SelfTradePreventionMode> AllowedSelfTradePreventionModes { get; set; } = Array.Empty<SelfTradePreventionMode>();
+        [JsonPropertyName("allowedSelfTradePreventionModes")]
+        public SelfTradePreventionMode[] AllowedSelfTradePreventionModes { get; set; } = Array.Empty<SelfTradePreventionMode>();
+
         /// <summary>
         /// Filter for max amount of iceberg parts for this symbol
         /// </summary>
-        [JsonIgnore]        
+        [JsonIgnore]
         public BinanceSymbolIcebergPartsFilter? IceBergPartsFilter => Filters.OfType<BinanceSymbolIcebergPartsFilter>().FirstOrDefault();
         /// <summary>
         /// Filter for max accuracy of the quantity for this symbol
@@ -170,5 +202,16 @@ namespace Binance.Net.Objects.Models.Spot
         /// </summary>
         [JsonIgnore]
         public BinanceSymbolTrailingDeltaFilter? TrailingDeltaFilter => Filters.OfType<BinanceSymbolTrailingDeltaFilter>().FirstOrDefault();
+        /// <summary>
+        /// Filter for the max number of edits per order
+        /// </summary>
+        [JsonIgnore]
+        public BinanceMaxNumberOfOrderAmendsFilter? MaxOrderEditsFilter => Filters.OfType<BinanceMaxNumberOfOrderAmendsFilter>().FirstOrDefault();
+        /// <summary>
+        /// Filter for the max order lists
+        /// </summary>
+        [JsonIgnore]
+        public BinanceMaxNumberOfOrderListsFilter? MaxOrderListsFilter => Filters.OfType<BinanceMaxNumberOfOrderListsFilter>().FirstOrDefault();
     }
 }
+

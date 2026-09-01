@@ -1,66 +1,77 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Recent trade info
     /// </summary>
-    public abstract record BinanceRecentTrade: IBinanceRecentTrade
+    [SerializationModel]
+    public abstract record BinanceRecentTrade : IBinanceRecentTrade
     {
         /// <summary>
-        /// The id of the trade
+        /// ["<c>id</c>"] The trade identifier.
         /// </summary>
-        [JsonProperty("id")]
+        [JsonPropertyName("id")]
         public long OrderId { get; set; }
         /// <summary>
-        /// The price of the trade
+        /// ["<c>price</c>"] The price of the trade
         /// </summary>
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <inheritdoc />
         public abstract decimal BaseQuantity { get; set; }
         /// <inheritdoc />
         public abstract decimal QuoteQuantity { get; set; }
         /// <summary>
-        /// The timestamp of the trade
+        /// ["<c>time</c>"] The timestamp of the trade
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TradeTime { get; set; }
         /// <summary>
-        /// Whether the buyer is maker
+        /// ["<c>isBuyerMaker</c>"] Whether the buyer is maker
         /// </summary>
-        [JsonProperty("isBuyerMaker")]
+        [JsonPropertyName("isBuyerMaker")]
         public bool BuyerIsMaker { get; set; }
         /// <summary>
-        /// Whether the trade was made at the best match
+        /// ["<c>isRPITrade</c>"] Whether this was a Retail Price Improvement trade
         /// </summary>
+        [JsonPropertyName("isRPITrade")]
+        public bool? IsRpiTrade { get; set; }
+        /// <summary>
+        /// ["<c>isBestMatch</c>"] Whether the trade was made at the best match
+        /// </summary>
+        [JsonPropertyName("isBestMatch")]
         public bool IsBestMatch { get; set; }
     }
 
     /// <summary>
     /// Recent trade with quote quantity
     /// </summary>
+    [SerializationModel]
     public record BinanceRecentTradeQuote : BinanceRecentTrade
     {
-        /// <inheritdoc />
-        [JsonProperty("quoteQty")]
+        /// ["<c>quoteQty</c>"] <inheritdoc />
+        [JsonPropertyName("quoteQty")]
         public override decimal QuoteQuantity { get; set; }
 
-        /// <inheritdoc />
-        [JsonProperty("qty")]
+        /// ["<c>qty</c>"] <inheritdoc />
+        [JsonPropertyName("qty")]
         public override decimal BaseQuantity { get; set; }
     }
 
     /// <summary>
     /// Recent trade with base quantity
     /// </summary>
+    [SerializationModel]
     public record BinanceRecentTradeBase : BinanceRecentTrade
     {
-        /// <inheritdoc />
-        [JsonProperty("qty")]
+        /// ["<c>qty</c>"] <inheritdoc />
+        [JsonPropertyName("qty")]
         public override decimal QuoteQuantity { get; set; }
 
-        /// <inheritdoc />
-        [JsonProperty("baseQty")]
+        /// ["<c>baseQty</c>"] <inheritdoc />
+        [JsonPropertyName("baseQty")]
         public override decimal BaseQuantity { get; set; }
     }
 }
+

@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot
@@ -6,17 +5,19 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// The status of Binance
     /// </summary>
+    [SerializationModel]
     public record BinanceSystemStatus
     {
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] The system status.
         /// </summary>
-        [JsonConverter(typeof(SystemStatusConverter))]
+        [JsonPropertyName("status")]
         public SystemStatus Status { get; set; }
         /// <summary>
-        /// Additional info
+        /// ["<c>msg</c>"] Additional info
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string? Message { get; set; }
     }
 }
+

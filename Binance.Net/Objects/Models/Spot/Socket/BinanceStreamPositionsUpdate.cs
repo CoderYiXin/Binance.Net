@@ -1,47 +1,48 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
 {
     /// <summary>
     /// Positions update
     /// </summary>
+    [SerializationModel]
     public record BinanceStreamPositionsUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Time of last account update
+        /// ["<c>u</c>"] Time of last account update
         /// </summary>
-        [JsonProperty("u"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("u"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// The listen key the update was for
+        /// API key this update was for.
         /// </summary>
-        public string ListenKey { get; set; } = string.Empty;
+        public string ApiKey { get; set; } = string.Empty;
         /// <summary>
-        /// Balances
+        /// ["<c>B</c>"] Balances
         /// </summary>
-        [JsonProperty("B")]
-        public IEnumerable<BinanceStreamBalance> Balances { get; set; } = Array.Empty<BinanceStreamBalance>();
+        [JsonPropertyName("B")]
+        public BinanceStreamBalance[] Balances { get; set; } = Array.Empty<BinanceStreamBalance>();
     }
 
     /// <summary>
     /// Information about an asset balance
     /// </summary>
-    public record BinanceStreamBalance: IBinanceBalance
+    public record BinanceStreamBalance : IBinanceBalance
     {
         /// <summary>
-        /// The asset this balance is for
+        /// ["<c>a</c>"] The asset this balance is for
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// The quantity that isn't locked in a trade
+        /// ["<c>f</c>"] The quantity that isn't locked in a trade
         /// </summary>
-        [JsonProperty("f")]
+        [JsonPropertyName("f")]
         public decimal Available { get; set; }
         /// <summary>
-        /// The quantity that is currently locked in a trade
+        /// ["<c>l</c>"] The quantity that is currently locked in a trade
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal Locked { get; set; }
         /// <summary>
         /// The total balance of this asset (Free + Locked)
@@ -49,3 +50,4 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         public decimal Total => Available + Locked;
     }
 }
+

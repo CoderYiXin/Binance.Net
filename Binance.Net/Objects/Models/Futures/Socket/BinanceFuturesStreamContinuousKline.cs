@@ -1,4 +1,4 @@
-﻿using Binance.Net.Converters;
+using Binance.Net.Converters;
 using Binance.Net.Enums;
 using Binance.Net.Interfaces;
 using Binance.Net.Objects.Models.Spot.Socket;
@@ -8,25 +8,27 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Wrapper for continuous kline information for a symbol
     /// </summary>
-    public record BinanceStreamContinuousKlineData: BinanceStreamEvent, IBinanceStreamKlineData
+    [SerializationModel]
+    public record BinanceStreamContinuousKlineData : BinanceStreamEvent, IBinanceStreamKlineData
     {
         /// <summary>
-        /// The symbol the data is for
+        /// ["<c>ps</c>"] The symbol the data is for
         /// </summary>
-        [JsonProperty("ps")]
+        [JsonPropertyName("ps")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// The contract type
+        /// ["<c>ct</c>"] The contract type
         /// </summary>
-        [JsonProperty("ct")]
+        [JsonPropertyName("ct")]
         public ContractType ContractType { get; set; } = ContractType.Unknown;
 
         /// <summary>
-        /// The data
+        /// ["<c>k</c>"] The data
         /// </summary>
-        [JsonProperty("k")]
-        [JsonConverter(typeof(InterfaceConverter<BinanceStreamKline>))]
+        [JsonPropertyName("k")]
+        [JsonConverter(typeof(InterfaceConverter<BinanceStreamKline, IBinanceStreamKline>))]
         public IBinanceStreamKline Data { get; set; } = default!;
     }
 }
+

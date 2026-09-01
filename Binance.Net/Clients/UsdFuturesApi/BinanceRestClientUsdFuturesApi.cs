@@ -1,19 +1,20 @@
-﻿using Binance.Net.Enums;
-using Binance.Net.Objects;
+﻿using Binance.Net.Clients.MessageHandlers;
+using Binance.Net.Enums;
+using Binance.Net.Interfaces.Clients.UsdFuturesApi;
 using Binance.Net.Objects.Internal;
 using Binance.Net.Objects.Models.Futures;
-using Binance.Net.Interfaces.Clients.UsdFuturesApi;
-using CryptoExchange.Net.CommonObjects;
-using CryptoExchange.Net.Interfaces.CommonClients;
 using Binance.Net.Objects.Options;
-using CryptoExchange.Net.Converters.MessageParsing;
 using CryptoExchange.Net.Clients;
-using CryptoExchange.Net.RateLimiting.Interfaces;
+using CryptoExchange.Net.Converters.MessageParsing;
+using CryptoExchange.Net.Converters.MessageParsing.DynamicConverters;
+using CryptoExchange.Net.Objects.Errors;
+using CryptoExchange.Net.SharedApis;
+using System.Net.Http.Headers;
 
 namespace Binance.Net.Clients.UsdFuturesApi
 {
     /// <inheritdoc cref="IBinanceRestClientUsdFuturesApi" />
-    internal class BinanceRestClientUsdFuturesApi : RestApiClient, IBinanceRestClientUsdFuturesApi, IFuturesClient
+    internal partial class BinanceRestClientUsdFuturesApi : RestApiClient<BinanceEnvironment, BinanceAuthenticationProvider, BinanceCredentials>, IBinanceRestClientUsdFuturesApi
     {
         #region fields 
         /// <inheritdoc />
@@ -23,9 +24,9 @@ namespace Binance.Net.Clients.UsdFuturesApi
 
         internal BinanceFuturesUsdtExchangeInfo? _exchangeInfo;
         internal DateTime? _lastExchangeInfoUpdate;
-        internal readonly string _brokerId;
+        protected override IRestMessageHandler MessageHandler { get; } = new BinanceRestMessageHandler(BinanceErrors.FuturesErrors);
 
-        internal static TimeSyncState _timeSyncState = new TimeSyncState("USD Futures Api");
+        protected override ErrorMapping ErrorMapping => BinanceErrors.FuturesErrors;
         #endregion
 
         #region Api clients
@@ -36,66 +37,36 @@ namespace Binance.Net.Clients.UsdFuturesApi
         /// <inheritdoc />
         public IBinanceRestClientUsdFuturesApiTrading Trading { get; }
         /// <inheritdoc />
+        public IBinanceRestClientUsdFuturesApiAgent Agent { get; }
+        /// <inheritdoc />
         public string ExchangeName => "Binance";
         #endregion
 
-        /// <summary>
-        /// Event triggered when an order is placed via this client. Only available for Spot orders
-        /// </summary>
-        public event Action<OrderId>? OnOrderPlaced;
-        /// <summary>
-        /// Event triggered when an order is canceled via this client. Note that this does not trigger when using CancelAllOrdersAsync. Only available for Spot orders
-        /// </summary>
-        public event Action<OrderId>? OnOrderCanceled;
-
         /// <inheritdoc />
-        public override string FormatSymbol(string baseAsset, string quoteAsset) => baseAsset.ToUpperInvariant() + quoteAsset.ToUpperInvariant();
+        public override string FormatSymbol(string baseAsset, string quoteAsset, TradingMode tradingMode, DateTime? deliverTime = null)
+                => BinanceExchange.FormatSymbol(baseAsset, quoteAsset, tradingMode, deliverTime);
 
         #region constructor/destructor
-        internal BinanceRestClientUsdFuturesApi(ILogger logger, HttpClient? httpClient, BinanceRestOptions options)
-            : base(logger, httpClient, options.Environment.UsdFuturesRestAddress!, options, options.UsdFuturesOptions)
+        internal BinanceRestClientUsdFuturesApi(ILoggerFactory? loggerFactory, HttpClient? httpClient, BinanceRestOptions options)
+            : base(loggerFactory, BinanceExchange.Metadata.Id, httpClient, options.Environment.UsdFuturesRestAddress!, options, options.UsdFuturesOptions)
         {
             Account = new BinanceRestClientUsdFuturesApiAccount(this);
-            ExchangeData = new BinanceRestClientUsdFuturesApiExchangeData(logger, this);
-            Trading = new BinanceRestClientUsdFuturesApiTrading(logger, this);
+            ExchangeData = new BinanceRestClientUsdFuturesApiExchangeData(_logger, this);
+            Trading = new BinanceRestClientUsdFuturesApiTrading(_logger, this);
+            Agent = new BinanceRestClientUsdFuturesApiAgent(this);
 
             RequestBodyEmptyContent = "";
             RequestBodyFormat = RequestBodyFormat.FormData;
-            ArraySerialization = ArrayParametersSerialization.MultipleValues;
-            _brokerId = !string.IsNullOrEmpty(options.UsdFuturesOptions.BrokerId) ? options.UsdFuturesOptions.BrokerId! : "x-d63tKbx3";
         }
 
-        event Action<CryptoExchange.Net.CommonObjects.OrderId> IBaseRestClient.OnOrderPlaced
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event Action<CryptoExchange.Net.CommonObjects.OrderId> IBaseRestClient.OnOrderCanceled
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
         #endregion
 
         /// <inheritdoc />
-        protected override AuthenticationProvider CreateAuthenticationProvider(ApiCredentials credentials)
+        protected override BinanceAuthenticationProvider CreateAuthenticationProvider(BinanceCredentials credentials)
             => new BinanceAuthenticationProvider(credentials);
-       
+
+        protected override IMessageSerializer CreateSerializer() => new SystemTextJsonMessageSerializer(SerializerOptions.WithConverters(BinanceExchange._serializerContext));
+
         internal Uri GetUrl(string endpoint, string api, string? version = null)
         {
             var result = BaseAddress.AppendPath(api);
@@ -120,14 +91,14 @@ namespace Binance.Net.Clients.UsdFuturesApi
                 await ExchangeData.GetExchangeInfoAsync(ct).ConfigureAwait(false);
 
             if (_exchangeInfo == null)
-                return BinanceTradeRuleResult.CreateFailed("Unable to retrieve trading rules, validation failed");
+                return BinanceTradeRuleResult.CreateFailed("", "Unable to retrieve trading rules, validation failed");
 
             var symbolData = _exchangeInfo.Symbols.SingleOrDefault(s => string.Equals(s.Name, symbol, StringComparison.CurrentCultureIgnoreCase));
             if (symbolData == null)
-                return BinanceTradeRuleResult.CreateFailed($"Trade rules check failed: Symbol {symbol} not found");
+                return BinanceTradeRuleResult.CreateFailed("symbol", $"Trade rules check failed: Symbol {symbol} not found");
 
             if (!symbolData.OrderTypes.Contains(type))
-                return BinanceTradeRuleResult.CreateFailed($"Trade rules check failed: {type} order type not allowed for {symbol}");
+                return BinanceTradeRuleResult.CreateFailed("orderType", $"Trade rules check failed: {type} order type not allowed for {symbol}");
 
             if (symbolData.LotSizeFilter != null || symbolData.MarketLotSizeFilter != null && type == FuturesOrderType.Market)
             {
@@ -151,7 +122,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
                     {
                         if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
                         {
-                            return BinanceTradeRuleResult.CreateFailed($"Trade rules check failed: LotSize filter failed. Original quantity: {quantity}, Closest allowed: {outputQuantity}");
+                            return BinanceTradeRuleResult.CreateFailed("quantity", $"Trade rules check failed: LotSize filter failed. Original quantity: {quantity}, Closest allowed: {outputQuantity}");
                         }
 
                         _logger.Log(LogLevel.Information, $"Quantity clamped from {quantity} to {outputQuantity}");
@@ -164,8 +135,11 @@ namespace Binance.Net.Clients.UsdFuturesApi
                 if (quoteQuantity < symbolData.MinNotionalFilter.MinNotional)
                 {
                     if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
+                    {
                         return BinanceTradeRuleResult.CreateFailed(
+                            "quoteQuantity",
                             $"Trade rules check failed: MinNotional filter failed. Order value: {quoteQuantity}, minimal order value: {symbolData.MinNotionalFilter.MinNotional}");
+                    }
 
                     outputQuoteQuantity = symbolData.MinNotionalFilter.MinNotional;
                     _logger.Log(LogLevel.Information, $"QuoteQuantity adjusted from {quoteQuantity} to {outputQuoteQuantity} based on min notional filter");
@@ -183,7 +157,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
                     if (outputPrice != price)
                     {
                         if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
-                            return BinanceTradeRuleResult.CreateFailed($"Trade rules check failed: Price filter max/min failed. Original price: {price}, Closest allowed: {outputPrice}");
+                            return BinanceTradeRuleResult.CreateFailed("price", $"Trade rules check failed: Price filter max/min failed. Original price: {price}, Closest allowed: {outputPrice}");
 
                         _logger.Log(LogLevel.Information, $"price clamped from {price} to {outputPrice}");
                     }
@@ -195,8 +169,11 @@ namespace Binance.Net.Clients.UsdFuturesApi
                         if (outputStopPrice != stopPrice)
                         {
                             if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
+                            {
                                 return BinanceTradeRuleResult.CreateFailed(
+                                    "stopPrice",
                                     $"Trade rules check failed: Stop price filter max/min failed. Original stop price: {stopPrice}, Closest allowed: {outputStopPrice}");
+                            }
 
                             _logger.Log(LogLevel.Information,
                                 $"Stop price clamped from {stopPrice} to {outputStopPrice} based on price filter");
@@ -211,7 +188,7 @@ namespace Binance.Net.Clients.UsdFuturesApi
                     if (outputPrice != beforePrice)
                     {
                         if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
-                            return BinanceTradeRuleResult.CreateFailed($"Trade rules check failed: Price filter tick failed. Original price: {price}, Closest allowed: {outputPrice}");
+                            return BinanceTradeRuleResult.CreateFailed("price", $"Trade rules check failed: Price filter tick failed. Original price: {price}, Closest allowed: {outputPrice}");
 
                         _logger.Log(LogLevel.Information, $"price rounded from {beforePrice} to {outputPrice}");
                     }
@@ -223,8 +200,11 @@ namespace Binance.Net.Clients.UsdFuturesApi
                         if (outputStopPrice != beforeStopPrice)
                         {
                             if (ApiOptions.TradeRulesBehaviour == TradeRulesBehaviour.ThrowError)
+                            {
                                 return BinanceTradeRuleResult.CreateFailed(
+                                    "stopPrice",
                                     $"Trade rules check failed: Stop price filter tick failed. Original stop price: {stopPrice}, Closest allowed: {outputStopPrice}");
+                            }
 
                             _logger.Log(LogLevel.Information,
                                 $"Stop price floored from {beforeStopPrice} to {outputStopPrice} based on price filter");
@@ -236,457 +216,33 @@ namespace Binance.Net.Clients.UsdFuturesApi
             return BinanceTradeRuleResult.CreatePassed(outputQuantity, outputQuoteQuantity, outputPrice, outputStopPrice);
         }
 
-        internal async Task<WebCallResult> SendAsync(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null)
+        internal async Task<HttpResult> SendAsync(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null)
         {
-            var result = await base.SendAsync(BaseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
-            if (!result && result.Error!.Code == -1021 && (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp))
+            var result = await base.SendAsync<Unit>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            if (!result.Success && result.Error!.ErrorType == ErrorType.InvalidTimestamp && (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp))
             {
                 _logger.Log(LogLevel.Debug, "Received Invalid Timestamp error, triggering new time sync");
-                _timeSyncState.LastSyncTime = DateTime.MinValue;
+                TimeOffsetManager.ResetRestUpdateTime(ClientName);
             }
             return result;
         }
 
-        internal Task<WebCallResult<T>> SendAsync<T>(RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
-            => SendToAddressAsync<T>(BaseAddress, definition, parameters, cancellationToken, weight);
-
-        internal async Task<WebCallResult<T>> SendToAddressAsync<T>(string baseAddress, RequestDefinition definition, ParameterCollection? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
+        internal async Task<HttpResult<T>> SendAsync<T>(RequestDefinition definition, Parameters? parameters, CancellationToken cancellationToken, int? weight = null) where T : class
         {
-            var result = await base.SendAsync<T>(baseAddress, definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
-            if (!result && result.Error!.Code == -1021 && (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp))
+            var result = await base.SendAsync<T>(definition, parameters, cancellationToken, null, weight).ConfigureAwait(false);
+            if (!result.Success && result.Error!.ErrorType == ErrorType.InvalidTimestamp && (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp))
             {
                 _logger.Log(LogLevel.Debug, "Received Invalid Timestamp error, triggering new time sync");
-                _timeSyncState.LastSyncTime = DateTime.MinValue;
+                TimeOffsetManager.ResetRestUpdateTime(ClientName);
             }
             return result;
         }
 
         /// <inheritdoc />
-        protected override Task<WebCallResult<DateTime>> GetServerTimestampAsync()
+        protected override Task<HttpResult<DateTime>> GetServerTimestampAsync()
             => ExchangeData.GetServerTimeAsync();
 
-        /// <inheritdoc />
-        public override TimeSyncInfo? GetTimeSyncInfo()
-            => new TimeSyncInfo(_logger, (ApiOptions.AutoTimestamp ?? ClientOptions.AutoTimestamp), (ApiOptions.TimestampRecalculationInterval ?? ClientOptions.TimestampRecalculationInterval), _timeSyncState);
+        public IBinanceRestClientUsdFuturesApiShared SharedClient => this;
 
-        /// <inheritdoc />
-        public override TimeSpan? GetTimeOffset()
-            => _timeSyncState.TimeOffset;
-
-        /// <inheritdoc />
-        public IFuturesClient CommonFuturesClient => this;
-
-        internal void InvokeOrderPlaced(OrderId id)
-        {
-            OnOrderPlaced?.Invoke(id);
-        }
-
-        internal void InvokeOrderCanceled(OrderId id)
-        {
-            OnOrderCanceled?.Invoke(id);
-        }
-
-        /// <inheritdoc />
-        public string GetSymbolName(string baseAsset, string quoteAsset) =>
-            (baseAsset + quoteAsset).ToUpper(CultureInfo.InvariantCulture);
-
-        async Task<WebCallResult<OrderId>> IFuturesClient.PlaceOrderAsync(string symbol, CommonOrderSide side, CommonOrderType type, decimal quantity, decimal? price, int? leverage, string? accountId, string? clientOrderId, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.PlaceOrderAsync), nameof(symbol));
-
-            var order = await Trading.PlaceOrderAsync(symbol, GetOrderSide(side), GetOrderType(type), quantity, price: price, timeInForce: type == CommonOrderType.Limit ? TimeInForce.GoodTillCanceled : (TimeInForce?)null, newClientOrderId: clientOrderId, ct: ct).ConfigureAwait(false);
-            if (!order)
-                return order.As<OrderId>(null);
-
-            return order.As(new OrderId
-            {
-                SourceObject = order,
-                Id = order.Data.Id.ToString(CultureInfo.InvariantCulture)
-            });
-        }
-
-        async Task<WebCallResult<IEnumerable<Position>>> IFuturesClient.GetPositionsAsync(CancellationToken ct)
-        {
-            var positions = await Account.GetPositionInformationAsync(ct: ct).ConfigureAwait(false);
-            if (!positions)
-                return positions.As<IEnumerable<Position>>(null);
-
-            return positions.As(positions.Data.Select(p =>
-                new Position
-                {
-                    SourceObject = p,
-                    Symbol = p.Symbol,
-                    AutoMargin = p.IsAutoAddMargin,
-                    EntryPrice = p.EntryPrice,
-                    Isolated = p.MarginType == FuturesMarginType.Isolated,
-                    Leverage = p.Leverage,
-                    LiquidationPrice = p.LiquidationPrice,
-                    MarkPrice = p.MarkPrice,
-                    Quantity = p.Quantity,
-                    UnrealizedPnl = p.UnrealizedPnl,
-                    Side = p.PositionSide == PositionSide.Long ? CommonPositionSide.Long : p.PositionSide == PositionSide.Short ? CommonPositionSide.Short: CommonPositionSide.Both                    
-                }
-            ));
-        }
-
-        async Task<WebCallResult<Order>> IBaseRestClient.GetOrderAsync(string orderId, string? symbol, CancellationToken ct)
-        {
-            if (!long.TryParse(orderId, out var id))
-                throw new ArgumentException("Order id invalid", nameof(orderId));
-
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetOrderAsync), nameof(symbol));
-
-            var order = await Trading.GetOrderAsync(symbol!, id, ct: ct).ConfigureAwait(false);
-            if (!order)
-                return order.As<Order>(null);
-
-            return order.As(new Order
-            {
-                SourceObject = order,
-                Id = order.Data.Id.ToString(CultureInfo.InvariantCulture),
-                Symbol = order.Data.Symbol,
-                Price = order.Data.Price,
-                Quantity = order.Data.Quantity,
-                QuantityFilled = order.Data.QuantityFilled,
-                Side = order.Data.Side == Enums.OrderSide.Buy ? CommonOrderSide.Buy : CommonOrderSide.Sell,
-                Type = GetOrderType(order.Data.Type),
-                Status = GetOrderStatus(order.Data.Status),
-                Timestamp = order.Data.CreateTime
-            });
-        }
-
-        async Task<WebCallResult<IEnumerable<UserTrade>>> IBaseRestClient.GetOrderTradesAsync(string orderId, string? symbol, CancellationToken ct)
-        {
-            if (!long.TryParse(orderId, out var id))
-                throw new ArgumentException("Order id invalid", nameof(orderId));
-
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetOrderTradesAsync), nameof(symbol));
-
-            var trades = await Trading.GetUserTradesAsync(symbol!, ct: ct).ConfigureAwait(false);
-            if (!trades)
-                return trades.As<IEnumerable<UserTrade>>(null);
-
-            return trades.As(trades.Data.Where(t => t.OrderId == id).Select(t =>
-                new UserTrade
-                {
-                    SourceObject = t,
-                    Id = t.Id.ToString(CultureInfo.InvariantCulture),
-                    Symbol = t.Symbol,
-                    OrderId = t.OrderId.ToString(CultureInfo.InvariantCulture),
-                    Price = t.Price,
-                    Quantity = t.Quantity,
-                    Fee = t.Fee,
-                    FeeAsset = t.FeeAsset,
-                    Timestamp = t.Timestamp
-                }));
-        }
-
-        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetOpenOrdersAsync(string? symbol, CancellationToken ct)
-        {
-            var orderInfo = await Trading.GetOpenOrdersAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!orderInfo)
-                return orderInfo.As<IEnumerable<Order>>(null);
-
-            return orderInfo.As(orderInfo.Data.Select(s =>
-                new Order
-                {
-                    SourceObject = s,
-                    Id = s.Id.ToString(CultureInfo.InvariantCulture),
-                    Symbol = s.Symbol,
-                    Side = s.Side == Enums.OrderSide.Buy ? CommonOrderSide.Buy : CommonOrderSide.Sell,
-                    Price = s.Price,
-                    Quantity = s.Quantity,
-                    QuantityFilled = s.QuantityFilled,
-                    Type = GetOrderType(s.Type),
-                    Status = GetOrderStatus(s.Status),
-                    Timestamp = s.CreateTime
-                }));
-        }
-
-        async Task<WebCallResult<IEnumerable<Order>>> IBaseRestClient.GetClosedOrdersAsync(string? symbol, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetClosedOrdersAsync), nameof(symbol));
-
-            var orderInfo = await Trading.GetOrdersAsync(symbol!, ct: ct).ConfigureAwait(false);
-            if (!orderInfo)
-                return orderInfo.As<IEnumerable<Order>>(null);
-
-            return orderInfo.As(orderInfo.Data.Where(o => o.Status == Enums.OrderStatus.Canceled || o.Status == Enums.OrderStatus.Filled).Select(s =>
-                new Order
-                {
-                    SourceObject = s,
-                    Id = s.Id.ToString(CultureInfo.InvariantCulture),
-                    Symbol = s.Symbol,
-                    Price = s.Price,
-                    Quantity = s.Quantity,
-                    QuantityFilled = s.QuantityFilled,
-                    Side = s.Side == Enums.OrderSide.Buy ? CommonOrderSide.Buy : CommonOrderSide.Sell,
-                    Type = GetOrderType(s.Type),
-                    Status = GetOrderStatus(s.Status),
-                    Timestamp = s.CreateTime
-                }));
-        }
-
-        async Task<WebCallResult<OrderId>> IBaseRestClient.CancelOrderAsync(string orderId, string? symbol, CancellationToken ct)
-        {
-            if (!long.TryParse(orderId, out var id))
-                throw new ArgumentException("Order id invalid", nameof(orderId));
-
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.CancelOrderAsync), nameof(symbol));
-
-            var order = await Trading.CancelOrderAsync(symbol!, id, ct: ct).ConfigureAwait(false);
-            if (!order)
-                return order.As<OrderId>(null);
-
-            return order.As(new OrderId
-            {
-                SourceObject = order,
-                Id = order.Data.Id.ToString(CultureInfo.InvariantCulture)
-            });
-        }
-
-        async Task<WebCallResult<IEnumerable<Symbol>>> IBaseRestClient.GetSymbolsAsync(CancellationToken ct)
-        {
-            var exchangeInfo = await ExchangeData.GetExchangeInfoAsync(ct: ct).ConfigureAwait(false);
-            if (!exchangeInfo)
-                return exchangeInfo.As<IEnumerable<Symbol>>(null);
-
-            return exchangeInfo.As(exchangeInfo.Data.Symbols.Select(s =>
-                new Symbol
-                {
-                    SourceObject = s,
-                    Name = s.Name,
-                    MinTradeQuantity = s.LotSizeFilter?.MinQuantity,
-                    QuantityStep = s.LotSizeFilter?.StepSize,
-                    PriceStep = s.PriceFilter?.TickSize
-                }));
-        }
-
-        async Task<WebCallResult<Ticker>> IBaseRestClient.GetTickerAsync(string symbol, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetTickerAsync), nameof(symbol));
-
-            var ticker = await ExchangeData.GetTickerAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!ticker)
-                return ticker.As<Ticker>(null);
-
-            return ticker.As(new Ticker
-            {
-                SourceObject = ticker.Data,
-                Symbol = ticker.Data.Symbol,
-                HighPrice = ticker.Data.HighPrice,
-                LowPrice = ticker.Data.LowPrice,
-                Price24H = ticker.Data.OpenPrice,
-                LastPrice = ticker.Data.LastPrice,
-                Volume = ticker.Data.Volume
-            });
-        }
-
-        async Task<WebCallResult<IEnumerable<Ticker>>> IBaseRestClient.GetTickersAsync(CancellationToken ct)
-        {
-            var tickers = await ExchangeData.GetTickersAsync(ct: ct).ConfigureAwait(false);
-            if (!tickers)
-                return tickers.As<IEnumerable<Ticker>>(null);
-
-            return tickers.As(tickers.Data.Select(t => new Ticker
-            {
-                SourceObject = t,
-                Symbol = t.Symbol,
-                HighPrice = t.HighPrice,
-                LowPrice = t.LowPrice,
-                Price24H = t.OpenPrice,
-                LastPrice = t.LastPrice,
-                Volume = t.Volume
-            }));
-        }
-
-        async Task<WebCallResult<IEnumerable<Kline>>> IBaseRestClient.GetKlinesAsync(string symbol, TimeSpan timespan, DateTime? startTime, DateTime? endTime, int? limit, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetKlinesAsync), nameof(symbol));
-
-            var klines = await ExchangeData.GetKlinesAsync(symbol, GetKlineIntervalFromTimespan(timespan), startTime, endTime, limit, ct: ct).ConfigureAwait(false);
-            if (!klines)
-                return klines.As<IEnumerable<Kline>>(null);
-
-            return klines.As(klines.Data.Select(t => new Kline
-            {
-                SourceObject = t,
-                HighPrice = t.HighPrice,
-                LowPrice = t.LowPrice,
-                OpenTime = t.OpenTime,
-                ClosePrice = t.ClosePrice,
-                OpenPrice = t.OpenPrice,
-                Volume = t.Volume
-            }));
-        }
-
-        async Task<WebCallResult<OrderBook>> IBaseRestClient.GetOrderBookAsync(string symbol, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetOrderBookAsync), nameof(symbol));
-
-            var orderbook = await ExchangeData.GetOrderBookAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!orderbook)
-                return orderbook.As<OrderBook>(null);
-
-            return orderbook.As(new OrderBook
-            {
-                SourceObject = orderbook.Data,
-                Asks = orderbook.Data.Asks.Select(a => new OrderBookEntry { Price = a.Price, Quantity = a.Quantity }),
-                Bids = orderbook.Data.Bids.Select(b => new OrderBookEntry { Price = b.Price, Quantity = b.Quantity })
-            });
-        }
-
-        async Task<WebCallResult<IEnumerable<Trade>>> IBaseRestClient.GetRecentTradesAsync(string symbol, CancellationToken ct)
-        {
-            if (string.IsNullOrWhiteSpace(symbol))
-                throw new ArgumentException(nameof(symbol) + " required for Binance " + nameof(IFuturesClient.GetRecentTradesAsync), nameof(symbol));
-
-            var trades = await ExchangeData.GetRecentTradesAsync(symbol, ct: ct).ConfigureAwait(false);
-            if (!trades)
-                return trades.As<IEnumerable<Trade>>(null);
-
-            return trades.As(trades.Data.Select(t => new Trade
-            {
-                SourceObject = t,
-                Symbol = symbol,
-                Price = t.Price,
-                Quantity = t.BaseQuantity,
-                Timestamp = t.TradeTime
-            }));
-        }
-
-        async Task<WebCallResult<IEnumerable<Balance>>> IBaseRestClient.GetBalancesAsync(string? accountId, CancellationToken ct)
-        {
-            var balances = await Account.GetAccountInfoAsync(ct: ct).ConfigureAwait(false);
-            if (!balances)
-                return balances.As<IEnumerable<Balance>>(null);
-
-            return balances.As(balances.Data.Assets.Select(t => new Balance
-            {
-                SourceObject = t,
-                Asset = t.Asset,
-                Available = t.AvailableBalance,
-                Total = t.WalletBalance
-            }));
-        }
-
-        private static CommonOrderType GetOrderType(FuturesOrderType orderType)
-        {
-            if (orderType == FuturesOrderType.Limit)
-                return CommonOrderType.Limit;
-            if (orderType == FuturesOrderType.Market)
-                return CommonOrderType.Market;
-            return CommonOrderType.Other;
-        }
-
-        private static CommonOrderStatus GetOrderStatus(Enums.OrderStatus orderStatus)
-        {
-            if (orderStatus == Enums.OrderStatus.New || orderStatus == Enums.OrderStatus.PartiallyFilled)
-                return CommonOrderStatus.Active;
-            if (orderStatus == Enums.OrderStatus.Filled)
-                return CommonOrderStatus.Filled;
-            return CommonOrderStatus.Canceled;
-        }
-
-        private static OrderSide GetOrderSide(CommonOrderSide side)
-        {
-            if (side == CommonOrderSide.Sell) return OrderSide.Sell;
-            if (side == CommonOrderSide.Buy) return OrderSide.Buy;
-
-            throw new ArgumentException("Unsupported order side for Binance order: " + side);
-        }
-
-        private static FuturesOrderType GetOrderType(CommonOrderType type)
-        {
-            if (type == CommonOrderType.Limit) return FuturesOrderType.Limit;
-            if (type == CommonOrderType.Market) return FuturesOrderType.Market;
-
-            throw new ArgumentException("Unsupported order type for Binance order: " + type);
-        }
-
-        private static KlineInterval GetKlineIntervalFromTimespan(TimeSpan timeSpan)
-        {
-            if (timeSpan == TimeSpan.FromSeconds(1)) return KlineInterval.OneSecond;
-            if (timeSpan == TimeSpan.FromMinutes(1)) return KlineInterval.OneMinute;
-            if (timeSpan == TimeSpan.FromMinutes(3)) return KlineInterval.ThreeMinutes;
-            if (timeSpan == TimeSpan.FromMinutes(5)) return KlineInterval.FiveMinutes;
-            if (timeSpan == TimeSpan.FromMinutes(15)) return KlineInterval.FifteenMinutes;
-            if (timeSpan == TimeSpan.FromMinutes(30)) return KlineInterval.ThirtyMinutes;
-            if (timeSpan == TimeSpan.FromHours(1)) return KlineInterval.OneHour;
-            if (timeSpan == TimeSpan.FromHours(2)) return KlineInterval.TwoHour;
-            if (timeSpan == TimeSpan.FromHours(4)) return KlineInterval.FourHour;
-            if (timeSpan == TimeSpan.FromHours(6)) return KlineInterval.SixHour;
-            if (timeSpan == TimeSpan.FromHours(8)) return KlineInterval.EightHour;
-            if (timeSpan == TimeSpan.FromHours(12)) return KlineInterval.TwelveHour;
-            if (timeSpan == TimeSpan.FromDays(1)) return KlineInterval.OneDay;
-            if (timeSpan == TimeSpan.FromDays(3)) return KlineInterval.ThreeDay;
-            if (timeSpan == TimeSpan.FromDays(7)) return KlineInterval.OneWeek;
-            if (timeSpan == TimeSpan.FromDays(30) || timeSpan == TimeSpan.FromDays(31)) return KlineInterval.OneMonth;
-
-            throw new ArgumentException("Unsupported timespan for Binance Klines, check supported intervals using Binance.Net.Enums.KlineInterval");
-        }
-
-        /// <inheritdoc />
-        protected override Error ParseErrorResponse(int httpStatusCode, IEnumerable<KeyValuePair<string, IEnumerable<string>>> responseHeaders, IMessageAccessor accessor)
-        {
-            if (!accessor.IsJson)
-                return new ServerError(accessor.GetOriginalString());
-
-            var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
-            var msg = accessor.GetValue<string>(MessagePath.Get().Property("msg"));
-            if (msg == null)
-                return new ServerError(accessor.GetOriginalString());
-
-            if (code == null)
-                return new ServerError(msg);
-
-            return new ServerError(code.Value, msg);
-        }
-
-        /// <inheritdoc />
-        protected override ServerRateLimitError ParseRateLimitResponse(int httpStatusCode, IEnumerable<KeyValuePair<string, IEnumerable<string>>> responseHeaders, IMessageAccessor accessor)
-        {
-            var error = GetRateLimitError(accessor);
-            var retryAfterHeader = responseHeaders.SingleOrDefault(r => r.Key.Equals("Retry-After", StringComparison.InvariantCultureIgnoreCase));
-            if (retryAfterHeader.Value?.Any() != true)
-                return error;
-
-            var value = retryAfterHeader.Value.First();
-            if (!int.TryParse(value, out var seconds))
-                return error;
-
-            if (seconds == 0)
-            {
-                var now = DateTime.UtcNow;
-                seconds = (int)(new DateTime(now.Year, now.Month, now.Day, now.Hour, now.Minute, 0, DateTimeKind.Utc).AddMinutes(1) - now).TotalSeconds + 1;
-            }
-
-            error.RetryAfter = DateTime.UtcNow.AddSeconds(seconds);
-            return error;
-        }
-
-        private BinanceRateLimitError GetRateLimitError(IMessageAccessor accessor)
-        {
-            if (!accessor.IsJson)
-                return new BinanceRateLimitError(accessor.GetOriginalString());
-
-            var code = accessor.GetValue<int?>(MessagePath.Get().Property("code"));
-            var msg = accessor.GetValue<string>(MessagePath.Get().Property("msg"));
-            if (msg == null)
-                return new BinanceRateLimitError(accessor.GetOriginalString());
-
-            if (code == null)
-                return new BinanceRateLimitError(msg);
-
-            return new BinanceRateLimitError(code.Value, msg, null);
-        }
     }
 }

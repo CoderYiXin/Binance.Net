@@ -1,4 +1,3 @@
-using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.Socket
@@ -6,17 +5,18 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Account update
     /// </summary>
-    public record BinanceFuturesStreamAccountUpdate: BinanceStreamEvent
+    [SerializationModel]
+    public record BinanceFuturesStreamAccountUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// The update data
+        /// ["<c>a</c>"] The update data
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public BinanceFuturesStreamAccountUpdateData UpdateData { get; set; } = new BinanceFuturesStreamAccountUpdateData();
         /// <summary>
-        /// Transaction time
+        /// ["<c>T</c>"] Transaction time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime TransactionTime { get; set; }
 
         /// <summary>
@@ -31,22 +31,27 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     public record BinanceFuturesStreamAccountUpdateData
     {
         /// <summary>
-        /// Account update reason type
+        /// ["<c>m</c>"] Account update reason type
         /// </summary>
-        [JsonProperty("m"), JsonConverter(typeof(AccountUpdateReasonConverter))]
+        [JsonPropertyName("m")]
         public AccountUpdateReason Reason { get; set; }
+        /// <summary>
+        /// ["<c>S</c>"] The symbol this update is for, only filled for funding rate updates
+        /// </summary>
+        [JsonPropertyName("S")]
+        public string? Symbol { get; set; }
 
         /// <summary>
-        /// Balances
+        /// ["<c>B</c>"] Balances
         /// </summary>
-        [JsonProperty("B")]
-        public IEnumerable<BinanceFuturesStreamBalance> Balances { get; set; } = Array.Empty<BinanceFuturesStreamBalance>();
+        [JsonPropertyName("B")]
+        public BinanceFuturesStreamBalance[] Balances { get; set; } = Array.Empty<BinanceFuturesStreamBalance>();
 
         /// <summary>
-        /// Positions
+        /// ["<c>P</c>"] Positions
         /// </summary>
-        [JsonProperty("P")]
-        public IEnumerable<BinanceFuturesStreamPosition> Positions { get; set; } = Array.Empty<BinanceFuturesStreamPosition>();
+        [JsonPropertyName("P")]
+        public BinanceFuturesStreamPosition[] Positions { get; set; } = Array.Empty<BinanceFuturesStreamPosition>();
     }
 
     /// <summary>
@@ -55,24 +60,24 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     public record BinanceFuturesStreamBalance
     {
         /// <summary>
-        /// The asset this balance is for
+        /// ["<c>a</c>"] The asset this balance is for
         /// </summary>
-        [JsonProperty("a")]
+        [JsonPropertyName("a")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// The quantity that isn't locked in a trade
+        /// ["<c>wb</c>"] The quantity that isn't locked in a trade
         /// </summary>
-        [JsonProperty("wb")]
+        [JsonPropertyName("wb")]
         public decimal WalletBalance { get; set; }
         /// <summary>
-        /// The quantity that is locked in a trade
+        /// ["<c>cw</c>"] The quantity that is locked in a trade
         /// </summary>
-        [JsonProperty("cw")]
+        [JsonPropertyName("cw")]
         public decimal CrossWalletBalance { get; set; }
         /// <summary>
-        /// The balance change except PnL and commission
+        /// ["<c>bc</c>"] The balance change except PnL and commission
         /// </summary>
-        [JsonProperty("bc")]
+        [JsonPropertyName("bc")]
         public decimal BalanceChange { get; set; }
     }
 
@@ -82,52 +87,53 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     public record BinanceFuturesStreamPosition
     {
         /// <summary>
-        /// The symbol this balance is for
+        /// ["<c>s</c>"] The symbol this balance is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// The quantity of the position
+        /// ["<c>pa</c>"] The quantity of the position
         /// </summary>
-        [JsonProperty("pa")]
+        [JsonPropertyName("pa")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// The entry price
+        /// ["<c>ep</c>"] The entry price
         /// </summary>
-        [JsonProperty("ep")]
+        [JsonPropertyName("ep")]
         public decimal EntryPrice { get; set; }
         /// <summary>
-        /// The break even price
+        /// ["<c>bep</c>"] The break even price
         /// </summary>
-        [JsonProperty("bep")]
+        [JsonPropertyName("bep")]
         public decimal BreakEvenPrice { get; set; }
         /// <summary>
-        /// The accumulated realized PnL
+        /// ["<c>cr</c>"] The accumulated realized PnL
         /// </summary>
-        [JsonProperty("cr")]
+        [JsonPropertyName("cr")]
         public decimal RealizedPnl { get; set; }
         /// <summary>
-        /// The Unrealized PnL
+        /// ["<c>up</c>"] The Unrealized PnL
         /// </summary>
-        [JsonProperty("up")]
+        [JsonPropertyName("up")]
         public decimal UnrealizedPnl { get; set; }
 
         /// <summary>
-        /// The margin type
+        /// ["<c>mt</c>"] The margin type
         /// </summary>
-        [JsonProperty("mt"), JsonConverter(typeof(FuturesMarginTypeConverter))]
+        [JsonPropertyName("mt")]
         public FuturesMarginType MarginType { get; set; }
 
         /// <summary>
-        /// The isolated wallet (if isolated position)
+        /// ["<c>iw</c>"] The isolated wallet (if isolated position)
         /// </summary>
-        [JsonProperty("iw")]
+        [JsonPropertyName("iw")]
         public decimal IsolatedMargin { get; set; }
 
         /// <summary>
-        /// Position Side
+        /// ["<c>ps</c>"] Position side.
         /// </summary>
-        [JsonProperty("ps"), JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("ps")]
         public PositionSide PositionSide { get; set; }
     }
 }
+

@@ -1,54 +1,57 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Converters;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// The history of order edits
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesOrderEditHistory
     {
         /// <summary>
-        /// The symbol the order is for
+        /// ["<c>symbol</c>"] The symbol the order is for
         /// </summary>
-        [JsonProperty("symbol")]
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Pair
+        /// ["<c>pair</c>"] Pair
         /// </summary>
-        [JsonProperty("pair")]
+        [JsonPropertyName("pair")]
         public string? Pair { get; set; }
 
         /// <summary>
-        /// The id of the amendment
+        /// ["<c>amendmentId</c>"] The id of the amendment
         /// </summary>
-        [JsonProperty("amendmentId")]
+        [JsonPropertyName("amendmentId")]
         public long AmendmentId { get; set; }
         /// <summary>
-        /// The order id as assigned by Binance
+        /// ["<c>orderId</c>"] The order id as assigned by Binance
         /// </summary>
-        [JsonProperty("orderId")]
+        [JsonPropertyName("orderId")]
         public long Id { get; set; }
         /// <summary>
-        /// The order id as assigned by the client
+        /// ["<c>clientOrderId</c>"] The order id as assigned by the client
         /// </summary>
-        [JsonProperty("clientOrderId")]
+        [JsonPropertyName("clientOrderId")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
         public string? ClientOrderId { get; set; }
         /// <summary>
-        /// Edit time
+        /// ["<c>time</c>"] Edit time
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Edit info
+        /// ["<c>amendment</c>"] Edit info
         /// </summary>
-        [JsonProperty("amendment")]
+        [JsonPropertyName("amendment")]
         public BinanceFuturesOrderChanges EditInfo { get; set; } = null!;
         /// <summary>
-        /// Price match
+        /// ["<c>priceMatch</c>"] Price match
         /// </summary>
-        [JsonProperty("priceMatch"), JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("priceMatch")]
         public PriceMatch PriceMatch { get; set; }
 
     }
@@ -59,37 +62,38 @@ namespace Binance.Net.Objects.Models.Futures
     public record BinanceFuturesOrderChanges
     {
         /// <summary>
-        /// Price change
+        /// ["<c>price</c>"] Price change
         /// </summary>
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public BinanceFuturesOrderChange Price { get; set; } = null!;
         /// <summary>
-        /// Quantity change
+        /// ["<c>origQty</c>"] Quantity change
         /// </summary>
-        [JsonProperty("origQty")]
+        [JsonPropertyName("origQty")]
         public BinanceFuturesOrderChange Quantity { get; set; } = null!;
 
         /// <summary>
-        /// Amount of times changed
+        /// ["<c>count</c>"] Amount of times changed
         /// </summary>
-        [JsonProperty("count")]
+        [JsonPropertyName("count")]
         public int EditCount { get; set; }
     }
-    
+
     /// <summary>
     /// Change info
     /// </summary>
     public record BinanceFuturesOrderChange
     {
         /// <summary>
-        /// Before edit
+        /// ["<c>before</c>"] Before edit
         /// </summary>
-        [JsonProperty("before")]
+        [JsonPropertyName("before")]
         public decimal Before { get; set; }
         /// <summary>
-        /// After edit
+        /// ["<c>after</c>"] After edit
         /// </summary>
-        [JsonProperty("after")]
+        [JsonPropertyName("after")]
         public decimal After { get; set; }
     }
 }
+

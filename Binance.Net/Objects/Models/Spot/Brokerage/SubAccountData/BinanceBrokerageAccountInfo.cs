@@ -1,40 +1,45 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.Brokerage.SubAccountData
 {
     /// <summary>
     /// Account Info
     /// </summary>
+    [SerializationModel]
     public record BinanceBrokerageAccountInfo
     {
         /// <summary>
-        /// Max Maker Commission
+        /// ["<c>maxMakerCommission</c>"] Max Maker Commission
         /// </summary>
+        [JsonPropertyName("maxMakerCommission")]
         public decimal MaxMakerCommission { get; set; }
-        
+
         /// <summary>
-        /// Min Maker Commission
+        /// ["<c>minMakerCommission</c>"] Min Maker Commission
         /// </summary>
+        [JsonPropertyName("minMakerCommission")]
         public decimal MinMakerCommission { get; set; }
-        
+
         /// <summary>
-        /// Max Taker Commission
+        /// ["<c>maxTakerCommission</c>"] Max Taker Commission
         /// </summary>
+        [JsonPropertyName("maxTakerCommission")]
         public decimal MaxTakerCommission { get; set; }
-        
+
         /// <summary>
-        /// Min Taker Commission
+        /// ["<c>minTakerCommission</c>"] Min Taker Commission
         /// </summary>
+        [JsonPropertyName("minTakerCommission")]
         public decimal MinTakerCommission { get; set; }
-        
+
         /// <summary>
-        /// Sub Account Quantity
+        /// ["<c>subAccountQty</c>"] Sub Account Quantity
         /// </summary>
-        [JsonProperty("subAccountQty")]
+        [JsonPropertyName("subAccountQty")]
         public int SubAccountQuantity { get; set; }
-        
+
         /// <summary>
-        /// Max Sub Account Quantity
+        /// ["<c>maxSubAccountQty</c>"] Max Sub Account Quantity
         /// </summary>
-        [JsonProperty("maxSubAccountQty")]
+        [JsonPropertyName("maxSubAccountQty")]
         public int MaxSubAccountQuantity { get; set; }
     }
 }

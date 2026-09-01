@@ -1,49 +1,49 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Staking
+namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
-    /// Historical staking info
+    /// Staking history
     /// </summary>
+    [SerializationModel]
     public record BinanceStakingHistory
     {
         /// <summary>
-        /// Position id
+        /// ["<c>asset</c>"] The staking asset.
         /// </summary>
-        public string? PositionId { get; set; }
+        [JsonPropertyName("asset")]
+        public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>amount</c>"] Amount
         /// </summary>
-        [JsonProperty("time")]
+        [JsonPropertyName("amount")]
+        public decimal Quantity { get; set; }
+        /// <summary>
+        /// ["<c>status</c>"] Status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string Status { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>time</c>"] The staking timestamp.
+        /// </summary>
+        [JsonPropertyName("time")]
         [JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>distributeAsset</c>"] Distribute asset
         /// </summary>
-        public string Asset { get; set; } = string.Empty;
+        [JsonPropertyName("distributeAsset")]
+        public string DistributedAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Project
+        /// ["<c>distributeAmount</c>"] Quantity distributed
         /// </summary>
-        public string Project { get; set; } = string.Empty;
+        [JsonPropertyName("distributeAmount")]
+        public decimal DistributeQuantity { get; set; }
         /// <summary>
-        /// Quantity
+        /// ["<c>conversionRatio</c>"] Conversion ratio
         /// </summary>
-        [JsonProperty("amount")]
-        public decimal Quantity { get; set; }
-        /// <summary>
-        /// Lock period
-        /// </summary>
-        public int? LockPeriod { get; set; }
-        /// <summary>
-        /// Redemption date
-        /// </summary>
-        [JsonConverter(typeof(DateTimeConverter))]
-        public DateTime DeliverDate { get; set; }
-        /// <summary>
-        /// Type
-        /// </summary>
-        public string? Type { get; set; }
-        /// <summary>
-        /// Status
-        /// </summary>
-        public string Status { get; set; } = string.Empty;
+        [JsonPropertyName("conversionRatio")]
+        public decimal ConversionRatio { get; set; }
+        [JsonInclude, JsonPropertyName("exchangeRate")]
+        internal decimal ConversionRatioInt { get => ConversionRatio; set => ConversionRatio = value; }
     }
 }
+

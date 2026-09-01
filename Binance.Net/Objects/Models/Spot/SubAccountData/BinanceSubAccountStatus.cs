@@ -1,50 +1,52 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SubAccountData
+namespace Binance.Net.Objects.Models.Spot.SubAccountData
 {
     /// <summary>
     /// Sub-account Status on Margin/Futures
     /// </summary>
+    [SerializationModel]
     public record BinanceSubAccountStatus
     {
         /// <summary>
-        /// User email
+        /// ["<c>email</c>"] The user email address.
         /// </summary>
-        [JsonProperty("email")]
+        [JsonPropertyName("email")]
         public string Email { get; set; } = string.Empty;
 
         /// <summary>
-        /// Sub account user enabled
+        /// ["<c>isSubUserEnabled</c>"] Whether the sub account user is enabled.
         /// </summary>
-        [JsonProperty("isSubUserEnabled")]
+        [JsonPropertyName("isSubUserEnabled")]
         public bool IsAccountEnabled { get; set; }
 
         /// <summary>
-        /// Sub account user active
+        /// ["<c>isUserActive</c>"] Whether the sub account user is active.
         /// </summary>
-        [JsonProperty("isUserActive")]
+        [JsonPropertyName("isUserActive")]
         public bool IsActive { get; set; }
 
         /// <summary>
-        /// The time the sub account was created
+        /// ["<c>insertTime</c>"] The time the sub account was created
         /// </summary>
-        [JsonProperty("insertTime"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("insertTime"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime CreateTime { get; set; }
 
         /// <summary>
-        /// Is Margin enabled
+        /// ["<c>isMarginEnabled</c>"] Whether margin is enabled.
         /// </summary>
-        [JsonProperty("isMarginEnabled")]
+        [JsonPropertyName("isMarginEnabled")]
         public bool IsMarginEnabled { get; set; }
 
         /// <summary>
-        /// Is Futures enabled
+        /// ["<c>isFutureEnabled</c>"] Whether futures is enabled.
         /// </summary>
-        [JsonProperty("isFutureEnabled")]
+        [JsonPropertyName("isFutureEnabled")]
         public bool IsFutureEnabled { get; set; }
 
         /// <summary>
-        /// User mobile number
+        /// ["<c>mobile</c>"] The user mobile number.
         /// </summary>
-        [JsonProperty("mobile")]
+        [JsonPropertyName("mobile")]
         public string? MobileNumber { get; set; }
     }
 }
+

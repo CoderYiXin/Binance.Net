@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.Mining
@@ -6,20 +5,24 @@ namespace Binance.Net.Objects.Models.Spot.Mining
     /// <summary>
     /// Revenue list
     /// </summary>
+    [SerializationModel]
     public record BinanceOtherRevenueList
     {
         /// <summary>
-        /// Total number of results
+        /// ["<c>totalNum</c>"] Total number of results
         /// </summary>
+        [JsonPropertyName("totalNum")]
         public int TotalNum { get; set; }
         /// <summary>
-        /// Page size
+        /// ["<c>pageSize</c>"] Page size
         /// </summary>
+        [JsonPropertyName("pageSize")]
         public int PageSize { get; set; }
         /// <summary>
-        /// Revenue items
+        /// ["<c>otherProfits</c>"] Revenue items
         /// </summary>
-        public IEnumerable<BinanceOtherRevenueItem> OtherProfits { get; set; } = Array.Empty<BinanceOtherRevenueItem>();
+        [JsonPropertyName("otherProfits")]
+        public BinanceOtherRevenueItem[] OtherProfits { get; set; } = Array.Empty<BinanceOtherRevenueItem>();
     }
 
     /// <summary>
@@ -28,29 +31,31 @@ namespace Binance.Net.Objects.Models.Spot.Mining
     public record BinanceOtherRevenueItem
     {
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Timestamp
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Coin
+        /// ["<c>coinName</c>"] Coin
         /// </summary>
-        [JsonProperty("coinName")]
+        [JsonPropertyName("coinName")]
         public string Coin { get; set; } = string.Empty;
         /// <summary>
-        /// Earning type
+        /// ["<c>type</c>"] Earning type
         /// </summary>
-        [JsonConverter(typeof(BinanceEarningTypeConverter))]
-        public BinanceEarningType Type { get; set; }
+        [JsonPropertyName("type")]
+        public EarningType Type { get; set; }
         /// <summary>
-        /// Profit quantity
+        /// ["<c>profitAmount</c>"] Profit quantity
         /// </summary>
-        [JsonProperty("profitAmount")]
+        [JsonPropertyName("profitAmount")]
         public decimal ProfitQuantity { get; set; }
         /// <summary>
-        /// Status
+        /// ["<c>status</c>"] Status
         /// </summary>
+        [JsonPropertyName("status")]
         public MinerStatus Status { get; set; }
     }
 }
+

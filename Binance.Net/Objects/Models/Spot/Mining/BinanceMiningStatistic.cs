@@ -1,49 +1,56 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Mining
+namespace Binance.Net.Objects.Models.Spot.Mining
 {
     /// <summary>
     /// Mining statistics
     /// </summary>
+    [SerializationModel]
     public record BinanceMiningStatistic
     {
         /// <summary>
-        /// Hashrate last fifteen minutes
+        /// ["<c>fifteenMinHashRate</c>"] Hashrate last fifteen minutes
         /// </summary>
-        [JsonProperty("fifteenMinHashRate")]
+        [JsonPropertyName("fifteenMinHashRate")]
         public decimal FifteenMinuteHashRate { get; set; }
         /// <summary>
-        /// Day hashrate
+        /// ["<c>dayHashRate</c>"] Day hashrate
         /// </summary>
+        [JsonPropertyName("dayHashRate")]
         public decimal DayHashRate { get; set; }
         /// <summary>
-        /// Valid shares
+        /// ["<c>validNum</c>"] Valid shares
         /// </summary>
-        [JsonProperty("validNum")]
+        [JsonPropertyName("validNum")]
         public int ValidShares { get; set; }
         /// <summary>
-        /// Invalid shares
+        /// ["<c>invalidNum</c>"] Invalid shares
         /// </summary>
-        [JsonProperty("invalidNum")]
+        [JsonPropertyName("invalidNum")]
         public int InvalidShares { get; set; }
         /// <summary>
-        /// Todays profit
+        /// ["<c>profitToday</c>"] Todays profit
         /// </summary>
+        [JsonPropertyName("profitToday")]
         public Dictionary<string, decimal> ProfitToday { get; set; } = new Dictionary<string, decimal>();
         /// <summary>
-        /// Yesterdays profit
+        /// ["<c>profitYesterday</c>"] Yesterdays profit
         /// </summary>
+        [JsonPropertyName("profitYesterday")]
         public Dictionary<string, decimal> ProfitYesterday { get; set; } = new Dictionary<string, decimal>();
         /// <summary>
-        /// User name
+        /// ["<c>userName</c>"] User name
         /// </summary>
+        [JsonPropertyName("userName")]
         public string UserName { get; set; } = string.Empty;
         /// <summary>
-        /// Hashrate unit
+        /// ["<c>unit</c>"] Hashrate unit
         /// </summary>
+        [JsonPropertyName("unit")]
         public string Unit { get; set; } = string.Empty;
         /// <summary>
-        /// Algorithm
+        /// ["<c>algo</c>"] Algorithm
         /// </summary>
-        [JsonProperty("algo")]
+        [JsonPropertyName("algo")]
         public string Algorithm { get; set; } = string.Empty;
     }
 }
+

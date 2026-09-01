@@ -1,29 +1,26 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Loans
+namespace Binance.Net.Objects.Models.Spot.Loans
 {
     /// <summary>
     /// Repay rate info
     /// </summary>
+    [SerializationModel]
     public record BinanceCryptoLoanRepayRate
     {
         /// <summary>
-        /// Loan asset
+        /// ["<c>loanCoin</c>"] The loan asset.
         /// </summary>
-        [JsonProperty("loanCoin")]
+        [JsonPropertyName("loanCoin")]
         public string LoanAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Collateral asset
+        /// ["<c>collateralCoin</c>"] The collateral asset.
         /// </summary>
-        [JsonProperty("collateralCoin")]
+        [JsonPropertyName("collateralCoin")]
         public string CollateralAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Repay quantity
+        /// ["<c>rate</c>"] Rate
         /// </summary>
-        [JsonProperty("repayAmount")]
-        public decimal RepayQuantity { get; set; }
-        /// <summary>
-        /// Rate
-        /// </summary>
-        [JsonProperty("rate")]
+        [JsonPropertyName("rate")]
         public decimal Rate { get; set; }
     }
 }
+

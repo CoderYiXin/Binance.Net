@@ -1,42 +1,44 @@
-﻿using Binance.Net.Interfaces;
+using Binance.Net.Enums;
+using Binance.Net.Interfaces;
 
 namespace Binance.Net.Objects.Models.Spot.Socket
 {
     /// <summary>
     /// MiniTick info
     /// </summary>
+    [SerializationModel]
     public abstract record BinanceStreamMiniTickBase : BinanceStreamEvent, IBinanceMiniTick
     {
         /// <summary>
-        /// The symbol this data is for
+        /// ["<c>s</c>"] The symbol this data is for
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// The current day close price. This is the latest price for this symbol.
+        /// ["<c>c</c>"] The current day close price. This is the latest price for this symbol.
         /// </summary>
-        [JsonProperty("c")]
+        [JsonPropertyName("c")]
         public decimal LastPrice { get; set; }
 
         /// <summary>
-        /// Todays open price
+        /// ["<c>o</c>"] Today's open price.
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public decimal OpenPrice { get; set; }
 
         /// <summary>
-        /// Todays high price
+        /// ["<c>h</c>"] Todays high price
         /// </summary>
-        [JsonProperty("h")]
+        [JsonPropertyName("h")]
         public decimal HighPrice { get; set; }
 
         /// <summary>
-        /// Todays low price
+        /// ["<c>l</c>"] Todays low price
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LowPrice { get; set; }
-        
+
         /// <summary>
         /// Total traded volume
         /// </summary>
@@ -46,37 +48,46 @@ namespace Binance.Net.Objects.Models.Spot.Socket
         /// Total traded quote volume
         /// </summary>
         public abstract decimal QuoteVolume { get; set; }
+
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
     }
 
     /// <summary>
     /// Stream mini tick
     /// </summary>
-    public record BinanceStreamMiniTick: BinanceStreamMiniTickBase
+    [SerializationModel]
+    public record BinanceStreamMiniTick : BinanceStreamMiniTickBase
     {
-        /// <inheritdoc/>
-        [JsonProperty("v")]
+        /// ["<c>v</c>"] <inheritdoc/>
+        [JsonPropertyName("v")]
         public override decimal Volume { get; set; }
-        /// <inheritdoc/>
-        [JsonProperty("q")]
+        /// ["<c>q</c>"] <inheritdoc/>
+        [JsonPropertyName("q")]
         public override decimal QuoteVolume { get; set; }
     }
 
     /// <summary>
     /// Stream mini tick
     /// </summary>
+    [SerializationModel]
     public record BinanceStreamCoinMiniTick : BinanceStreamMiniTickBase
     {
-        /// <inheritdoc/>
-        [JsonProperty("q")]
+        /// ["<c>q</c>"] <inheritdoc/>
+        [JsonPropertyName("q")]
         public override decimal Volume { get; set; }
-        /// <inheritdoc/>
-        [JsonProperty("v")]
+        /// ["<c>v</c>"] <inheritdoc/>
+        [JsonPropertyName("v")]
         public override decimal QuoteVolume { get; set; }
 
         /// <summary>
-        /// The pair
+        /// ["<c>ps</c>"] The pair
         /// </summary>
-        [JsonProperty("ps")]
+        [JsonPropertyName("ps")]
         public string Pair { get; set; } = string.Empty;
     }
 }
+

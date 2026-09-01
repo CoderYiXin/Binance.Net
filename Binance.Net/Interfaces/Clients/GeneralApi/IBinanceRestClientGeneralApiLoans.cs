@@ -10,163 +10,345 @@ namespace Binance.Net.Interfaces.Clients.GeneralApi
     public interface IBinanceRestClientGeneralApiLoans
     {
         /// <summary>
-        /// Get income history from crypto loans
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-crypto-loans-income-history-user_data" /></para>
+        /// Get LTV information and collateral limit of collateral assets. The collateral limit is shown in USD value.
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/market-data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/collateral/data
+        /// </para>
         /// </summary>
-        /// <param name="asset">The asset</param>
-        /// <param name="type">Filter by type of incoming</param>
-        /// <param name="startTime">Filter by startTime from</param>
-        /// <param name="endTime">Filter by endTime from</param>
-        /// <param name="limit">Limit of the amount of results</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<IEnumerable<BinanceCryptoLoanIncome>>> GetIncomeHistoryAsync(string asset, LoanIncomeType? type = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Take a crypto loan
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#borrow-crypto-loan-borrow-trade" /></para>
-        /// </summary>
-        /// <param name="loanAsset">Asset to loan</param>
-        /// <param name="collateralAsset">Collateral asset</param>
-        /// <param name="loanTerm">Loan term in days, 7/14/30/90/180</param>
-        /// <param name="loanQuantity">Quantity to loan in loan asset</param>
-        /// <param name="collateralQuantity">Quantity to loan in collateral asset</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceCryptoLoanBorrow>> BorrowAsync(string loanAsset, string collateralAsset, int loanTerm, decimal? loanQuantity = null, decimal? collateralQuantity = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get borrow order history
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#borrow-get-loan-borrow-history-user_data" /></para>
-        /// </summary>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="loanAsset">Filter by loan asset</param>
         /// <param name="collateralAsset">Filter by collateral asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="page">Page number</param>
-        /// <param name="limit">Page size</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanBorrowRecord>>> GetBorrowHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get ongoing loan orders
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#borrow-get-loan-ongoing-orders-user_data" /></para>
-        /// </summary>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="loanAsset">Filter by loan asset</param>
-        /// <param name="collateralAsset">Filter by collateral asset</param>
-        /// <param name="page">Page number</param>
-        /// <param name="limit">Page size</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanOpenBorrowOrder>>> GetOpenBorrowOrdersAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Repay a loan
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#repay-crypto-loan-repay-trade" /></para>
-        /// </summary>
-        /// <param name="orderId">Order id to repay</param>
-        /// <param name="quantity">Quantity to repay</param>
-        /// <param name="repayWithBorrowedAsset">True to repay with the borrowed asset, false to repay with collateral asset</param>
-        /// <param name="collateralReturn">Return extra colalteral to spot account</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceCryptoLoanRepay>> RepayAsync(long orderId, decimal quantity, bool? repayWithBorrowedAsset = null, bool? collateralReturn = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get loan repayment history
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#repay-get-loan-repayment-history-user_data" /></para>
-        /// </summary>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="loanAsset">Filter by loan asset</param>
-        /// <param name="collateralAsset">Filter by collateral asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="page">Page number</param>
-        /// <param name="limit">Page size</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanRepayRecord>>> GetRepayHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Adjust LTV for a loan
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#adjust-ltv-crypto-loan-adjust-ltv-trade" /></para>
-        /// </summary>
-        /// <param name="orderId">Order id</param>
-        /// <param name="quantity">Adjustment quantity</param>
-        /// <param name="addOrRmove">True for add, false to reduce</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceCryptoLoanLtvAdjust>> AdjustLTVAsync(long orderId, decimal quantity, bool addOrRmove, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get LTV adjustment history
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#adjust-ltv-get-loan-ltv-adjustment-history-user_data" /></para>
-        /// </summary>
-        /// <param name="orderId">Filter by order id</param>
-        /// <param name="loanAsset">Filter by loan asset</param>
-        /// <param name="collateralAsset">Filter by collateral asset</param>
-        /// <param name="startTime">Filter by start time</param>
-        /// <param name="endTime">Filter by end time</param>
-        /// <param name="page">Page number</param>
-        /// <param name="limit">Page size</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanLtvAdjustRecord>>> GetLtvAdjustHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+        /// <returns>Collateral assets with LTV and collateral limits</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanCollateralAsset>>> GetCollateralAssetsAsync(string? collateralAsset = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
         /// Get interest rate and borrow limit of loanable assets. The borrow limit is shown in USD value.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-loanable-assets-data-user_data-2" /></para>
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/market-data/Get-Flexible-Loan-Assets-Data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/loanable/data
+        /// </para>
         /// </summary>
         /// <param name="loanAsset">Filter by loan asset</param>
-        /// <param name="vipLevel">Vip level</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanAsset>>> GetLoanableAssetsAsync(string? loanAsset = null, int? vipLevel = null, long? receiveWindow = null, CancellationToken ct = default);
+        /// <returns>Loanable assets with interest rate and borrow limits</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanAsset>>> GetLoanableAssetsAsync(string? loanAsset = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Get LTV information and collateral limit of collateral assets. The collateral limit is shown in USD value.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#get-collateral-assets-data-user_data" /></para>
-        /// </summary>
-        /// <param name="collateralAsset">Filter by collateral asset</param>
-        /// <param name="vipLevel">Vip level</param>
-        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
-        /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanCollateralAsset>>> GetCollateralAssetsAsync(string? collateralAsset = null, int? vipLevel = null, long? receiveWindow = null, CancellationToken ct = default);
-
-        /// <summary>
-        /// Get the the rate of collateral coin / loan coin when using collateral repay, the rate will be valid within 8 second.
-        /// <para><a href="https://binance-docs.github.io/apidocs/spot/en/#check-collateral-repay-rate-user_data" /></para>
+        /// Borrows a flexible loan
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/trade" /><br />
+        /// Endpoint:<br />
+        /// POST /sapi/v2/loan/flexible/borrow
+        /// </para>
         /// </summary>
         /// <param name="loanAsset">Loan asset</param>
         /// <param name="collateralAsset">Collateral asset</param>
-        /// <param name="quantity">Quantity</param>
+        /// <param name="loanQuantity">Quantity to borrow in loan asset</param>
+        /// <param name="collateralQuantity">Collateral quantity to pledge</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceCryptoLoanRepayRate>> GetCollateralRepayRateAsync(string loanAsset, string collateralAsset, decimal quantity, long? receiveWindow = null, CancellationToken ct = default);
+        /// <returns>Borrow transaction result</returns>
+        Task<HttpResult<BinanceCryptoLoanBorrow>> BorrowAsync(string loanAsset, string collateralAsset, decimal? loanQuantity = null, decimal? collateralQuantity = null, long? receiveWindow = null, CancellationToken ct = default);
 
         /// <summary>
-        /// Customize margin call for ongoing orders only.
+        /// Repays a flexible loan
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/trade/Flexible-Loan-Repay" /><br />
+        /// Endpoint:<br />
+        /// POST /sapi/v2/loan/flexible/repay
+        /// </para>
         /// </summary>
-        /// <param name="marginCall">Margin call value</param>
-        /// <param name="orderId">Order id. Required if collateralAsset is not send</param>
-        /// <param name="collateralAsset">Collateral asset. Required if order id is not send</param>
+        /// <param name="loanAsset">Loan asset</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="quantity">Repay quantity in loan asset</param>
+        /// <param name="collateralReturn">Return extra collateral to spot account</param>
+        /// <param name="fullRepayment">Whether to fully repay the loan</param>
         /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
         /// <param name="ct">Cancellation token</param>
-        /// <returns></returns>
-        Task<WebCallResult<BinanceQueryRecords<BinanceCryptoLoanMarginCallResult>>> CustomizeMarginCallAsync(decimal marginCall, string? orderId = null, string? collateralAsset = null, long? receiveWindow = null, CancellationToken ct = default);
+        /// <returns>Repay transaction result</returns>
+        Task<HttpResult<BinanceCryptoLoanRepay>> RepayAsync(string loanAsset, string collateralAsset, decimal quantity, bool? collateralReturn = null, bool? fullRepayment = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Repays a flexible loan using collateral
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/trade/Flexible-Loan-Collateral-Repay" /><br />
+        /// Endpoint:<br />
+        /// POST /sapi/v2/loan/flexible/repay/collateral
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Loan asset</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="quantity">Repay quantity in collateral asset</param>
+        /// <param name="collateralReturn">Return extra collateral to spot account</param>
+        /// <param name="fullRepayment">Whether to fully repay the loan</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Repay transaction result</returns>
+        Task<HttpResult<BinanceCryptoLoanRepay>> RepayCollateralAsync(string loanAsset, string collateralAsset, decimal quantity, bool? collateralReturn = null, bool? fullRepayment = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Adjust LTV for a loan
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/trade/Flexible-Loan-Adjust-LTV" /><br />
+        /// Endpoint:<br />
+        /// POST /sapi/v2/loan/flexible/adjust/ltv
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Asset to loan</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="quantity">Adjustment quantity</param>
+        /// <param name="addOrRemove">True for add, false to reduce</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>LTV adjustment result</returns>
+        Task<HttpResult<BinanceCryptoLoanLtvAdjust>> AdjustLTVAsync(string loanAsset, string collateralAsset, decimal quantity, bool addOrRemove, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get flexible loan LTV adjustment history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/ltv/adjustment/history
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Loan asset</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Limit of the amount of results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Flexible loan LTV adjustment history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanFlexibleLtvAdjustRecord>>> GetFlexibleLtvAdjustHistoryAsync(string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get the latest rate of collateral coin/loan coin when using collateral repay.
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information/Check-Collateral-Repay-Rate" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/repay/rate
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Loan asset</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Collateral repay rate</returns>
+        Task<HttpResult<BinanceCryptoLoanRepayRate>> GetCollateralRepayRateAsync(string loanAsset, string collateralAsset, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get flexible borrow order history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information/Get-Flexible-Loan-Borrow-History" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/borrow/history
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Flexible borrow history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanFlexibleBorrowRecord>>> GetFlexibleBorrowHistoryAsync(string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get ongoing flexible loan orders
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information/Get-Flexible-Loan-Ongoing-Orders" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/ongoing/orders
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Open flexible borrow orders</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanOpenBorrowOrder>>> GetOpenBorrowOrdersAsync(string? loanAsset = null, string? collateralAsset = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get flexible loan liquidation history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information/Get-Flexible-Loan-Liquidation-History" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/liquidation/history
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Flexible loan liquidation history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanLiquidationRecord>>> GetLiquidationHistoryAsync(string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get flexible loan repayment history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/flexible-rate/user-information/Get-Flexible-Loan-Repayment-History" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v2/loan/flexible/repay/history
+        /// </para>
+        /// </summary>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Flexible loan repayment history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanFlexibleRepayRecord>>> GetFlexibleRepayHistoryAsync(string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get income history from stable crypto loans
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/stable-rate/market-data" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/loan/income
+        /// </para>
+        /// </summary>
+        /// <param name="asset">The asset</param>
+        /// <param name="type">Filter by income type</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="limit">Limit of the amount of results</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Loan income history</returns>
+        Task<HttpResult<BinanceCryptoLoanIncome[]>> GetIncomeHistoryAsync(string asset, LoanIncomeType? type = null, DateTime? startTime = null, DateTime? endTime = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get stable borrow order history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/stable-rate/user-information" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/loan/borrow/history
+        /// </para>
+        /// </summary>
+        /// <param name="orderId">Filter by order id</param>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Stable borrow history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanBorrowRecord>>> GetBorrowHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get LTV adjustment history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/stable-rate/user-information/Get-Loan-LTV-Adjustment-History" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/loan/ltv/adjustment/history
+        /// </para>
+        /// </summary>
+        /// <param name="orderId">Filter by order id</param>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>LTV adjustment history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanLtvAdjustRecord>>> GetLtvAdjustHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get stable loan repayment history
+        /// <para>
+        /// Docs:<br />
+        /// <a href="https://developers.binance.com/docs/crypto_loan/stable-rate/user-information/Get-Loan-Repayment-History" /><br />
+        /// Endpoint:<br />
+        /// GET /sapi/v1/loan/repay/history
+        /// </para>
+        /// </summary>
+        /// <param name="orderId">Filter by order id</param>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="startTime">Filter by start time</param>
+        /// <param name="endTime">Filter by end time</param>
+        /// <param name="page">Page number</param>
+        /// <param name="limit">Page size</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Stable loan repayment history</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanRepayRecord>>> GetRepayHistoryAsync(long? orderId = null, string? loanAsset = null, string? collateralAsset = null, DateTime? startTime = null, DateTime? endTime = null, int? page = null, int? limit = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get interest rate and borrow limit of loanable assets.
+        /// </summary>
+        /// <param name="loanAsset">Filter by loan asset</param>
+        /// <param name="vipLevel">VIP level filter</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Loanable assets with interest rate and borrow limits</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanAsset>>> GetLoanableAssetsAsync(string? loanAsset = null, int? vipLevel = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get LTV information and collateral limit of collateral assets.
+        /// </summary>
+        /// <param name="collateralAsset">Filter by collateral asset</param>
+        /// <param name="vipLevel">VIP level filter</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Collateral assets with LTV and collateral limits</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanCollateralAsset>>> GetCollateralAssetsAsync(string? collateralAsset = null, int? vipLevel = null, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Get the latest rate of collateral coin/loan coin when using collateral repay.
+        /// </summary>
+        /// <param name="loanAsset">Loan asset</param>
+        /// <param name="collateralAsset">Collateral asset</param>
+        /// <param name="quantity">Repay amount</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Collateral repay rate</returns>
+        Task<HttpResult<BinanceCryptoLoanRepayRate>> GetCollateralRepayRateAsync(string loanAsset, string collateralAsset, decimal quantity, long? receiveWindow = null, CancellationToken ct = default);
+
+        /// <summary>
+        /// Customize margin call (FULLY RETIRED)
+        /// </summary>
+        /// <param name="marginCall">Margin call value</param>
+        /// <param name="orderId">Order ID filter</param>
+        /// <param name="collateralAsset">Collateral asset filter</param>
+        /// <param name="receiveWindow">The receive window for which this request is active. When the request takes longer than this to complete the server will reject the request</param>
+        /// <param name="ct">Cancellation token</param>
+        /// <returns>Customized margin call records</returns>
+        Task<HttpResult<BinanceQueryRecords<BinanceCryptoLoanMarginCallResult>>> CustomizeMarginCallAsync(decimal marginCall, string? orderId = null, string? collateralAsset = null, long? receiveWindow = null, CancellationToken ct = default);
     }
 }

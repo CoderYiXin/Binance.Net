@@ -1,13 +1,16 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Rate limit info
     /// </summary>
-    public record BinanceCurrentRateLimit: BinanceRateLimit
+    [SerializationModel]
+    public record BinanceCurrentRateLimit : BinanceRateLimit
     {
         /// <summary>
-        /// The current used amount
+        /// ["<c>count</c>"] The currently used amount.
         /// </summary>
+        [JsonPropertyName("count")]
         public int Count { get; set; }
     }
 }
+

@@ -3,22 +3,26 @@
     /// <summary>
     /// Extension to be able to deserialize an error response as well
     /// </summary>
+    [SerializationModel]
     internal record BinanceFuturesMultipleOrderCancelResult : BinanceFuturesOrder
     {
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 
     /// <summary>
     /// Extension to be able to deserialize an error response as well
     /// </summary>
+    [SerializationModel]
     internal record BinanceUsdFuturesMultipleOrderCancelResult : BinanceUsdFuturesOrder
     {
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 }

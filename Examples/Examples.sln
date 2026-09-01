@@ -25,7 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleClient", "ConsoleCli
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebApi", "WebApi", "{39C7949D-D9DC-4E18-9B2E-4090D1565315}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Minimal WebApi", "Minimal WebApi\Minimal WebApi.csproj", "{19981783-B5E5-4A46-BC98-08ABF82EAED4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Minimal WebApi", "Minimal WebApi\Minimal WebApi.csproj", "{19981783-B5E5-4A46-BC98-08ABF82EAED4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binance.Net", "..\Binance.Net\Binance.Net.csproj", "{8C2483B9-6D2F-441E-AC30-1743B31CEA6D}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binance.Examples.OrderBook", "Binance.Examples.OrderBook\Binance.Examples.OrderBook.csproj", "{A369F38D-C3D2-4B4E-8517-5FD318AE65EA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binance.Examples.Tracker", "Binance.Examples.Tracker\Binance.Examples.Tracker.csproj", "{59561A93-D840-41DC-8A30-1428325CC562}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Binance.Examples.OrderPlacement", "Binance.Examples.OrderPlacement\Binance.Examples.OrderPlacement.csproj", "{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +69,22 @@ Global
 		{19981783-B5E5-4A46-BC98-08ABF82EAED4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19981783-B5E5-4A46-BC98-08ABF82EAED4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19981783-B5E5-4A46-BC98-08ABF82EAED4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C2483B9-6D2F-441E-AC30-1743B31CEA6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C2483B9-6D2F-441E-AC30-1743B31CEA6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C2483B9-6D2F-441E-AC30-1743B31CEA6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C2483B9-6D2F-441E-AC30-1743B31CEA6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A369F38D-C3D2-4B4E-8517-5FD318AE65EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A369F38D-C3D2-4B4E-8517-5FD318AE65EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A369F38D-C3D2-4B4E-8517-5FD318AE65EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A369F38D-C3D2-4B4E-8517-5FD318AE65EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59561A93-D840-41DC-8A30-1428325CC562}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59561A93-D840-41DC-8A30-1428325CC562}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59561A93-D840-41DC-8A30-1428325CC562}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59561A93-D840-41DC-8A30-1428325CC562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -73,6 +97,7 @@ Global
 		{A983FA47-119D-4DF0-B203-BC7CABAB059F} = {22A17980-2549-4799-8E1A-1F8381A755B1}
 		{13B01E63-9E0C-40BF-9988-7F22DDCDA9B8} = {04BE6C5B-66C2-4DC0-A850-731603BE8E80}
 		{19981783-B5E5-4A46-BC98-08ABF82EAED4} = {39C7949D-D9DC-4E18-9B2E-4090D1565315}
+		{56AD38A8-AF15-4634-8DF2-A8C6893A7AF5} = {04BE6C5B-66C2-4DC0-A850-731603BE8E80}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0FC03929-769B-4314-AF91-AF01E06278DD}

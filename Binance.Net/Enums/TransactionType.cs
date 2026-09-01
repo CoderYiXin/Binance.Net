@@ -3,6 +3,7 @@
     /// <summary>
     /// Transaction type
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<TransactionType>))]
     public enum TransactionType
     {
         /// <summary>

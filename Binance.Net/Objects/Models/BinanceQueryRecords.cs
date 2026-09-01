@@ -1,18 +1,22 @@
-﻿namespace Binance.Net.Objects.Models
+namespace Binance.Net.Objects.Models
 {
     /// <summary>
     /// Query results
     /// </summary>
     /// <typeparam name="T"></typeparam>
+    //[SerializationModel]
     public record BinanceQueryRecords<T>
     {
         /// <summary>
-        /// The list records
+        /// ["<c>rows</c>"] The list records
         /// </summary>
-        public IEnumerable<T> Rows { get; set; } = Array.Empty<T>();
+        [JsonPropertyName("rows")]
+        public T[] Rows { get; set; } = Array.Empty<T>();
         /// <summary>
-        /// The total count of the records
+        /// ["<c>total</c>"] The total count of the records
         /// </summary>
+        [JsonPropertyName("total")]
         public int Total { get; set; }
     }
 }
+

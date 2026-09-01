@@ -1,69 +1,192 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Locked product position info
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnLockedPosition
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Product asset.
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Position id
+        /// ["<c>positionId</c>"] Position id
         /// </summary>
-        [JsonProperty("positionId")]
+        [JsonPropertyName("positionId"), JsonConverter(typeof(NumberStringConverter))]
         public string PositionId { get; set; } = string.Empty;
         /// <summary>
-        /// Project id
+        /// ["<c>parentPositionId</c>"] Parent position identifier.
         /// </summary>
-        [JsonProperty("projectId")]
+        [JsonPropertyName("parentPositionId"), JsonConverter(typeof(NumberStringConverter))]
+        public string ParentPositionId { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>projectId</c>"] Project id
+        /// </summary>
+        [JsonPropertyName("projectId")]
         public string ProjectId { get; set; } = string.Empty;
         /// <summary>
-        /// Position quantity
+        /// ["<c>amount</c>"] Position quantity
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Purchase time
+        /// ["<c>purchaseTime</c>"] Purchase time
         /// </summary>
-        [JsonProperty("purchaseTime"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("purchaseTime"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime? PurchaseTime { get; set; }
         /// <summary>
-        /// Duration in days
+        /// ["<c>duration</c>"] Duration in days
         /// </summary>
-        [JsonProperty("duration")]
+        [JsonPropertyName("duration")]
         public int Duration { get; set; }
         /// <summary>
-        /// Accrual days
+        /// ["<c>accrualDays</c>"] Accrual days
         /// </summary>
-        [JsonProperty("accrualDays")]
+        [JsonPropertyName("accrualDays")]
         public int AccrualDays { get; set; }
         /// <summary>
-        /// Reward asset
+        /// ["<c>rewardAsset</c>"] Reward asset
         /// </summary>
-        [JsonProperty("rewardAsset")]
+        [JsonPropertyName("rewardAsset")]
         public string RewardAsset { get; set; } = string.Empty;
         /// <summary>
-        /// APY
+        /// ["<c>APY</c>"] APY
         /// </summary>
-        [JsonProperty("APY")]
+        [JsonPropertyName("APY")]
         public decimal APY { get; set; }
         /// <summary>
-        /// Is renewable
+        /// ["<c>isRenewable</c>"] Is renewable
         /// </summary>
-        [JsonProperty("isRenewable")]
+        [JsonPropertyName("isRenewable")]
         public bool IsRenewable { get; set; }
         /// <summary>
-        /// Is auto renew enabled
+        /// ["<c>isAutoRenew</c>"] Is auto renew enabled
         /// </summary>
-        [JsonProperty("isAutoRenew")]
+        [JsonPropertyName("isAutoRenew")]
         public bool IsAutoRenew { get; set; }
         /// <summary>
-        /// Redeem date
+        /// ["<c>redeemDate</c>"] Redeem date
         /// </summary>
-        [JsonProperty("redeemDate"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("redeemDate"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime? RedeemDate { get; set; }
+        /// <summary>
+        /// ["<c>rewardAmt</c>"] Reward quantity
+        /// </summary>
+        [JsonPropertyName("rewardAmt")]
+        public decimal RewardQuantity { get; set; }
+        /// <summary>
+        /// ["<c>extraRewardAsset</c>"] Extra reward asset
+        /// </summary>
+        [JsonPropertyName("extraRewardAsset")]
+        public string ExtraRewardAsset { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>extraRewardAPR</c>"] Extra reward APR
+        /// </summary>
+        [JsonPropertyName("extraRewardAPR")]
+        public decimal ExtraRewardApr { get; set; }
+        /// <summary>
+        /// ["<c>estExtraRewardAmt</c>"] Estimated extra reward quantity
+        /// </summary>
+        [JsonPropertyName("estExtraRewardAmt")]
+        public decimal EstimatedExtraRewardQuantity { get; set; }
+
+        /// <summary>
+        /// ["<c>boostRewardAsset</c>"] Asset the boost reward is in
+        /// </summary>
+        [JsonPropertyName("boostRewardAsset")]
+        public string? BoostRewardAsset { get; set; }
+        /// <summary>
+        /// ["<c>boostApr</c>"] Boost apr
+        /// </summary>
+        [JsonPropertyName("boostApr")]
+        public decimal? BoostApr { get; set; }
+        /// <summary>
+        /// ["<c>totalBoostRewardAmt</c>"] Total boost reward quantity
+        /// </summary>
+        [JsonPropertyName("totalBoostRewardAmt")]
+        public decimal? TotalBoostRewardQuantity { get; set; }
+        /// <summary>
+        /// ["<c>nextPay</c>"] Estimated quantity of next payment
+        /// </summary>
+        [JsonPropertyName("nextPay")]
+        public decimal? EstimatedNextPayQuantity { get; set; }
+        /// <summary>
+        /// ["<c>nextPayDate</c>"] Next pay time
+        /// </summary>
+        [JsonPropertyName("nextPayDate")]
+        public DateTime? NextPayTime { get; set; }
+        /// <summary>
+        /// ["<c>payPeriod</c>"] Payment cycle
+        /// </summary>
+        [JsonPropertyName("payPeriod")]
+        public string? PaymentPeriod { get; set; }
+        /// <summary>
+        /// ["<c>redeemAmountEarly</c>"] Early redemption quantity
+        /// </summary>
+        [JsonPropertyName("redeemAmountEarly")]
+        public decimal? EarlyRedemptionQuantity { get; set; }
+        /// <summary>
+        /// ["<c>rewardsEndDate</c>"] Rewards accrual end time
+        /// </summary>
+        [JsonPropertyName("rewardsEndDate")]
+        public DateTime? RewardsEndTime { get; set; }
+        /// <summary>
+        /// ["<c>deliverDate</c>"] Redemption arrival time
+        /// </summary>
+        [JsonPropertyName("deliverDate")]
+        public DateTime? DeliverTime { get; set; }
+        /// <summary>
+        /// ["<c>redeemPeriod</c>"] Redeem period
+        /// </summary>
+        [JsonPropertyName("redeemPeriod")]
+        public string? RedeemPeriod { get; set; }
+        /// <summary>
+        /// ["<c>redeemingAmt</c>"] Quantity under redemption
+        /// </summary>
+        [JsonPropertyName("redeemingAmt")]
+        public decimal? RedemptionQuantity { get; set; }
+        /// <summary>
+        /// ["<c>redeemTo</c>"] Redeem target account
+        /// </summary>
+        [JsonPropertyName("redeemTo")]
+        public string? RedeemTo { get; set; }
+        /// <summary>
+        /// ["<c>partialAmtDeliverDate</c>"] Arrival time of partial redemption amount of order
+        /// </summary>
+        [JsonPropertyName("partialAmtDeliverDate")]
+        public DateTime? PartialRedemptionDeliverTime { get; set; }
+        /// <summary>
+        /// ["<c>canRedeemEarly</c>"] Can redeem early
+        /// </summary>
+        [JsonPropertyName("canRedeemEarly")]
+        public bool? CanRedeemEarly { get; set; }
+        /// <summary>
+        /// ["<c>canFastRedemption</c>"] Can fast redeem
+        /// </summary>
+        [JsonPropertyName("canFastRedemption")]
+        public bool? CanFastRedeem { get; set; }
+        /// <summary>
+        /// ["<c>autoSubscribe</c>"] Auto subscribe is enabled
+        /// </summary>
+        [JsonPropertyName("autoSubscribe")]
+        public bool? AutoSubscribe { get; set; }
+        /// <summary>
+        /// ["<c>type</c>"] Auto subscribe or normal
+        /// </summary>
+        [JsonPropertyName("type")]
+        public string? OrderType { get; set; }
+        /// <summary>
+        /// ["<c>status</c>"] Status
+        /// </summary>
+        [JsonPropertyName("status")]
+        public string? Status { get; set; }
+        /// <summary>
+        /// ["<c>canReStake</c>"] Can restake
+        /// </summary>
+        [JsonPropertyName("canReStake")]
+        public bool? CanRestake { get; set; }
     }
 }
+

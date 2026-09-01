@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,42 +5,46 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Result of the margin change history request
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesMarginChangeHistoryResult
     {
         /// <summary>
-        /// Request quantity of margin used
+        /// ["<c>amount</c>"] The requested margin change quantity.
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Base asset used for margin
+        /// ["<c>asset</c>"] The margin asset.
         /// </summary>
+        [JsonPropertyName("asset")]
         public string? Asset { get; set; }
         /// <summary>
-        /// Symbol margin is placed on
+        /// ["<c>symbol</c>"] The symbol the margin change applies to.
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string? Symbol { get; set; }
         /// <summary>
-        /// Delta type
+        /// ["<c>deltaType</c>"] Delta type
         /// </summary>
-        [JsonProperty("deltaType")]
+        [JsonPropertyName("deltaType")]
         public string? DeltaType { get; set; }
         /// <summary>
-        /// Time of the margin change request
+        /// ["<c>time</c>"] The margin change request time.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
-        [JsonProperty("time")]
+        [JsonPropertyName("time")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Direction of the margin change request
+        /// ["<c>type</c>"] The margin change direction.
         /// </summary>
-        [JsonConverter(typeof(FuturesMarginChangeDirectionTypeConverter))]
+        [JsonPropertyName("type")]
         public FuturesMarginChangeDirectionType Type { get; set; }
         /// <summary>
-        /// Position side
+        /// ["<c>positionSide</c>"] Position side
         /// </summary>
-        [JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("positionSide")]
         public PositionSide PositionSide { get; set; }
     }
 
 }
+

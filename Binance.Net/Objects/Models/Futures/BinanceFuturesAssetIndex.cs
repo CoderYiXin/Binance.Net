@@ -1,58 +1,66 @@
-﻿namespace Binance.Net.Objects.Models.Futures
+namespace Binance.Net.Objects.Models.Futures
 {
     /// <summary>
     /// Futures asset index
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesAssetIndex
     {
         /// <summary>
-        /// The symbol
+        /// ["<c>symbol</c>"] The symbol
         /// </summary>
+        [JsonPropertyName("symbol")]
         public string Symbol { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Timestamp
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Index
+        /// ["<c>index</c>"] Index
         /// </summary>
+        [JsonPropertyName("index")]
         public decimal Index { get; set; }
         /// <summary>
-        /// Bid buffer
+        /// ["<c>bidBuffer</c>"] Bid buffer
         /// </summary>
+        [JsonPropertyName("bidBuffer")]
         public decimal BidBuffer { get; set; }
         /// <summary>
-        /// Ask buffer
+        /// ["<c>askBuffer</c>"] Ask buffer
         /// </summary>
+        [JsonPropertyName("askBuffer")]
         public decimal AskBuffer { get; set; }
         /// <summary>
-        /// Bid price
+        /// ["<c>bidRate</c>"] Bid price
         /// </summary>
-        [JsonProperty("bidRate")]
+        [JsonPropertyName("bidRate")]
         public decimal BidPrice { get; set; }
         /// <summary>
-        /// Ask price
+        /// ["<c>askRate</c>"] Ask price
         /// </summary>
-        [JsonProperty("askRate")]
+        [JsonPropertyName("askRate")]
         public decimal AskPrice { get; set; }
         /// <summary>
-        /// Auto exchange bid buffer
+        /// ["<c>autoExchangeBidBuffer</c>"] Auto exchange bid buffer
         /// </summary>
+        [JsonPropertyName("autoExchangeBidBuffer")]
         public decimal AutoExchangeBidBuffer { get; set; }
         /// <summary>
-        /// Auto exchange ask buffer
+        /// ["<c>autoExchangeAskBuffer</c>"] Auto exchange ask buffer
         /// </summary>
+        [JsonPropertyName("autoExchangeAskBuffer")]
         public decimal AutoExchangeAskBuffer { get; set; }
         /// <summary>
-        /// Auto exchange bid price
+        /// ["<c>autoExchangeBidRate</c>"] Auto exchange bid price
         /// </summary>
-        [JsonProperty("autoExchangeBidRate")]
+        [JsonPropertyName("autoExchangeBidRate")]
         public decimal AutoExchangeBidPrice { get; set; }
         /// <summary>
-        /// Auto exchange ask price
+        /// ["<c>autoExchangeAskRate</c>"] Auto exchange ask price
         /// </summary>
-        [JsonProperty("autoExchangeAskRate")]
+        [JsonPropertyName("autoExchangeAskRate")]
         public decimal AutoExchangeAskPrice { get; set; }
     }
 }
+

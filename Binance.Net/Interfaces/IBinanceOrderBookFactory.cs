@@ -1,11 +1,12 @@
 ﻿using Binance.Net.Objects.Options;
+using CryptoExchange.Net.SharedApis;
 
 namespace Binance.Net.Interfaces
 {
     /// <summary>
     /// Binance order book factory
     /// </summary>
-    public interface IBinanceOrderBookFactory
+    public interface IBinanceOrderBookFactory: IExchangeService
     {
         /// <summary>
         /// Spot order book factory methods
@@ -19,6 +20,14 @@ namespace Binance.Net.Interfaces
         /// Coin Futures order book factory methods
         /// </summary>
         public IOrderBookFactory<BinanceOrderBookOptions> CoinFutures { get; }
+
+        /// <summary>
+        /// Create a SymbolOrderBook for the symbol
+        /// </summary>
+        /// <param name="symbol">The symbol</param>
+        /// <param name="options">Book options</param>
+        /// <returns></returns>
+        ISymbolOrderBook Create(SharedSymbol symbol, Action<BinanceOrderBookOptions>? options = null);
 
         /// <summary>
         /// Create a Spot SymbolOrderBook

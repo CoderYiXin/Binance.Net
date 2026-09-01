@@ -1,17 +1,29 @@
-﻿namespace Binance.Net.Objects.Models.Futures.AlgoOrders
+using Binance.Net.Converters;
+
+namespace Binance.Net.Objects.Models.Futures.AlgoOrders
 {
     /// <summary>
     /// Algo order result
     /// </summary>
-    public record BinanceAlgoResult: BinanceResult
+    [SerializationModel]
+    public record BinanceAlgoResult : BinanceResult
     {
         /// <summary>
-        /// Algo order id
+        /// ["<c>algoId</c>"] Algo order id
         /// </summary>
+        [JsonPropertyName("algoId")]
         public long AlgoId { get; set; }
         /// <summary>
-        /// Successful
+        /// ["<c>clientAlgoId</c>"] Client order id
         /// </summary>
+        [JsonPropertyName("clientAlgoId")]
+        [JsonConverter(typeof(ClientOrderIdReplaceConverter))]
+        public string? ClientAlgoId { get; set; }
+        /// <summary>
+        /// ["<c>success</c>"] Successful
+        /// </summary>
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
     }
 }
+

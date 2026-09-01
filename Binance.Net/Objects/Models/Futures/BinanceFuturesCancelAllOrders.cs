@@ -3,18 +3,20 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// The result of cancel all orders
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesCancelAllOrders
     {
         /// <summary>
-        /// The execution code
+        /// ["<c>code</c>"] The execution code
         /// </summary>
-        [JsonProperty("code")]
+        [JsonPropertyName("code")]
         public int Code { get; set; }
 
         /// <summary>
-        /// The execution message
+        /// ["<c>msg</c>"] The execution message
         /// </summary>
-        [JsonProperty("msg")]
+        [JsonPropertyName("msg")]
         public string Message { get; set; } = string.Empty;
     }
 }
+

@@ -3,22 +3,24 @@ namespace Binance.Net.Objects.Models.Spot
     /// <summary>
     /// Current average price details for a symbol.
     /// </summary>
+    [SerializationModel]
     public record BinanceAveragePrice
     {
         /// <summary>
-        /// Duration in minutes
+        /// ["<c>mins</c>"] Averaging duration in minutes.
         /// </summary>
-        [JsonProperty("mins")]
+        [JsonPropertyName("mins")]
         public int Minutes { get; set; }
         /// <summary>
-        /// The average price
+        /// ["<c>price</c>"] The average price
         /// </summary>
-        [JsonProperty("price")]
+        [JsonPropertyName("price")]
         public decimal Price { get; set; }
         /// <summary>
-        /// The last trade time
+        /// ["<c>closeTime</c>"] The last trade time
         /// </summary>
-        [JsonProperty("closeTime"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("closeTime"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime LastTradeTime { get; set; }
     }
 }
+

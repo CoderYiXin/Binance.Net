@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures.Socket
@@ -6,18 +5,19 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// Margin update
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamMarginUpdate : BinanceStreamEvent
     {
         /// <summary>
-        /// Cross Wallet Balance. Only pushed with crossed position margin call
+        /// ["<c>cw</c>"] Cross Wallet Balance. Only pushed with crossed position margin call
         /// </summary>
-        [JsonProperty("cw")]
+        [JsonPropertyName("cw")]
         public decimal? CrossWalletBalance { get; set; }
         /// <summary>
-        /// Positions
+        /// ["<c>p</c>"] Positions
         /// </summary>
-        [JsonProperty("p")]
-        public IEnumerable<BinanceFuturesStreamMarginPosition> Positions { get; set; } = Array.Empty<BinanceFuturesStreamMarginPosition>();
+        [JsonPropertyName("p")]
+        public BinanceFuturesStreamMarginPosition[] Positions { get; set; } = Array.Empty<BinanceFuturesStreamMarginPosition>();
 
         /// <summary>
         /// The listen key the update was for
@@ -31,51 +31,52 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     public record BinanceFuturesStreamMarginPosition
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>s</c>"] Symbol
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Position Side
+        /// ["<c>ps</c>"] Position Side
         /// </summary>
-        [JsonProperty("ps"), JsonConverter(typeof(PositionSideConverter))]
+        [JsonPropertyName("ps")]
         public PositionSide PositionSide { get; set; }
 
         /// <summary>
-        /// Position quantity
+        /// ["<c>pa</c>"] Position quantity
         /// </summary>
-        [JsonProperty("pa")]
+        [JsonPropertyName("pa")]
         public decimal PositionQuantity { get; set; }
 
         /// <summary>
-        /// Margin type
+        /// ["<c>mt</c>"] Margin type
         /// </summary>
-        [JsonProperty("mt"), JsonConverter(typeof(FuturesMarginTypeConverter))]
+        [JsonPropertyName("mt")]
         public FuturesMarginType MarginType { get; set; }
 
         /// <summary>
-        /// Isolated Wallet (if isolated position)
+        /// ["<c>iw</c>"] Isolated Wallet (if isolated position)
         /// </summary>
-        [JsonProperty("iw")]
+        [JsonPropertyName("iw")]
         public decimal IsolatedWallet { get; set; }
 
         /// <summary>
-        /// Mark Price
+        /// ["<c>mp</c>"] Mark Price
         /// </summary>
-        [JsonProperty("mp")]
+        [JsonPropertyName("mp")]
         public decimal MarkPrice { get; set; }
 
         /// <summary>
-        /// Unrealized PnL
+        /// ["<c>up</c>"] Unrealized PnL
         /// </summary>
-        [JsonProperty("up")]
+        [JsonPropertyName("up")]
         public decimal UnrealizedPnl { get; set; }
 
         /// <summary>
-        /// Maintenance Margin Required
+        /// ["<c>mm</c>"] Maintenance Margin Required
         /// </summary>
-        [JsonProperty("mm")]
+        [JsonPropertyName("mm")]
         public decimal MaintMargin { get; set; }
     }
 }
+

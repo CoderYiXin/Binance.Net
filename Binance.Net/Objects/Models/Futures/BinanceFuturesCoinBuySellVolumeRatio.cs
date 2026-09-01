@@ -1,4 +1,3 @@
-﻿using Binance.Net.Converters;
 using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Futures
@@ -6,41 +5,45 @@ namespace Binance.Net.Objects.Models.Futures
     /// <summary>
     /// Buy/sell volume ratio
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesCoinBuySellVolumeRatio
     {
         /// <summary>
-        /// The pair
+        /// ["<c>pair</c>"] The futures pair.
         /// </summary>
+        [JsonPropertyName("pair")]
         public string Pair { get; set; } = string.Empty;
         /// <summary>
-        /// Contract type
+        /// ["<c>contractType</c>"] Contract type
         /// </summary>
-        [JsonConverter(typeof(ContractTypeConverter))]
+        [JsonPropertyName("contractType")]
         public ContractType ContractType { get; set; }
         /// <summary>
-        /// The taker buy volume
+        /// ["<c>takerBuyVol</c>"] The taker buy volume
         /// </summary>
-        [JsonProperty("takerBuyVol")]
+        [JsonPropertyName("takerBuyVol")]
         public decimal TakerBuyVolume { get; set; }
         /// <summary>
-        /// The taker sell volume
+        /// ["<c>takerSellVol</c>"] The taker sell volume
         /// </summary>
-        [JsonProperty("takerSellVol")]
+        [JsonPropertyName("takerSellVol")]
         public decimal TakerSellVolume { get; set; }
         /// <summary>
-        /// The taker buy value
+        /// ["<c>takerBuyVolValue</c>"] The taker buy value
         /// </summary>
-        [JsonProperty("takerBuyVolValue")]
+        [JsonPropertyName("takerBuyVolValue")]
         public decimal TakerBuyVolumeValue { get; set; }
         /// <summary>
-        /// The taker sell value
+        /// ["<c>takerSellVolValue</c>"] The taker sell value
         /// </summary>
-        [JsonProperty("takerSellVolValue")]
+        [JsonPropertyName("takerSellVolValue")]
         public decimal TakerSellVolumeValue { get; set; }
         /// <summary>
-        /// Data timestamp
+        /// ["<c>timestamp</c>"] The data timestamp.
         /// </summary>
         [JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("timestamp")]
         public DateTime Timestamp { get; set; }
     }
 }
+

@@ -1,17 +1,23 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// The direction to change futures margin
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<FuturesMarginChangeDirectionType>))]
     public enum FuturesMarginChangeDirectionType
     {
         /// <summary>
-        /// Add margin
+        /// ["<c>1</c>"] Add margin
         /// </summary>
+        [Map("1")]
         Add,
         /// <summary>
-        /// Reduce Margin
+        /// ["<c>2</c>"] Reduce Margin
         /// </summary>
+        [Map("2")]
         Reduce
     }
 }
+

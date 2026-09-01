@@ -2,6 +2,7 @@
 using Binance.Net.Interfaces.Clients;
 using Binance.Net.Objects.Options;
 using CryptoExchange.Net.OrderBook;
+using CryptoExchange.Net.SharedApis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Binance.Net.SymbolOrderBooks
@@ -13,6 +14,9 @@ namespace Binance.Net.SymbolOrderBooks
     {
         private readonly IServiceProvider _serviceProvider;
 
+        /// <inheritdoc />
+        public string ExchangeName => BinanceExchange.ExchangeName;
+
         /// <summary>
         /// ctor
         /// </summary>
@@ -21,9 +25,9 @@ namespace Binance.Net.SymbolOrderBooks
         {
             _serviceProvider = serviceProvider;
 
-            Spot = new OrderBookFactory<BinanceOrderBookOptions>((symbol, options) => CreateSpot(symbol, options), (baseAsset, quoteAsset, options) => CreateSpot(baseAsset + quoteAsset, options));
-            UsdFutures = new OrderBookFactory<BinanceOrderBookOptions>((symbol, options) => CreateUsdtFutures(symbol, options), (baseAsset, quoteAsset, options) => CreateUsdtFutures(baseAsset + quoteAsset, options));
-            CoinFutures = new OrderBookFactory<BinanceOrderBookOptions>((symbol, options) => CreateCoinFutures(symbol, options), (baseAsset, quoteAsset, options) => CreateCoinFutures(baseAsset + quoteAsset, options));
+            Spot = new OrderBookFactory<BinanceOrderBookOptions>(CreateSpot, Create);
+            UsdFutures = new OrderBookFactory<BinanceOrderBookOptions>(CreateUsdtFutures, Create);
+            CoinFutures = new OrderBookFactory<BinanceOrderBookOptions>(CreateCoinFutures, Create);
         }
 
         /// <inheritdoc />
@@ -34,6 +38,18 @@ namespace Binance.Net.SymbolOrderBooks
         public IOrderBookFactory<BinanceOrderBookOptions> CoinFutures { get; }
 
         /// <inheritdoc />
+        public ISymbolOrderBook Create(SharedSymbol symbol, Action<BinanceOrderBookOptions>? options = null)
+        {
+            var symbolName = symbol.GetSymbol(BinanceExchange.FormatSymbol);
+            if (symbol.TradingMode == TradingMode.Spot)
+                return CreateSpot(symbolName, options);
+            if (symbol.TradingMode.IsLinear())
+                return CreateUsdtFutures(symbolName, options);
+
+            return CreateCoinFutures(symbolName, options);
+        }
+
+        /// <inheritdoc />
         public ISymbolOrderBook CreateSpot(string symbol, Action<BinanceOrderBookOptions>? options = null)
             => new BinanceSpotSymbolOrderBook(symbol,
                                              options,
@@ -41,7 +57,7 @@ namespace Binance.Net.SymbolOrderBooks
                                              _serviceProvider.GetRequiredService<IBinanceRestClient>(),
                                              _serviceProvider.GetRequiredService<IBinanceSocketClient>());
 
-        
+
         /// <inheritdoc />
         public ISymbolOrderBook CreateUsdtFutures(string symbol, Action<BinanceOrderBookOptions>? options = null)
             => new BinanceFuturesUsdtSymbolOrderBook(symbol,
@@ -50,7 +66,7 @@ namespace Binance.Net.SymbolOrderBooks
                                              _serviceProvider.GetRequiredService<IBinanceRestClient>(),
                                              _serviceProvider.GetRequiredService<IBinanceSocketClient>());
 
-        
+
         /// <inheritdoc />
         public ISymbolOrderBook CreateCoinFutures(string symbol, Action<BinanceOrderBookOptions>? options = null)
             => new BinanceFuturesCoinSymbolOrderBook(symbol,

@@ -1,36 +1,38 @@
-﻿using Binance.Net.Enums;
+using Binance.Net.Enums;
 
 namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Simple Earn flexible product reward record
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnFlexibleRewardRecord
     {
         /// <summary>
-        /// Asset
+        /// ["<c>asset</c>"] Reward asset.
         /// </summary>
-        [JsonProperty("asset")]
+        [JsonPropertyName("asset")]
         public string Asset { get; set; } = string.Empty;
         /// <summary>
-        /// Project id
+        /// ["<c>projectId</c>"] Project id
         /// </summary>
-        [JsonProperty("projectId")]
+        [JsonPropertyName("projectId")]
         public string ProjectId { get; set; } = string.Empty;
         /// <summary>
-        /// Rewards
+        /// ["<c>rewards</c>"] Rewards
         /// </summary>
-        [JsonProperty("rewards")]
+        [JsonPropertyName("rewards")]
         public decimal Rewards { get; set; }
         /// <summary>
-        /// Reward type
+        /// ["<c>type</c>"] Reward type
         /// </summary>
-        [JsonProperty("type"), JsonConverter(typeof(EnumConverter))]
+        [JsonPropertyName("type")]
         public RewardType Type { get; set; }
         /// <summary>
-        /// Timestamp
+        /// ["<c>time</c>"] Reward timestamp.
         /// </summary>
-        [JsonProperty("time"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("time"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
     }
 }
+

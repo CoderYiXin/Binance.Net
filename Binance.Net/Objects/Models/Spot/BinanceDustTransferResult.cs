@@ -1,24 +1,26 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Result of dust transfer
     /// </summary>
+    [SerializationModel]
     public record BinanceDustTransferResult
     {
         /// <summary>
-        /// Total service charge
+        /// ["<c>totalServiceCharge</c>"] Total service charge
         /// </summary>
-        [JsonProperty("totalServiceCharge")]
+        [JsonPropertyName("totalServiceCharge")]
         public decimal TotalServiceCharge { get; set; }
         /// <summary>
-        /// Total transferred
+        /// ["<c>totalTransfered</c>"] Total transferred
         /// </summary>
-        [JsonProperty("totalTransfered")]
+        [JsonPropertyName("totalTransfered")]
         public decimal TotalTransferred { get; set; }
         /// <summary>
-        /// Transfer entries
+        /// ["<c>transferResult</c>"] Transfer entries
         /// </summary>
-        public IEnumerable<BinanceDustTransferResultEntry> TransferResult { get; set; } = Array.Empty<BinanceDustTransferResultEntry>();
+        [JsonPropertyName("transferResult")]
+        public BinanceDustTransferResultEntry[] TransferResult { get; set; } = Array.Empty<BinanceDustTransferResultEntry>();
     }
 
     /// <summary>
@@ -27,33 +29,35 @@
     public record BinanceDustTransferResultEntry
     {
         /// <summary>
-        /// Quantity of dust
+        /// ["<c>amount</c>"] Quantity of dust
         /// </summary>
-        [JsonProperty("amount")]
+        [JsonPropertyName("amount")]
         public decimal Quantity { get; set; }
         /// <summary>
-        /// Asset
+        /// ["<c>fromAsset</c>"] The source asset.
         /// </summary>
+        [JsonPropertyName("fromAsset")]
         public string FromAsset { get; set; } = string.Empty;
         /// <summary>
-        /// Timestamp of conversion
+        /// ["<c>operateTime</c>"] Timestamp of conversion
         /// </summary>
-        [JsonConverter(typeof(DateTimeConverter)), JsonProperty("operateTime")]
+        [JsonConverter(typeof(DateTimeConverter)), JsonPropertyName("operateTime")]
         public DateTime Timestamp { get; set; }
         /// <summary>
-        /// Service charge
+        /// ["<c>serviceChargeAmount</c>"] Service charge
         /// </summary>
-        [JsonProperty("serviceChargeAmount")]
+        [JsonPropertyName("serviceChargeAmount")]
         public decimal ServiceChargeQuantity { get; set; }
         /// <summary>
-        /// Transaction id
+        /// ["<c>tranId</c>"] Transaction id
         /// </summary>
-        [JsonProperty("tranId")]
+        [JsonPropertyName("tranId")]
         public long TransactionId { get; set; }
         /// <summary>
-        /// BNB result quantity
+        /// ["<c>transferedAmount</c>"] BNB result quantity
         /// </summary>
-        [JsonProperty("transferedAmount")]
+        [JsonPropertyName("transferedAmount")]
         public decimal TransferredQuantity { get; set; }
     }
 }
+

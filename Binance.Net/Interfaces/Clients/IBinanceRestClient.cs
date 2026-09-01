@@ -2,35 +2,35 @@
 using Binance.Net.Interfaces.Clients.GeneralApi;
 using Binance.Net.Interfaces.Clients.SpotApi;
 using Binance.Net.Interfaces.Clients.UsdFuturesApi;
+using CryptoExchange.Net.Interfaces.Clients;
+using CryptoExchange.Net.Objects.Options;
 
 namespace Binance.Net.Interfaces.Clients
 {
     /// <summary>
     /// Client for accessing the Binance Rest API. 
     /// </summary>
-    public interface IBinanceRestClient: IRestClient
+    public interface IBinanceRestClient : IRestClient<BinanceCredentials>
     {
         /// <summary>
         /// General API endpoints
         /// </summary>
+        /// <see cref="IBinanceRestClientGeneralApi"/>
         IBinanceRestClientGeneralApi GeneralApi { get; }
         /// <summary>
         /// Coin futures API endpoints
         /// </summary>
+        /// <see cref="IBinanceRestClientCoinFuturesApi"/>
         IBinanceRestClientCoinFuturesApi CoinFuturesApi { get; }
         /// <summary>
         /// Spot API endpoints
         /// </summary>
+        /// <see cref="IBinanceRestClientSpotApi"/>
         IBinanceRestClientSpotApi SpotApi { get; }
         /// <summary>
         /// Usd futures API endpoints
         /// </summary>
+        /// <see cref="IBinanceRestClientUsdFuturesApi"/>
         IBinanceRestClientUsdFuturesApi UsdFuturesApi { get; }
-
-        /// <summary>
-        /// Set the API credentials for this client. All Api clients in this client will use the new credentials, regardless of earlier set options.
-        /// </summary>
-        /// <param name="credentials">The credentials to set</param>
-        void SetApiCredentials(ApiCredentials credentials);
     }
 }

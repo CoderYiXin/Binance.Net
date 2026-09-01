@@ -1,4 +1,3 @@
-using Binance.Net.Converters;
 using Binance.Net.Enums;
 using Binance.Net.Interfaces;
 
@@ -7,84 +6,92 @@ namespace Binance.Net.Objects.Models.Futures.Socket
     /// <summary>
     /// A event received by a Binance websocket
     /// </summary>
+    [SerializationModel]
     public record BinanceFuturesStreamLiquidationData : BinanceStreamEvent
     {
         /// <summary>
-        /// The data of the event
+        /// ["<c>o</c>"] The data of the event
         /// </summary>
-        [JsonProperty("o")]
+        [JsonPropertyName("o")]
         public BinanceFuturesStreamLiquidation Data { get; set; } = default!;
     }
 
     /// <summary>
-    /// 
+    /// Liquidation info
     /// </summary>
     public record BinanceFuturesStreamLiquidation : IBinanceFuturesLiquidation
     {
         /// <summary>
-        /// Symbol
+        /// ["<c>s</c>"] The symbol.
         /// </summary>
-        [JsonProperty("s")]
+        [JsonPropertyName("s")]
         public string Symbol { get; set; } = string.Empty;
 
         /// <summary>
-        /// Liquidation Sided
+        /// ["<c>S</c>"] Liquidation side.
         /// </summary>
-        [JsonProperty("S"), JsonConverter(typeof(OrderSideConverter))]
+        [JsonPropertyName("S")]
         public OrderSide Side { get; set; }
-        
+
         /// <summary>
-        /// Liquidation order type
+        /// ["<c>o</c>"] Liquidation order type
         /// </summary>
-        [JsonProperty("o"), JsonConverter(typeof(FuturesOrderTypeConverter))]
+        [JsonPropertyName("o")]
         public FuturesOrderType Type { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Time in Force
+        /// ["<c>f</c>"] Liquidation Time in Force
         /// </summary>
-        [JsonProperty("f"), JsonConverter(typeof(TimeInForceConverter))]
+        [JsonPropertyName("f")]
         public TimeInForce TimeInForce { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Original Quantity
+        /// ["<c>q</c>"] Liquidation Original Quantity
         /// </summary>
-        [JsonProperty("q")]
+        [JsonPropertyName("q")]
         public decimal Quantity { get; set; }
-        
+
         /// <summary>
-        /// Liquidation order price
+        /// ["<c>p</c>"] Liquidation order price
         /// </summary>
-        [JsonProperty("p")]
+        [JsonPropertyName("p")]
         public decimal Price { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Average Price
+        /// ["<c>ap</c>"] Liquidation Average Price
         /// </summary>
-        [JsonProperty("ap")]
+        [JsonPropertyName("ap")]
         public decimal AveragePrice { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Order Status
+        /// ["<c>X</c>"] Liquidation Order Status
         /// </summary>
-        [JsonProperty("X"), JsonConverter(typeof(OrderStatusConverter))]
+        [JsonPropertyName("X")]
         public OrderStatus Status { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Last Filled Quantity
+        /// ["<c>l</c>"] Liquidation Last Filled Quantity
         /// </summary>
-        [JsonProperty("l")]
+        [JsonPropertyName("l")]
         public decimal LastQuantityFilled { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Accumulated fill quantity
+        /// ["<c>z</c>"] Liquidation Accumulated fill quantity
         /// </summary>
-        [JsonProperty("z")]
+        [JsonPropertyName("z")]
         public decimal QuantityFilled { get; set; }
-        
+
         /// <summary>
-        /// Liquidation Trade Time
+        /// ["<c>T</c>"] Liquidation Trade Time
         /// </summary>
-        [JsonProperty("T"), JsonConverter(typeof(DateTimeConverter))]
+        [JsonPropertyName("T"), JsonConverter(typeof(DateTimeConverter))]
         public DateTime Timestamp { get; set; }
+
+        /// <summary>
+        /// ["<c>st</c>"] Symbol type
+        /// </summary>
+        [JsonPropertyName("st")]
+        public SymbolType? SymbolType { get; set; }
     }
 }
+

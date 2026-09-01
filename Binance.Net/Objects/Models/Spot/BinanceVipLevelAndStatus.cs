@@ -1,24 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// VIP level and futures/margin enabled status
     /// </summary>
+    [SerializationModel]
     public record BinanceVipLevelAndStatus
     {
         /// <summary>
-        /// VIP level
+        /// ["<c>vipLevel</c>"] VIP level
         /// </summary>
-        [JsonProperty("vipLevel")]
+        [JsonPropertyName("vipLevel")]
         public int VipLevel { get; set; }
         /// <summary>
-        /// Is margin enabled
+        /// ["<c>isMarginEnabled</c>"] Is margin enabled
         /// </summary>
-        [JsonProperty("isMarginEnabled")]
+        [JsonPropertyName("isMarginEnabled")]
         public bool IsMarginEnabled { get; set; }
         /// <summary>
-        /// Is futures enabled
+        /// ["<c>isFutureEnabled</c>"] Is futures enabled
         /// </summary>
-        [JsonProperty("isFutureEnabled")]
+        [JsonPropertyName("isFutureEnabled")]
         public bool IsFuturesEnabled { get; set; }
+        /// <summary>
+        /// ["<c>isOptionsEnabled</c>"] Is options enabled
+        /// </summary>
+        [JsonPropertyName("isOptionsEnabled")]
+        public bool IsOptionsEnabled { get; set; }
+        /// <summary>
+        /// ["<c>isPortfolioMarginRetailEnabled</c>"] Is portfolio margin retail enabled
+        /// </summary>
+        [JsonPropertyName("isPortfolioMarginRetailEnabled")]
+        public bool IsPortfolioMarginRetailEnabled { get; set; }
     }
 }
+

@@ -1,19 +1,21 @@
-﻿namespace Binance.Net.Objects.Models.Spot.Staking
+namespace Binance.Net.Objects.Models.Spot.Staking
 {
     /// <summary>
     /// Eth staking account
     /// </summary>
+    [SerializationModel]
     public record BinanceEthStakingAccount
     {
         /// <summary>
-        /// Total profit in Beth
+        /// ["<c>cumulativeProfitInBETH</c>"] Total profit in BETH.
         /// </summary>
-        [JsonProperty("cumulativeProfitInBETH")]
+        [JsonPropertyName("cumulativeProfitInBETH")]
         public decimal TotalProfitInBeth { get; set; }
         /// <summary>
-        /// Last day profit in Beth
+        /// ["<c>lastDayProfitInBETH</c>"] Last day profit in BETH.
         /// </summary>
-        [JsonProperty("lastDayProfitInBETH")]
+        [JsonPropertyName("lastDayProfitInBETH")]
         public decimal LastDayProfitInBeth { get; set; }
     }
 }
+

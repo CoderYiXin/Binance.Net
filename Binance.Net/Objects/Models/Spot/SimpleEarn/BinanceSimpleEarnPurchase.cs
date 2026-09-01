@@ -1,24 +1,26 @@
-﻿namespace Binance.Net.Objects.Models.Spot.SimpleEarn
+namespace Binance.Net.Objects.Models.Spot.SimpleEarn
 {
     /// <summary>
     /// Purchase id
     /// </summary>
+    [SerializationModel]
     public record BinanceSimpleEarnPurchase
     {
         /// <summary>
-        /// Success
+        /// ["<c>success</c>"] Whether the request succeeded.
         /// </summary>
-        [JsonProperty("success")]
+        [JsonPropertyName("success")]
         public bool Success { get; set; }
         /// <summary>
-        /// Purchase id
+        /// ["<c>purchaseId</c>"] Purchase id
         /// </summary>
-        [JsonProperty("purchaseId")]
+        [JsonPropertyName("purchaseId")]
         public long PurchaseId { get; set; }
         /// <summary>
-        /// Position id
+        /// ["<c>positionId</c>"] Position id
         /// </summary>
-        [JsonProperty("positionId")]
+        [JsonPropertyName("positionId")]
         public string? PositionId { get; set; }
     }
 }
+

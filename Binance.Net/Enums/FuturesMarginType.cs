@@ -1,18 +1,23 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// Type of Margin
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<FuturesMarginType>))]
     public enum FuturesMarginType
     {
         /// <summary>
-        /// Isolated margin
+        /// ["<c>ISOLATED</c>"] Isolated margin
         /// </summary>
+        [Map("ISOLATED", "isolated")]
         Isolated,
-
         /// <summary>
         /// Crossed margin
         /// </summary>
+        [Map("CROSSED", "cross")]
         Cross
     }
 }
+

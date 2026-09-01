@@ -1,21 +1,28 @@
-﻿namespace Binance.Net.Enums
+using CryptoExchange.Net.Attributes;
+
+namespace Binance.Net.Enums
 {
     /// <summary>
     /// List order status
     /// </summary>
+    [JsonConverter(typeof(EnumConverter<ListOrderStatus>))]
     public enum ListOrderStatus
     {
         /// <summary>
-        /// Executing
+        /// ["<c>EXECUTING</c>"] Executing
         /// </summary>
+        [Map("EXECUTING")]
         Executing,
         /// <summary>
-        /// Executed
+        /// ["<c>REJECT</c>"] Rejected
         /// </summary>
-        Done,
+        [Map("REJECT")]
+        Rejected,
         /// <summary>
-        /// Rejected
+        /// ["<c>ALL_DONE</c>"] Done
         /// </summary>
-        Rejected
+        [Map("ALL_DONE")]
+        Done
     }
 }
+

@@ -1,26 +1,36 @@
-﻿namespace Binance.Net.Objects.Models.Spot
+namespace Binance.Net.Objects.Models.Spot
 {
     /// <summary>
     /// Deposit address info
     /// </summary>
+    [SerializationModel]
     public record BinanceDepositAddress
     {
         /// <summary>
-        /// The deposit address
+        /// ["<c>address</c>"] The deposit address
         /// </summary>
+        [JsonPropertyName("address")]
         public string Address { get; set; } = string.Empty;
         /// <summary>
-        /// Url
+        /// ["<c>url</c>"] The address URL.
         /// </summary>
-        public string Url { get; set; } = string.Empty;
+        [JsonPropertyName("url")]
+        public string? Url { get; set; }
         /// <summary>
-        /// Address tag
+        /// ["<c>tag</c>"] Address tag
         /// </summary>
+        [JsonPropertyName("tag")]
         public string Tag { get; set; } = string.Empty;
         /// <summary>
-        /// Asset the address is for
+        /// ["<c>coin</c>"] Asset the address is for
         /// </summary>
-        [JsonProperty("coin")]
+        [JsonPropertyName("coin")]
         public string Asset { get; set; } = string.Empty;
+        /// <summary>
+        /// ["<c>isDefault</c>"] Whether this is the default address.
+        /// </summary>
+        [JsonPropertyName("isDefault")]
+        public bool? IsDefault { get; set; }
     }
 }
+

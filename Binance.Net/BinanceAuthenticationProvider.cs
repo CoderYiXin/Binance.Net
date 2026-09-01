@@ -1,73 +1,79 @@
-﻿using System.Text;
+﻿using Binance.Net.Objects.Internal;
+using Binance.Net.Objects.Sockets;
 using CryptoExchange.Net.Clients;
+using CryptoExchange.Net.Sockets;
+using CryptoExchange.Net.Sockets.Default;
+using System.Net;
+using System.Text;
 
 namespace Binance.Net
 {
-    internal class BinanceAuthenticationProvider : AuthenticationProvider
+    internal class BinanceAuthenticationProvider : AuthenticationProvider<BinanceCredentials>
     {
-        public string GetApiKey() => _credentials.Key!.GetString();
+        public override string Key => ApiCredentials.Credential!.Key;
 
-        public BinanceAuthenticationProvider(ApiCredentials credentials) : base(credentials)
+        public BinanceAuthenticationProvider(BinanceCredentials credentials) : base(credentials)
         {
         }
 
-        public override void AuthenticateRequest(
-            RestApiClient apiClient,
-            Uri uri,
-            HttpMethod method,
-            IDictionary<string, object> uriParameters,
-            IDictionary<string, object> bodyParameters,
-            Dictionary<string, string> headers,
-            bool auth,
-            ArrayParametersSerialization arraySerialization,
-            HttpMethodParameterPosition parameterPosition,
-            RequestBodyFormat requestBodyFormat)
+        public override void ProcessRequest(RestApiClient apiClient, RestRequestConfiguration request)
         {
-            headers.Add("X-MBX-APIKEY", _credentials.Key!.GetString());
+            request.Headers ??= new Dictionary<string, string>();
+            request.Headers.Add("X-MBX-APIKEY", ApiCredentials.Credential!.Key);
 
-            if (!auth)
+            if (!request.RequestDefinition.Authenticated)
                 return;
 
-            var parameters = parameterPosition == HttpMethodParameterPosition.InUri ? uriParameters : bodyParameters;
             var timestamp = GetMillisecondTimestamp(apiClient);
-            parameters.Add("timestamp", timestamp);
+            var parameters = request.GetPositionParameters() ?? new Parameters(ParameterSerializationSettings.Default);
+            parameters["timestamp"] = timestamp;
 
-            if (_credentials.CredentialType == ApiCredentialsType.Hmac)
+            if (request.ParameterPosition == HttpMethodParameterPosition.InUri)
             {
-                uri = uri.SetParameters(uriParameters, arraySerialization);
-                parameters.Add("signature", SignHMACSHA256(parameterPosition == HttpMethodParameterPosition.InUri ? uri.Query.Replace("?", "") : parameters.ToFormData()));
+                var queryString = request.GetQueryString();
+                var signature = Sign(queryString);
+                parameters["signature"] = signature;
+                request.SetQueryString($"{queryString}&signature={WebUtility.UrlEncode(signature)}");
             }
             else
             {
-                var parameterString = parameters.ToFormData();
-                var sign = SignRSASHA256(Encoding.ASCII.GetBytes(parameterString), SignOutputType.Base64);
-                parameters.Add("signature", sign);
+                var parameterData = request.BodyParameters?.ToFormData() ?? string.Empty;
+                var signature = Sign(parameterData);
+                parameters["signature"] = signature;
+                request.SetBodyContent($"{parameterData}&signature={WebUtility.UrlEncode(signature)}");
             }
         }
 
-        public Dictionary<string, object> AuthenticateSocketParameters(Dictionary<string, object> providedParameters)
+        public Parameters ProcessRequest(SocketApiClient apiClient, Parameters? providedParameters)
         {
-            var sortedParameters = new SortedDictionary<string, object>(providedParameters)
+            var parameters = new Parameters(BinanceExchange._socketParameterSignSettings);
+            if (providedParameters?.Count > 0)
             {
-                { "apiKey", _credentials.Key!.GetString() },
-                { "timestamp", DateTimeConverter.ConvertToMilliseconds(DateTime.UtcNow) }
-            };
-            var paramString = string.Join("&", sortedParameters.Select(p => p.Key + "=" + Convert.ToString(p.Value, CultureInfo.InvariantCulture)));
+                foreach (var param in providedParameters)
+                    parameters.AddRaw(param.Key, param.Value);
+            }
 
-            if (_credentials.CredentialType == ApiCredentialsType.Hmac)
-            {
-                var sign = SignHMACSHA256(paramString);
-                var result = sortedParameters.ToDictionary(p => p.Key, p => p.Value);
-                result.Add("signature", sign);
-                return result;
-            }
+            parameters.Add("apiKey", ApiCredentials.Credential!.Key);
+            parameters.Add("timestamp", GetMillisecondTimestampLong(apiClient));
+            var paramString = string.Join("&", parameters.Select(p => p.Key + "=" + Convert.ToString(p.Value, CultureInfo.InvariantCulture)));
+
+            string sign = Sign(paramString);
+            parameters.Add("signature", sign);
+            return parameters;
+        }
+
+        private string Sign(string data)
+        {
+            if (ApiCredentials.Credential is HMACCredential hmacCred)
+                return SignHMACSHA256(hmacCred, data);
+#if NET8_0_OR_GREATER
+            else if (ApiCredentials.Credential is Ed25519Credential ed25519Cred)
+                return SignEd25519(ed25519Cred, data, SignOutputType.Base64);
+#endif
+            else if (ApiCredentials.Credential is RSACredential rsaCred)
+                return SignRSASHA256(rsaCred, Encoding.ASCII.GetBytes(data), SignOutputType.Base64);
             else
-            {
-                var sign = SignRSASHA256(Encoding.ASCII.GetBytes(paramString), SignOutputType.Base64);
-                var result = sortedParameters.ToDictionary(p => p.Key, p => p.Value);
-                result.Add("signature", sign);
-                return result;
-            }
+                throw new NotImplementedException();
         }
     }
 }
